@@ -1,0 +1,3 @@
+CREATE TABLE Pays(
+    nom VARCHAR(30) PRIMARY KEY
+);
