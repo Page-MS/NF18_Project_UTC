@@ -1,0 +1,1 @@
+DROP TABLE Assos_Playlist_Album;

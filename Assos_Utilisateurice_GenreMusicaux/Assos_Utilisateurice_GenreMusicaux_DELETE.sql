@@ -1,0 +1,1 @@
+DROP TABLE Assos_Utilisateurice_GenreMusicaux;
