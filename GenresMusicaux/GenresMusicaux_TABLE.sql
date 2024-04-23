@@ -1,0 +1,3 @@
+CREATE TABLE GenresMusicaux(
+    nom VARCHAR(30) PRIMARY KEY
+);
