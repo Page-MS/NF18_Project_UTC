@@ -1,4 +1,4 @@
 CREATE TABLE Compte(
     id SERIAL PRIMARY KEY,
-    nom varchar(30) NOT NULL
+    nom varchar(30) UNIQUE NOT NULL
 );
