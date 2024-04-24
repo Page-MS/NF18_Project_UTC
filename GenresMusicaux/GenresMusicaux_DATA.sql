@@ -22,4 +22,4 @@ INSERT INTO GenresMusicaux VALUES ('Lo-fi');
 INSERT INTO GenresMusicaux VALUES ('Opéra');
 INSERT INTO GenresMusicaux VALUES ('Reggaeton');
 INSERT INTO GenresMusicaux VALUES ('Reggae');
-INSERT INTO GenresMusicaux VALUES ('Soul')
+INSERT INTO GenresMusicaux VALUES ('Soul');
