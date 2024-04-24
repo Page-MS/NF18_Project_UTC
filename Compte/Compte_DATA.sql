@@ -30,3 +30,33 @@ INSERT INTO Compte(id, nom)
 VALUES(DEFAULT,'jump_max');
 INSERT INTO Compte(id, nom)
 VALUES(DEFAULT,'chimpanze_combat');
+
+INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Michael Jackson');
+INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Elvis Presley');
+INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Bob Dylan');
+INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Madonna');
+INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'John Lennon');
+INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Paul McCartney');
+INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'David Bowie');
+INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Stevie Wonder');
+INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Freddie Mercury');
+INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Prince');
+
+INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Louis Armstrong');
+INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Tupac Shakur');
+INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Beyoncé');
+INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Daft Punk');
+INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Calvin Harris');
+INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Rahzel');
+INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Johnny Cash');
+INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Chief Keef');
+INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Arctic Monkeys');
+INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Mac DeMarco');
+
+INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Mozart');
+INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Beethoven');
+INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Bach');
+INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Tchaikovsky');
+INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Chopin');
+
+
