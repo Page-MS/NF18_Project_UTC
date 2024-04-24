@@ -4,18 +4,6 @@ INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(D
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Eine kleine Nachtmusik', 1200, NULL, (SELECT id FROM Profil_Artiste WHERE nom = 'Mozart'), 'Classique');
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Le Nozze di Figaro', 10800, NULL, (SELECT id FROM Profil_Artiste WHERE nom = 'Mozart'), 'Classique');
 
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Symphonie n° 9', 3600, NULL, (SELECT id FROM Profil_Artiste WHERE nom = 'Beethoven'), 'Classique');
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Sonate pour piano n° 14 "Clair de lune"', 900, NULL, (SELECT id FROM Profil_Artiste WHERE nom = 'Beethoven'), 'Classique');
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Symphonie n° 5', 1800, NULL, (SELECT id FROM Profil_Artiste WHERE nom = 'Beethoven'), 'Classique');
-
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Toccata et fugue en ré mineur', 600, NULL, (SELECT id FROM Profil_Artiste WHERE nom = 'Bach'), 'Classique');
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Suites pour violoncelle seul', 1800, NULL, (SELECT id FROM Profil_Artiste WHERE nom = 'Bach'), 'Classique');
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Passacaille et fugue en ut mineur', 900, NULL, (SELECT id FROM Profil_Artiste WHERE nom = 'Bach'), 'Classique');
-
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Le Lac des cygnes', 7200, NULL, (SELECT id FROM Profil_Artiste WHERE nom = 'Tchaikovsky'), 'Classique');
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Symphonie n° 6 "Pathétique"', 2700, NULL, (SELECT id FROM Profil_Artiste WHERE nom = 'Tchaikovsky'), 'Classique');
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Concerto pour piano n° 1', 1800, NULL, (SELECT id FROM Profil_Artiste WHERE nom = 'Tchaikovsky'), 'Classique');
-
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Nocturne en mi bémol majeur', 300, NULL, (SELECT id FROM Profil_Artiste WHERE nom = 'Chopin'), 'Classique');
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Ballade en sol mineur', 600, NULL, (SELECT id FROM Profil_Artiste WHERE nom = 'Chopin'), 'Classique');
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Polonaise héroïque', 420, NULL, (SELECT id FROM Profil_Artiste WHERE nom = 'Chopin'), 'Classique');
@@ -100,3 +88,7 @@ INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(D
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Salad Days', 171, NULL, (SELECT id FROM Compte WHERE nom = 'Mac DeMarco'), 'Lo-fi');
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Chamber of Reflection', 251, NULL, (SELECT id FROM Compte WHERE nom = 'Mac DeMarco'), 'Lo-fi');
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Ode to Viceroy', 189, NULL, (SELECT id FROM Compte WHERE nom = 'Mac DeMarco'), 'Lo-fi');
+
+INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Lose Yourself', 326, NULL, (SELECT id FROM Compte WHERE nom = 'Eminem'), 'Rap');
+INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Stan', 370, NULL, (SELECT id FROM Compte WHERE nom = 'Eminem'), 'Rap');
+INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Without Me', 290, NULL, (SELECT id FROM Compte WHERE nom = 'Eminem'), 'Rap');

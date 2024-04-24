@@ -41,7 +41,6 @@ INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'David Bowie');
 INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Stevie Wonder');
 INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Freddie Mercury');
 INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Prince');
-
 INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Louis Armstrong');
 INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Tupac Shakur');
 INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Beyoncé');
@@ -52,11 +51,7 @@ INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Johnny Cash');
 INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Chief Keef');
 INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Arctic Monkeys');
 INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Mac DeMarco');
-
 INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Mozart');
-INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Beethoven');
-INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Bach');
-INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Tchaikovsky');
 INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Chopin');
-
+INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Eminem');
 
