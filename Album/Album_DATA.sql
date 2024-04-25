@@ -23,3 +23,6 @@ INSERT INTO Album VALUES (DEFAULT, 'One Kiss', '2018-04-06', 214, (SELECT id FRO
 INSERT INTO Album VALUES (DEFAULT, 'Random Access Memories', '2013-05-20', 4440, (SELECT id FROM Compte WHERE nom = 'Daft Punk'));
 INSERT INTO Album VALUES (DEFAULT, 'Discovery', '2001-03-12', 3660, (SELECT id FROM Compte WHERE nom = 'Daft Punk'));
 INSERT INTO Album VALUES (DEFAULT, 'Homework', '1997-01-17', 4440, (SELECT id FROM Compte WHERE nom = 'Daft Punk'));
+
+INSERT INTO Album VALUES (DEFAULT, 'Dangerously In Love', '2003-06-24', 3660, (SELECT id FROM Compte WHERE nom = 'Beyoncé'));
+INSERT INTO Album VALUES (DEFAULT, 'I AM...SASHA FIERCE', '2008-11-17', 2501, (SELECT id FROM Compte WHERE nom = 'Beyoncé'));

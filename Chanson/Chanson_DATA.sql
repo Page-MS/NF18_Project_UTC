@@ -57,9 +57,9 @@ INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(D
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Changes', 271, NULL, (SELECT id FROM Compte WHERE nom = 'Tupac Shakur'), 'Hip-hop');
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Dear Mama', 272, NULL, (SELECT id FROM Compte WHERE nom = 'Tupac Shakur'), 'Hip-hop');
 
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Crazy in Love', 235, NULL, (SELECT id FROM Compte WHERE nom = 'Beyoncé'), 'R&B');
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Single Ladies (Put a Ring on It)', 201, NULL, (SELECT id FROM Compte WHERE nom = 'Beyoncé'), 'R&B');
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Halo', 230, NULL, (SELECT id FROM Compte WHERE nom = 'Beyoncé'), 'R&B');
+INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Crazy in Love', 235, (SELECT id FROM Album WHERE titre = 'Dangerously In Love'), (SELECT id FROM Compte WHERE nom = 'Beyoncé'), 'R&B');
+INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Single Ladies (Put a Ring on It)', 201, (SELECT id FROM Album WHERE titre = 'I AM...SASHA FIERCE'), (SELECT id FROM Compte WHERE nom = 'Beyoncé'), 'R&B');
+INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Halo', 230, (SELECT id FROM Album WHERE titre = 'I AM...SASHA FIERCE'), (SELECT id FROM Compte WHERE nom = 'Beyoncé'), 'R&B');
 
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Get Lucky', 248, (SELECT id FROM Album WHERE titre = 'Random Access Memories'), (SELECT id FROM Compte WHERE nom = 'Daft Punk'), 'Electro');
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Harder, Better, Faster, Stronger', 224, (SELECT id FROM Album WHERE titre = 'Discovery'), (SELECT id FROM Compte WHERE nom = 'Daft Punk'), 'Electro');
