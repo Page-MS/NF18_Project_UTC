@@ -65,9 +65,9 @@ INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(D
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Harder, Better, Faster, Stronger', 224, NULL, (SELECT id FROM Compte WHERE nom = 'Daft Punk'), 'Electro');
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Around the World', 421, NULL, (SELECT id FROM Compte WHERE nom = 'Daft Punk'), 'Electro');
 
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Summer', 223, NULL, (SELECT id FROM Compte WHERE nom = 'Calvin Harris'), 'EDM');
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Feel So Close', 220, NULL, (SELECT id FROM Compte WHERE nom = 'Calvin Harris'), 'EDM');
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'One Kiss', 214, NULL, (SELECT id FROM Compte WHERE nom = 'Calvin Harris'), 'EDM');
+INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Summer', 223, (SELECT id FROM Album WHERE titre = 'Motion'), (SELECT id FROM Compte WHERE nom = 'Calvin Harris'), 'EDM');
+INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Feel So Close', 220, (SELECT id FROM Album WHERE titre = '18 Months'), (SELECT id FROM Compte WHERE nom = 'Calvin Harris'), 'EDM');
+INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'One Kiss', 214, (SELECT id FROM Album WHERE titre = 'One Kiss'), (SELECT id FROM Compte WHERE nom = 'Calvin Harris'), 'EDM');
 
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'If Your Mother Only Knew', 157, (SELECT id FROM Album WHERE titre = 'Make The Music 2000'), (SELECT id FROM Compte WHERE nom = 'Rahzel'), 'Beatbox');
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'All I Know', 220, (SELECT id FROM Album WHERE titre = 'Make The Music 2000'), (SELECT id FROM Compte WHERE nom = 'Rahzel'), 'Beatbox');

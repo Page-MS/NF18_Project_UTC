@@ -15,3 +15,7 @@ INSERT INTO Album VALUES (DEFAULT, 'I Walk the Line', '1964-06-13', 1963, (SELEC
 INSERT INTO Album VALUES (DEFAULT, 'American IV: The Man Comes Around', '2002-01-01', 3110, (SELECT id FROM Compte WHERE nom = 'Johnny Cash'));
 
 INSERT INTO Album VALUES (DEFAULT, 'Make The Music 2000', '1999-01-01', 3010, (SELECT id FROM Compte WHERE nom = 'Rahzel'));
+
+INSERT INTO Album VALUES (DEFAULT, 'Motion', '2014-10-31', 3353, (SELECT id FROM Compte WHERE nom = 'Calvin Harris'));
+INSERT INTO Album VALUES (DEFAULT, '18 Months', '2012-10-29', 2994, (SELECT id FROM Compte WHERE nom = 'Calvin Harris'));
+INSERT INTO Album VALUES (DEFAULT, 'One Kiss', '2018-04-06', 214, (SELECT id FROM Compte WHERE nom = 'Calvin Harris'));
