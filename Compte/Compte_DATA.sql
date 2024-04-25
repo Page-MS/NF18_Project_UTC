@@ -1,7 +1,7 @@
 INSERT INTO Compte(id, nom) VALUES(DEFAULT,'Freddy Mercury');
 INSERT INTO Compte(id, nom) VALUES(DEFAULT,'lau_fst');
 INSERT INTO Compte(id, nom) VALUES(DEFAULT,'Queen');
-INSERT INTO Compte(id, nom) VALUES(DEFAULT,'Hayliat');
+INSERT INTO Compte(id, nom) VALUES(DEFAULT,'Hayilat');
 INSERT INTO Compte(id, nom) VALUES(DEFAULT,'Brian May');
 INSERT INTO Compte(id, nom) VALUES(DEFAULT,'Roger Taylor');
 INSERT INTO Compte(id, nom) VALUES(DEFAULT,'Gambi');
