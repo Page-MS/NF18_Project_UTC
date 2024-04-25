@@ -5,7 +5,7 @@ INSERT INTO Assos_Utilisateurice_Utilisateurice VALUES((SELECT id FROM Compte WH
 INSERT INTO Assos_Utilisateurice_Utilisateurice VALUES((SELECT id FROM Compte WHERE nom = 'iris_gri'), (SELECT id FROM Compte WHERE nom = 'Laure Ploix'));
 INSERT INTO Assos_Utilisateurice_Utilisateurice VALUES((SELECT id FROM Compte WHERE nom = 'no_gru'), (SELECT id FROM Compte WHERE nom = 'iris_gri'));
 INSERT INTO Assos_Utilisateurice_Utilisateurice VALUES((SELECT id FROM Compte WHERE nom = 'no_gru'), (SELECT id FROM Compte WHERE nom = 'adeeee'));
-INSERT INTO Assos_Utilisateurice_Utilisateurice VALUES((SELECT id FROM Compte WHERE nom = 'no_gru'), (SELECT id FROM Compte WHERE nom = 'Laure_Ploix'));
+INSERT INTO Assos_Utilisateurice_Utilisateurice VALUES((SELECT id FROM Compte WHERE nom = 'no_gru'), (SELECT id FROM Compte WHERE nom = 'Laure Ploix'));
 INSERT INTO Assos_Utilisateurice_Utilisateurice VALUES((SELECT id FROM Compte WHERE nom = 'lau_fst'), (SELECT id FROM Compte WHERE nom = 'Laure Ploix'));
 INSERT INTO Assos_Utilisateurice_Utilisateurice VALUES((SELECT id FROM Compte WHERE nom = 'lau_fst'), (SELECT id FROM Compte WHERE nom = 'no_gru'));
 INSERT INTO Assos_Utilisateurice_Utilisateurice VALUES((SELECT id FROM Compte WHERE nom = 'lau_fst'), (SELECT id FROM Compte WHERE nom = 'adeeee'));
