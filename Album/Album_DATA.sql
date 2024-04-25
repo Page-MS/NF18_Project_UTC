@@ -26,3 +26,6 @@ INSERT INTO Album VALUES (DEFAULT, 'Homework', '1997-01-17', 4440, (SELECT id FR
 
 INSERT INTO Album VALUES (DEFAULT, 'Dangerously In Love', '2003-06-24', 3660, (SELECT id FROM Compte WHERE nom = 'Beyoncé'));
 INSERT INTO Album VALUES (DEFAULT, 'I AM...SASHA FIERCE', '2008-11-17', 2501, (SELECT id FROM Compte WHERE nom = 'Beyoncé'));
+
+INSERT INTO Album VALUES (DEFAULT, 'Greatest Hits', '1998-01-01', 6840, (SELECT id FROM Compte WHERE nom = 'Tupac Shakur'));
+INSERT INTO Album VALUES (DEFAULT, 'Me Against The World', '1995-03-14', 3900, (SELECT id FROM Compte WHERE nom = 'Tupac Shakur'));

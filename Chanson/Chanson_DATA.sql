@@ -53,9 +53,9 @@ INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(D
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'La Vie en rose', 211, NULL, (SELECT id FROM Compte WHERE nom = 'Louis Armstrong'), 'Jazz');
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'When the Saints Go Marching In', 197, NULL, (SELECT id FROM Compte WHERE nom = 'Louis Armstrong'), 'Jazz');
 
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'California Love', 244, NULL, (SELECT id FROM Compte WHERE nom = 'Tupac Shakur'), 'Hip-hop');
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Changes', 271, NULL, (SELECT id FROM Compte WHERE nom = 'Tupac Shakur'), 'Hip-hop');
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Dear Mama', 272, NULL, (SELECT id FROM Compte WHERE nom = 'Tupac Shakur'), 'Hip-hop');
+INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'California Love', 244, (SELECT id FROM Album WHERE titre = 'Greatest Hits'), (SELECT id FROM Compte WHERE nom = 'Tupac Shakur'), 'Hip-hop');
+INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Changes', 271, (SELECT id FROM Album WHERE titre = 'Greatest Hits'), (SELECT id FROM Compte WHERE nom = 'Tupac Shakur'), 'Hip-hop');
+INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Dear Mama', 272, (SELECT id FROM Album WHERE titre = 'Me Against The World'), (SELECT id FROM Compte WHERE nom = 'Tupac Shakur'), 'Hip-hop');
 
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Crazy in Love', 235, (SELECT id FROM Album WHERE titre = 'Dangerously In Love'), (SELECT id FROM Compte WHERE nom = 'Beyoncé'), 'R&B');
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Single Ladies (Put a Ring on It)', 201, (SELECT id FROM Album WHERE titre = 'I AM...SASHA FIERCE'), (SELECT id FROM Compte WHERE nom = 'Beyoncé'), 'R&B');
