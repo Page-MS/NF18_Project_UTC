@@ -49,9 +49,9 @@ INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(D
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'When Doves Cry', 221, NULL, (SELECT id FROM Profil_Artiste WHERE nom = 'Prince'), 'Pop');
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Kiss', 224, NULL, (SELECT id FROM Profil_Artiste WHERE nom = 'Prince'), 'Pop');
 
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'What a Wonderful World', 143, NULL, (SELECT id FROM Compte WHERE nom = 'Louis Armstrong'), 'Jazz');
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'La Vie en rose', 211, NULL, (SELECT id FROM Compte WHERE nom = 'Louis Armstrong'), 'Jazz');
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'When the Saints Go Marching In', 197, NULL, (SELECT id FROM Compte WHERE nom = 'Louis Armstrong'), 'Jazz');
+INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'What A Wonderful World', 143, (SELECT id FROM Album WHERE titre = 'What A Wonderful World'), (SELECT id FROM Compte WHERE nom = 'Louis Armstrong'), 'Jazz');
+INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'La Vie en rose', 211, (SELECT id FROM Album WHERE titre = 'Satchmo Serenades'), (SELECT id FROM Compte WHERE nom = 'Louis Armstrong'), 'Jazz');
+INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'When the Saints Go Marching In', 197, (SELECT id FROM Album WHERE titre = 'Louis Armstrong Of New Orleans'), (SELECT id FROM Compte WHERE nom = 'Louis Armstrong'), 'Jazz');
 
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'California Love', 244, (SELECT id FROM Album WHERE titre = 'Greatest Hits'), (SELECT id FROM Compte WHERE nom = 'Tupac Shakur'), 'Hip-hop');
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Changes', 271, (SELECT id FROM Album WHERE titre = 'Greatest Hits'), (SELECT id FROM Compte WHERE nom = 'Tupac Shakur'), 'Hip-hop');

@@ -29,3 +29,7 @@ INSERT INTO Album VALUES (DEFAULT, 'I AM...SASHA FIERCE', '2008-11-17', 2501, (S
 
 INSERT INTO Album VALUES (DEFAULT, 'Greatest Hits', '1998-01-01', 6840, (SELECT id FROM Compte WHERE nom = 'Tupac Shakur'));
 INSERT INTO Album VALUES (DEFAULT, 'Me Against The World', '1995-03-14', 3900, (SELECT id FROM Compte WHERE nom = 'Tupac Shakur'));
+
+INSERT INTO Album VALUES (DEFAULT, 'What A Wonderful World', '1968-01-01', 1892, (SELECT id FROM Compte WHERE nom = 'Louis Armstrong'));
+INSERT INTO Album VALUES (DEFAULT, 'Louis Armstrong Of New Orleans', '1989-01-01', 3222, (SELECT id FROM Compte WHERE nom = 'Louis Armstrong'));
+INSERT INTO Album VALUES (DEFAULT, 'Satchmo Serenades', '1952-04-01', 3254, (SELECT id FROM Compte WHERE nom = 'Louis Armstrong'));
