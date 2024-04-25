@@ -69,9 +69,9 @@ INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(D
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Feel So Close', 220, NULL, (SELECT id FROM Compte WHERE nom = 'Calvin Harris'), 'EDM');
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'One Kiss', 214, NULL, (SELECT id FROM Compte WHERE nom = 'Calvin Harris'), 'EDM');
 
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'If Your Mother Only Knew', 157, NULL, (SELECT id FROM Compte WHERE nom = 'Rahzel'), 'Beatbox');
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'All I Know', 220, NULL, (SELECT id FROM Compte WHERE nom = 'Rahzel'), 'Beatbox');
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Make the Music 2000', 274, NULL, (SELECT id FROM Compte WHERE nom = 'Rahzel'), 'Beatbox');
+INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'If Your Mother Only Knew', 157, (SELECT id FROM Album WHERE titre = 'Make The Music 2000'), (SELECT id FROM Compte WHERE nom = 'Rahzel'), 'Beatbox');
+INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'All I Know', 220, (SELECT id FROM Album WHERE titre = 'Make The Music 2000'), (SELECT id FROM Compte WHERE nom = 'Rahzel'), 'Beatbox');
+INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Make the Music 2000', 274, (SELECT id FROM Album WHERE titre = 'Make The Music 2000'), (SELECT id FROM Compte WHERE nom = 'Rahzel'), 'Beatbox');
 
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'I Walk the Line', 165, (SELECT id FROM Album WHERE titre = 'I Walk the Line'), (SELECT id FROM Compte WHERE nom = 'Johnny Cash'), 'Country');
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Folsom Prison Blues', 170, (SELECT id FROM Album WHERE titre = 'I Walk the Line'), (SELECT id FROM Compte WHERE nom = 'Johnny Cash'), 'Country');

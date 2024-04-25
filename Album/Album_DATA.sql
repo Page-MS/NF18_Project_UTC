@@ -13,3 +13,5 @@ INSERT INTO Album VALUES (DEFAULT, 'Back from the Dead 2', '2016-06-16', 4740, (
 
 INSERT INTO Album VALUES (DEFAULT, 'I Walk the Line', '1964-06-13', 1963, (SELECT id FROM Compte WHERE nom = 'Johnny Cash'));
 INSERT INTO Album VALUES (DEFAULT, 'American IV: The Man Comes Around', '2002-01-01', 3110, (SELECT id FROM Compte WHERE nom = 'Johnny Cash'));
+
+INSERT INTO Album VALUES (DEFAULT, 'Make The Music 2000', '1999-01-01', 3010, (SELECT id FROM Compte WHERE nom = 'Rahzel'));
