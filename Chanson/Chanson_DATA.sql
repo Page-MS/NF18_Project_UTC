@@ -85,9 +85,9 @@ INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(D
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Fluorescent Adolescent', 183, NULL, (SELECT id FROM Compte WHERE nom = 'Arctic Monkeys'), 'Indie');
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'R U Mine?', 205, NULL, (SELECT id FROM Compte WHERE nom = 'Arctic Monkeys'), 'Indie');
 
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Salad Days', 171, NULL, (SELECT id FROM Compte WHERE nom = 'Mac DeMarco'), 'Lo-fi');
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Chamber of Reflection', 251, NULL, (SELECT id FROM Compte WHERE nom = 'Mac DeMarco'), 'Lo-fi');
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Ode to Viceroy', 189, NULL, (SELECT id FROM Compte WHERE nom = 'Mac DeMarco'), 'Lo-fi');
+INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Salad Days', 171, (SELECT id FROM Album WHERE titre = 'Salad Days'), (SELECT id FROM Compte WHERE nom = 'Mac DeMarco'), 'Lo-fi');
+INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Chamber of Reflection', 251, (SELECT id FROM Album WHERE titre = 'Salad Days'), (SELECT id FROM Compte WHERE nom = 'Mac DeMarco'), 'Lo-fi');
+INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Ode to Viceroy', 189, (SELECT id FROM Album WHERE titre = '2'), (SELECT id FROM Compte WHERE nom = 'Mac DeMarco'), 'Lo-fi');
 
 INSERT INTO Chanson(id, titre, duree, album, createurice, genre_musical) VALUES(DEFAULT, 'Lose Yourself', 326, (SELECT id FROM Album WHERE titre = 'SHADYXV'), (SELECT id FROM Compte WHERE nom = 'Eminem'), 'Rap');
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Stan', 370, (SELECT id FROM Album WHERE titre = 'The Marshall Mathers LP'), (SELECT id FROM Compte WHERE nom = 'Eminem'), 'Rap');
