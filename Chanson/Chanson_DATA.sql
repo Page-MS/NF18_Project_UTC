@@ -81,9 +81,9 @@ INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(D
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Faneto', 265, NULL, (SELECT id FROM Compte WHERE nom = 'Chief Keef'), 'Drill');
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'I Don''t Like', 290, NULL, (SELECT id FROM Compte WHERE nom = 'Chief Keef'), 'Drill');
 
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Do I Wanna Know?', 272, NULL, (SELECT id FROM Compte WHERE nom = 'Arctic Monkeys'), 'Indie');
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Fluorescent Adolescent', 183, NULL, (SELECT id FROM Compte WHERE nom = 'Arctic Monkeys'), 'Indie');
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'R U Mine?', 205, NULL, (SELECT id FROM Compte WHERE nom = 'Arctic Monkeys'), 'Indie');
+INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Do I Wanna Know?', 272, (SELECT id FROM Album WHERE titre = 'AM'), (SELECT id FROM Compte WHERE nom = 'Arctic Monkeys'), 'Indie');
+INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Fluorescent Adolescent', 183, (SELECT id FROM Album WHERE titre = 'Favorite Worst Nightmare'), (SELECT id FROM Compte WHERE nom = 'Arctic Monkeys'), 'Indie');
+INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'R U Mine?', 205, (SELECT id FROM Album WHERE titre = 'AM'), (SELECT id FROM Compte WHERE nom = 'Arctic Monkeys'), 'Indie');
 
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Salad Days', 171, (SELECT id FROM Album WHERE titre = 'Salad Days'), (SELECT id FROM Compte WHERE nom = 'Mac DeMarco'), 'Lo-fi');
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Chamber of Reflection', 251, (SELECT id FROM Album WHERE titre = 'Salad Days'), (SELECT id FROM Compte WHERE nom = 'Mac DeMarco'), 'Lo-fi');
