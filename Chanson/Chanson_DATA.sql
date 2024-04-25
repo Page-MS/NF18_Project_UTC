@@ -73,9 +73,9 @@ INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(D
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'All I Know', 220, NULL, (SELECT id FROM Compte WHERE nom = 'Rahzel'), 'Beatbox');
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Make the Music 2000', 274, NULL, (SELECT id FROM Compte WHERE nom = 'Rahzel'), 'Beatbox');
 
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'I Walk the Line', 165, NULL, (SELECT id FROM Compte WHERE nom = 'Johnny Cash'), 'Country');
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Folsom Prison Blues', 170, NULL, (SELECT id FROM Compte WHERE nom = 'Johnny Cash'), 'Country');
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Hurt', 219, NULL, (SELECT id FROM Compte WHERE nom = 'Johnny Cash'), 'Country');
+INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'I Walk the Line', 165, (SELECT id FROM Album WHERE titre = 'I Walk the Line'), (SELECT id FROM Compte WHERE nom = 'Johnny Cash'), 'Country');
+INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Folsom Prison Blues', 170, (SELECT id FROM Album WHERE titre = 'I Walk the Line'), (SELECT id FROM Compte WHERE nom = 'Johnny Cash'), 'Country');
+INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Hurt', 219, (SELECT id FROM Album WHERE titre = 'American IV: The Man Comes Around'), (SELECT id FROM Compte WHERE nom = 'Johnny Cash'), 'Country');
 
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Love Sosa', 229, (SELECT id FROM Album WHERE titre = 'Finally Rich'), (SELECT id FROM Compte WHERE nom = 'Chief Keef'), 'Drill');
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Faneto', 265, (SELECT id FROM Album WHERE titre = 'Back from the Dead 2'), (SELECT id FROM Compte WHERE nom = 'Chief Keef'), 'Drill');

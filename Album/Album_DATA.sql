@@ -10,3 +10,6 @@ INSERT INTO Album VALUES (DEFAULT, 'Favorite Worst Nightmare', '2007-04-22', 228
 
 INSERT INTO Album VALUES (DEFAULT, 'Finally Rich', '2012-01-01', 2713, (SELECT id FROM Compte WHERE nom = 'Chief Keef'));
 INSERT INTO Album VALUES (DEFAULT, 'Back from the Dead 2', '2016-06-16', 4740, (SELECT id FROM Compte WHERE nom = 'Chief Keef'));
+
+INSERT INTO Album VALUES (DEFAULT, 'I Walk the Line', '1964-06-13', 1963, (SELECT id FROM Compte WHERE nom = 'Johnny Cash'));
+INSERT INTO Album VALUES (DEFAULT, 'American IV: The Man Comes Around', '2002-01-01', 3110, (SELECT id FROM Compte WHERE nom = 'Johnny Cash'));
