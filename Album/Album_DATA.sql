@@ -8,3 +8,5 @@ INSERT INTO Album VALUES (DEFAULT, '2', '2012-10-16', 1886, (SELECT id FROM Comp
 INSERT INTO Album VALUES (DEFAULT, 'AM', '2013-09-09', 2507, (SELECT id FROM Compte WHERE nom = 'Arctic Monkeys'));
 INSERT INTO Album VALUES (DEFAULT, 'Favorite Worst Nightmare', '2007-04-22', 2285, (SELECT id FROM Compte WHERE nom = 'Arctic Monkeys'));
 
+INSERT INTO Album VALUES (DEFAULT, 'Finally Rich', '2012-01-01', 2713, (SELECT id FROM Compte WHERE nom = 'Chief Keef'));
+INSERT INTO Album VALUES (DEFAULT, 'Back from the Dead 2', '2016-06-16', 4740, (SELECT id FROM Compte WHERE nom = 'Chief Keef'));

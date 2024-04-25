@@ -77,9 +77,9 @@ INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(D
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Folsom Prison Blues', 170, NULL, (SELECT id FROM Compte WHERE nom = 'Johnny Cash'), 'Country');
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Hurt', 219, NULL, (SELECT id FROM Compte WHERE nom = 'Johnny Cash'), 'Country');
 
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Love Sosa', 229, NULL, (SELECT id FROM Compte WHERE nom = 'Chief Keef'), 'Drill');
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Faneto', 265, NULL, (SELECT id FROM Compte WHERE nom = 'Chief Keef'), 'Drill');
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'I Don''t Like', 290, NULL, (SELECT id FROM Compte WHERE nom = 'Chief Keef'), 'Drill');
+INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Love Sosa', 229, (SELECT id FROM Album WHERE titre = 'Finally Rich'), (SELECT id FROM Compte WHERE nom = 'Chief Keef'), 'Drill');
+INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Faneto', 265, (SELECT id FROM Album WHERE titre = 'Back from the Dead 2'), (SELECT id FROM Compte WHERE nom = 'Chief Keef'), 'Drill');
+INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'I Don''t Like', 290, (SELECT id FROM Album WHERE titre = 'Finally Rich'), (SELECT id FROM Compte WHERE nom = 'Chief Keef'), 'Drill');
 
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Do I Wanna Know?', 272, (SELECT id FROM Album WHERE titre = 'AM'), (SELECT id FROM Compte WHERE nom = 'Arctic Monkeys'), 'Indie');
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Fluorescent Adolescent', 183, (SELECT id FROM Album WHERE titre = 'Favorite Worst Nightmare'), (SELECT id FROM Compte WHERE nom = 'Arctic Monkeys'), 'Indie');
