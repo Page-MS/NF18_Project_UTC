@@ -90,5 +90,5 @@ INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(D
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Ode to Viceroy', 189, NULL, (SELECT id FROM Compte WHERE nom = 'Mac DeMarco'), 'Lo-fi');
 
 INSERT INTO Chanson(id, titre, duree, album, createurice, genre_musical) VALUES(DEFAULT, 'Lose Yourself', 326, (SELECT id FROM Album WHERE titre = 'SHADYXV'), (SELECT id FROM Compte WHERE nom = 'Eminem'), 'Rap');
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Stan', 370, NULL, (SELECT id FROM Compte WHERE nom = 'Eminem'), 'Rap');
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Without Me', 290, NULL, (SELECT id FROM Compte WHERE nom = 'Eminem'), 'Rap');
+INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Stan', 370, (SELECT id FROM Album WHERE titre = 'The Marshall Mathers LP'), (SELECT id FROM Compte WHERE nom = 'Eminem'), 'Rap');
+INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Without Me', 290, (SELECT id FROM Album WHERE titre = 'The Eminem Show'), (SELECT id FROM Compte WHERE nom = 'Eminem'), 'Rap');
