@@ -19,3 +19,7 @@ INSERT INTO Album VALUES (DEFAULT, 'Make The Music 2000', '1999-01-01', 3010, (S
 INSERT INTO Album VALUES (DEFAULT, 'Motion', '2014-10-31', 3353, (SELECT id FROM Compte WHERE nom = 'Calvin Harris'));
 INSERT INTO Album VALUES (DEFAULT, '18 Months', '2012-10-29', 2994, (SELECT id FROM Compte WHERE nom = 'Calvin Harris'));
 INSERT INTO Album VALUES (DEFAULT, 'One Kiss', '2018-04-06', 214, (SELECT id FROM Compte WHERE nom = 'Calvin Harris'));
+
+INSERT INTO Album VALUES (DEFAULT, 'Random Access Memories', '2013-05-20', 4440, (SELECT id FROM Compte WHERE nom = 'Daft Punk'));
+INSERT INTO Album VALUES (DEFAULT, 'Discovery', '2001-03-12', 3660, (SELECT id FROM Compte WHERE nom = 'Daft Punk'));
+INSERT INTO Album VALUES (DEFAULT, 'Homework', '1997-01-17', 4440, (SELECT id FROM Compte WHERE nom = 'Daft Punk'));

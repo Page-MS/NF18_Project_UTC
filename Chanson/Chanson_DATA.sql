@@ -61,9 +61,9 @@ INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(D
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Single Ladies (Put a Ring on It)', 201, NULL, (SELECT id FROM Compte WHERE nom = 'Beyoncé'), 'R&B');
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Halo', 230, NULL, (SELECT id FROM Compte WHERE nom = 'Beyoncé'), 'R&B');
 
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Get Lucky', 248, NULL, (SELECT id FROM Compte WHERE nom = 'Daft Punk'), 'Electro');
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Harder, Better, Faster, Stronger', 224, NULL, (SELECT id FROM Compte WHERE nom = 'Daft Punk'), 'Electro');
-INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Around the World', 421, NULL, (SELECT id FROM Compte WHERE nom = 'Daft Punk'), 'Electro');
+INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Get Lucky', 248, (SELECT id FROM Album WHERE titre = 'Random Access Memories'), (SELECT id FROM Compte WHERE nom = 'Daft Punk'), 'Electro');
+INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Harder, Better, Faster, Stronger', 224, (SELECT id FROM Album WHERE titre = 'Discovery'), (SELECT id FROM Compte WHERE nom = 'Daft Punk'), 'Electro');
+INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Around the World', (SELECT id FROM Album WHERE titre = 'Homework'), NULL, (SELECT id FROM Compte WHERE nom = 'Daft Punk'), 'Electro');
 
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Summer', 223, (SELECT id FROM Album WHERE titre = 'Motion'), (SELECT id FROM Compte WHERE nom = 'Calvin Harris'), 'EDM');
 INSERT INTO Chanson(id, titre, duree, album, createurice, genremusical) VALUES(DEFAULT, 'Feel So Close', 220, (SELECT id FROM Album WHERE titre = '18 Months'), (SELECT id FROM Compte WHERE nom = 'Calvin Harris'), 'EDM');
