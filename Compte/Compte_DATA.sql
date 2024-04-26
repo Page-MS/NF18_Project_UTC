@@ -36,6 +36,7 @@ INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Johnny Cash');
 INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Chief Keef');
 INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Arctic Monkeys');
 INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Mac DeMarco');
+INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Lofi Girl');
 INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Mozart');
 INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Chopin');
 INSERT INTO Compte(id, nom) VALUES(DEFAULT, 'Eminem');
