@@ -1,4 +1,8 @@
-CREATE TYPE AUTORISATION AS ENUM('privée', 'publique', 'partagee_aux_amies');
+CREATE TYPE AUTORISATION AS ENUM(
+    'privée', 
+    'publique', 
+    'partagee_aux_amies'
+    );
 
 CREATE TABLE Playlist(
     id INTEGER PRIMARY KEY,
