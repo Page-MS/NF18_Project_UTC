@@ -1,0 +1,41 @@
+Ce document texte permet d'étudier les dépendances fonctionnelles aux sein des tables
+
+Table Album : 
+Pas de dépendances entre id et titre car nous partons du principe que des album de meme nom peuvent exister.
+En revanche (album, artiste_principal) est bien une clé, car on suppose qu'un meme artise ne crée pas deux album ayant le meme nom
+La durée totale de l'album est techniquement dépendantes des chansons présentes dans l'album. (mais cela suppose d'avoir une parfaite connaissance de la table Chanson)
+Il n'y a pas d'autre dépendances
+
+Table Chanson :
+Pas de dépendances apparente dans cette classe.
+Notement pas de dépendance entre id et titre car nous partons du principe que des chansons avec le même nom peuvent exister.
+
+Table Compte : 
+Pas de dépendance.
+
+Table GenresMusicaux : 
+La table comporte un seul attribut donc pas de dépendance.
+
+Table Pays : 
+Pas de dépendances.
+
+Table Playlist :
+Encore une fois, nous n'interdisons pas la créations de Playlist ayant le même nom qu'une playlist déjà crée. Donc il n'y a pas de dépendance entre id et nom
+Meme chose pour description
+
+
+Table Profil_Artiste :
+Pas de dépendance
+
+Table Profil_Utilisateurice :
+Il y a, à priori, une dépendance entre mail et id car par définition un mail est unique. La connaissance du mail de l'utilisateur 
+permet de retrouver l'id. 
+En revanche il n'y a pas de dépendance entre mail et mdp, les utilisateurs pouvant choisir exactement le meme mot de passe. 
+Il n'y a pas non plus de dépendances entre la date d'inscription et le mail, car deux personnes peuvent s'inscire exactement en meme temps.
+
+
+
+
+
+
+

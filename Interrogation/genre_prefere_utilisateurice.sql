@@ -9,8 +9,6 @@
 --on trie ce resultat par nombre de chansons décroissant pour ensuite avoir le genre musical préféré pour chaque utilisateur
 
 
-
-
 SELECT Utilisateur.nom, GenresMusicaux.nom, COUNT(Chanson.id)
 FROM Chanson 
 JOIN Assos_Playlist_Chanson AS Assos ON Assos.chanson = Chanson.id 
@@ -19,6 +17,5 @@ JOIN Utilisateur ON Utilisateur.id = Playlist.createurice
 JOIN GenresMusicaux ON GenresMusicaux.nom = Chanson.genre_musical 
 GROUP BY Utilisateur.id, GenresMusicaux.nom
 ORDER BY COUNT(Chanson.id) DESC
-LIMIT 3
+LIMIT 3;
 
---Renvoie le nombre de chansons differentes associé à chaque combinaisons Utilisateur, Genre Musical
