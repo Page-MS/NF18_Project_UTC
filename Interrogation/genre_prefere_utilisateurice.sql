@@ -1,19 +1,14 @@
--- Pour trouver le genre musical prefereé d'un personne 
--- il faut tout d'abord selectionner les chansons des playlists crée par l'utilisateur. 
--- Puis rassembler les chanssons de ces playlists par genre musical, les compter et prende
--- le genre musical ayant le plus de chanson.
+-- Trouver les genres préférés des utilisateurs. (Analyser les genres les plus préférés pour chaque utilisateur)
 
---On va donc utiliser des Join avec les tables Playlist, Profil_Utilisateurice, Chanson et GenreMisocaux
+-- Por ce faire, on effectue une requête permettant d'obtenir le genre préféré d'un utilisateur donné
+-- Il serait possible d'itérer pour obtenir le genre préféré de chaque utilisateur
 
-
-SELECT Utilisateur.nom, GenresMusicaux.nom, COUNT(Chanson.id)
-FROM Chanson 
-JOIN Assos_Playlist_Chanson AS Assos ON Assos.chanson = Chanson.id 
-JOIN Playlist ON Assos.playlist = Playlist.id 
-JOIN Utilisateur ON Utilisateur.id = Playlist.createurice 
-JOIN GenresMusicaux ON GenresMusicaux.nom = Chanson.genre_musical 
-GROUP BY Utilisateur.id, GenresMusicaux.nom
-ORDER BY COUNT(Chanson.id) DESC
-LIMIT 3
-
---Renvoie le nombre de chansons differentes associé à chaque combinaisons Utilisateur, Genre Musical
+Select Compte.nom, Chanson.genre_musical, COUNT(Chanson.genre_musical) as "nombre_musiques_du_genre"
+    from Compte
+        JOIN Playlist ON playlist.createurice = Compte.id
+        JOIN Assos_Playlist_Chanson ON Assos_Playlist_Chanson.playlist = Playlist.id
+        JOIN Chanson ON Chanson.id = Assos_Playlist_Chanson.chanson
+    WHERE nom = 'lau_fst'
+    Group BY Compte.nom, Chanson.genre_musical
+    ORDER BY nom, nombre_musiques_du_genre DESC
+    LIMIT 1
