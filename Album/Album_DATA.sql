@@ -37,3 +37,4 @@ INSERT INTO Album VALUES (DEFAULT, 'Satchmo Serenades', '1952-04-01', 3254, (SEL
 
 INSERT INTO Album VALUES (DEFAULT, 'Purple Rain', '1984-06-25', 2639, (SELECT id FROM Compte WHERE nom = 'Prince'));
 INSERT INTO Album VALUES (DEFAULT, 'Parade', '1984-03-31', 2465, (SELECT id FROM Compte WHERE nom = 'Prince'));
+INSERT INTO Album VALUES (DEFAULT, 'Compliation Various Artists', '2024-04-21', 2465, (SELECT id FROM Compte WHERE nom = 'Queen'));
