@@ -3,8 +3,10 @@
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/Album/Album_DATA.sql" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/Assos_Utilisateurice_Utilisateurice/Assos_Utilisateurice_Utilisateurice_DATA.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/Chanson/Chanson_DATA.sql" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/DroitsAuteurs/DroitsAuteurs_DATA.sql" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/Interrogation/genre_prefere_utilisateurice.sql" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/Pays/Pays_DATA.sql" dialect="GenericSQL" />
+    <file url="PROJECT" dialect="GenericSQL" />
   </component>
 </project>
