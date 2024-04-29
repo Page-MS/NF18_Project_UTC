@@ -1,6 +1,9 @@
+-- Séléctionne les 10 artistes avec le plus de chansons dans la base de données
 
-SELECT Profil_Artiste.nom AS Nom, COUNT(Chanson.id) AS Nombrechanson 
-FROM Profil_Artiste
-JOIN Chanson ON Chanson.createurice = Profil_Artiste.id 
-GROUP BY Profil_Artiste.id 
-ORDER BY Nombrechanson DESC;
+SELECT Compte.nom AS Nom, COUNT(Chanson.id) AS Nombrechanson
+FROM Compte
+JOIN Chanson ON Chanson.createurice = Compte.id
+GROUP BY Compte.id
+ORDER BY Nombrechanson DESC
+LIMIT 10;
+

@@ -1,6 +1,6 @@
 CREATE TYPE PROFESSION AS ENUM('compositeur', 'editeur', 'auteur');
 
-CREATE TABLE DroitAuteurs(
+CREATE TABLE DroitsAuteurs(
     metier PROFESSION,
     compte INTEGER references Compte(id),
     chanson INTEGER references Chanson(id),

@@ -26,5 +26,5 @@ INSERT INTO DroitsAuteurs(metier, compte, chanson) VALUES('auteur',(SELECT id FR
 INSERT INTO DroitsAuteurs(metier, compte, chanson) VALUES('auteur',(SELECT id FROM Compte WHERE nom = 'Arctic Monkeys'),4);
 INSERT INTO DroitsAuteurs(metier, compte, chanson) VALUES('auteur',(SELECT id FROM Compte WHERE nom = 'Arctic Monkeys'),5);
 INSERT INTO DroitsAuteurs(metier, compte, chanson) VALUES('auteur',(SELECT id FROM Compte WHERE nom = 'Prince'),6);
-INSERT INTO DroitsAuteurs(metier, compte, chanson) VALUES('auteur',(SELECT id FROM Compte WHERE nom = 'lau_fst'),7);
-
+INSERT INTO DroitsAuteurs(metier, compte, chanson) VALUES('auteur',(SELECT id FROM Compte WHERE nom = 'Freddie Mercury'),7);
+INSERT INTO DroitsAuteurs(metier, compte, chanson) VALUES('auteur',(SELECT id FROM Compte WHERE nom = 'Brian May'),7);
