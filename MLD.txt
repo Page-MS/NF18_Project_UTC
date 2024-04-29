@@ -1,0 +1,54 @@
+```MLD
+
+Compte(#id : integer, nom : varchar(30)) WITH nom UNIQUE NOT NULL
+    
+Profil_Utilisateurice(#id => Compte, mail : varchar(30), mdp : varchar(30), date_inscription : date, statut : {"premium", "regulier"}) WITH mail UNIQUE NOT NULL, mdp NOT NULL, date_inscription NOT NULL, statut NOT NULL
+    
+Pays(#nom : varchar(30))
+
+Profil_Artiste (#id => Compte, bio : varchar(500), type : {"Profil_Artiste","Profil_Groupe", "Profil_ArtisteSolo"}, groupe => Profil_Artiste, pays => Pays) WITH pays NOT NULL, bio UNIQUE, groupe.type = "Profil_Groupe" or groupe.type = NULL if type = "Profil_Artiste_Solo", groupe = NULL if type = "Profil_Groupe", groupe = NULL if type = "Profil_Artiste"
+
+# Héritage par référence entre Compte et Profil_Utilisateurice et Profil_Artiste car si l'héritage est exclusif, la classe Compte possède une relation many-to-many avec la classe Chanson qu'il n'est pas intéréssant de dédoubler.
+
+# Heritage par la classe mère entre Profil_Artiste et Profil_Groupe et Profil_ArtisteSolo car l'héritage est presque complet. En effet, les deux classe filles sont reliés par une association one-to-many. Un héritage par références aurait pu être envisageable
+
+GenresMusicaux(#nom : varchar(30))
+               
+Album(#id : integer, titre : varchar(30), annee_de_sortie : date, duree_totale : integer, artiste_principale => Profil_Artiste) WITH titre NOT NULL, annee_de_sortie NOT NULL, duree_totale NOT NULL, artiste_principale NOT NULL, (titre, artiste) UNIQUE
+
+Chansons(#id : integer, titre : varchar(30), duree : integer, album => Album, createurice => Profil_Artiste, genre_musical => GenresMusicaux) WITH titre NOT NULL, duree NOT NULL, album NOT NULL, createurice NOT NULL, genre_musical NOT NULL, (titre, createurice) UNIQUE
+    
+    
+Playlists(#id : integer, titre: varchar(30), description : varchar(50), autorisation_acces : {"privée", "publique", "partagee_aux_amies"}, createurice => Profil_Utilisateurice) WITH titre NOT NULL, createurice NOT NULL, (titre, createurice) UNIQUE
+
+DroitsAuteurs(#metier : {"editeur", "compositeur", "auteur"}, #compte => Compte, #chanson => Chansons)
+    
+# Il serait possible de remplacer la clé primaire composée des attributs (compte, metier, chanson) par une clé artificielle comme par exemple une id. Cependant, cela induirait une perte de signification très importante et un plus grand potentiel de redondance.
+
+
+Assos_Utilisateurice_Utilisateurice(#ami_1 => Profil_Utilisateurice, #ami_2 => Profil_Utilisateurice) 
+    
+Assos_Utilisateurice_GenreMusicaux(#utilisateurice => Profil_Utilisateurice, #genre => GenreMusicaux)
+    
+Assos_Playlist_Chanson(#playlist => Playlists, #chanson => Chansons)
+    
+Assos_Playlist_Album(#id_Playlist => Playlist, #id_Album => Album)
+    
+
+# Le fait d'ajouter un album à une playlist revient à ajouter toutes les chanson de l'album à cette playlist
+
+
+Contraintes :
+INTERSECTION(INTERSECTION(PROJECTION(Profil_Utilisateurice, id), PROJECTION(Profil_Artiste, id)), PROJECTION(Profil_Artiste, id))={}
+
+PROJECTION(Profil_Utilisateurice,id) = PROJECTION(Assos_Utilisateurice_GenreMusicaux, utilisateurice)
+    
+PROJECTION(Playlist, createurice) ⊆ PROJECTION(Profil_Utilisateurice,id)
+    
+PROJECTION(DroitsAuteurs,chanson) = PROJECTION(Chansons, id) 
+    
+PROJECTION(Album,id) = Projection(Chanson, album)
+    
+PROJECTION(Compte,id) = PROJECTION(DroitsAuteurs, compte)
+    
+PROJECTION(Chanson,id) = PROJECTION(DroitsAuteurs, chanson)

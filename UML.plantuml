@@ -1,0 +1,81 @@
+@startuml
+hide circle
+skinparam roundcorner 20
+
+class Compte{
+    id : integer {key}
+    nom : string
+}
+
+class Profil_Utilisateurice{
+
+    mail : string
+    mdp : string
+    date_inscription : date
+    statut : {premium, regulier}
+}
+
+class Profil_Artiste{
+    bio : string
+}
+
+class Profil_ArtisteSolo{}
+
+class Profil_Groupe{}
+
+class Chanson{
+    id : integer {key}
+    titre : string
+    duree : int
+}
+
+class Album{
+    id : integer {key}
+    titre : string
+    annee_de_sortie : date
+    duree_totale : integer
+}
+
+Album : calcul_duree()
+
+class Playlist{
+    id : integer {key}
+    titre : string
+    description : string
+    autorisation_acces : {publique, privee, partagee_aux_amies}
+    }
+
+Playlist : redondance()
+Playlist : verification_autorisation()
+
+class DroitsAuteur{
+     metier : {editeur, compositeur, auteur} {local key}
+    }
+
+class GenresMusicaux{
+    nom : string {key}
+}
+
+class Pays{
+    nom : string {key}
+}
+
+Profil_ArtisteSolo --|>Profil_Artiste 
+Profil_Groupe --|>Profil_Artiste
+Profil_Artiste --|> Compte
+Profil_Utilisateurice -up-|> Compte
+Profil_Utilisateurice "0..*" -- "1..*" GenresMusicaux : apprécie >
+Profil_Utilisateurice "0..*" -- "0..*" Profil_Utilisateurice : ami.e.s >
+Profil_Utilisateurice "1" -- "0..*" Playlist : a créé >
+Profil_ArtisteSolo "0..*" - "0..1" Profil_Groupe : fait partie >
+GenresMusicaux "1" -- "0..*" Chanson : appartient au genre <
+Compte "0..*" - "1..*" Chanson : touche des droits >
+(Chanson, Compte) .. DroitsAuteur
+Album "0..*" -- "1" Profil_Artiste : est artiste principal de <
+Album "1" - "1..*" Chanson : est dans album <
+Chanson "0..*" -- "1" Profil_Artiste : est crée par >
+Pays "1" -- "0..*" Profil_Artiste : vient de <
+Playlist "0..*" -- "0..*" Album : fait partie de <
+Playlist "0..*" -- "0..*" Chanson : fait partie de <
+
+@enduml
