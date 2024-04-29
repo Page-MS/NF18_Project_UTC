@@ -1,4 +1,4 @@
-Ce document texte permet d'étudier les dépendances fonctionnelles aux sein des tables
+Ce document texte permet d'étudier les dépendances fonctionnelles aux sein des tables qui sont en 3NF. 
 
 Table Album : 
 Pas de dépendances entre id et titre car nous partons du principe que des album de meme nom peuvent exister.
