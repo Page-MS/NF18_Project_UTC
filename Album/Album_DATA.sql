@@ -34,7 +34,6 @@ INSERT INTO Album VALUES (DEFAULT, 'What A Wonderful World', '1968-01-01', 1892,
 INSERT INTO Album VALUES (DEFAULT, 'Louis Armstrong Of New Orleans', '1989-01-01', 3222, (SELECT id FROM Compte WHERE nom = 'Louis Armstrong'));
 INSERT INTO Album VALUES (DEFAULT, 'Satchmo Serenades', '1952-04-01', 3254, (SELECT id FROM Compte WHERE nom = 'Louis Armstrong'));
 
-
 INSERT INTO Album VALUES (DEFAULT, 'Purple Rain', '1984-06-25', 2639, (SELECT id FROM Compte WHERE nom = 'Prince'));
 INSERT INTO Album VALUES (DEFAULT, 'Parade', '1984-03-31', 2465, (SELECT id FROM Compte WHERE nom = 'Prince'));
-INSERT INTO Album VALUES (DEFAULT, 'Compliation Various Artists', '2024-04-21', 2465, (SELECT id FROM Compte WHERE nom = 'Queen'));
+INSERT INTO Album VALUES (DEFAULT, 'Compilation Various Artists', '2024-04-21', 2465, (SELECT id FROM Compte WHERE nom = 'Queen'));
