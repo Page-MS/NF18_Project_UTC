@@ -1,11 +1,11 @@
 INSERT INTO Profil_Utilisateurice VALUES((SELECT id FROM Compte WHERE nom = 'lau_fst'), 'lau@example.com', 'mdp123456', '2020-10-27', 'premium');
-INSERT INTO Profil_Utilisateurice VALUES((SELECT id FROM Compte WHERE nom = 'emmanuel_macron'), 'emmanuel.macron@example.com','macron1977','2024-01-01','regulier');
+INSERT INTO Profil_Utilisateurice VALUES((SELECT id FROM Compte WHERE nom = 'emmanuel_macron'), 'emmanuel.macron@example.com','BenallaIl0v3U','2024-01-01','regulier');
 INSERT INTO Profil_Utilisateurice VALUES ((SELECT id FROM Compte WHERE nom = 'Xavier Guchet'), 'xavier.guchet@example.com', 'xavier4312','2022-10-23','regulier');
 INSERT INTO Profil_Utilisateurice VALUES((SELECT id FROM Compte WHERE nom = 'Laure Ploix'), 'laure.ploix@example.com', 'bvqjkr5', '2021-05-12', 'premium');
-INSERT INTO Profil_Utilisateurice VALUES((SELECT id FROM Compte WHERE nom = 'no_gru'), 'no.gruget@example.com', 'lkjlrg123_7', '2020-12-30', 'premium');
+INSERT INTO Profil_Utilisateurice VALUES((SELECT id FROM Compte WHERE nom = 'no_gru'), 'no.gruget@example.com', 'skateboard', '2020-12-30', 'premium');
 INSERT INTO Profil_Utilisateurice VALUES((SELECT id FROM Compte WHERE nom = 'Xxx_Hater_xxX'), 'ihateeverything@example.com', 'xxxx11xxxx', '2023-04-25', 'regulier');
 INSERT INTO Profil_Utilisateurice VALUES((SELECT id FROM Compte WHERE nom = 'jump_max'), 'max@example.com', 'bjbvkfjhjk,yfuyqsu24345gfherr', '2018-01-21', 'premium');
-INSERT INTO Profil_Utilisateurice VALUES((SELECT id FROM Compte WHERE nom = 'chimpanze_combat'), 'chimpanze.combat@example.com', 'hahahaha', '2023-06-15', 'premium');
-INSERT INTO Profil_Utilisateurice VALUES((SELECT id FROM Compte WHERE nom = 'iris_gri'), 'irisaubresil@example.com', 'stflcaldm,aenpqmaf', '2019-03-11', 'premium');
+INSERT INTO Profil_Utilisateurice VALUES((SELECT id FROM Compte WHERE nom = 'chimpanze_combat'), 'chimpanze.combat@example.com', 'hahahahaCOMBAT', '2023-06-15', 'premium');
+INSERT INTO Profil_Utilisateurice VALUES((SELECT id FROM Compte WHERE nom = 'iris_gri'), 'irisaubresil@example.com', 'stflcaldm,aenpqmaf_milp', '2019-03-11', 'premium');
 INSERT INTO Profil_Utilisateurice VALUES((SELECT id FROM Compte WHERE nom = 'adeeee'), 'ade@example.com', 'gb2004', '2019-03-11', 'premium');
 INSERT INTO Profil_Utilisateurice VALUES((SELECT id FROM Compte WHERE nom = 'Jacques Chirac'), 'jacques.chirac@example.com', 'pommes', '1999-01-16', 'regulier');
