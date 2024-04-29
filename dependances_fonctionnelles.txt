@@ -1,37 +1,72 @@
 Ce document texte permet d'étudier les dépendances fonctionnelles aux sein des tables
 
 Table Album : 
-Pas de dépendances entre id et titre car nous partons du principe que des album de meme nom peuvent exister.
-En revanche (album, artiste_principal) est bien une clé, car on suppose qu'un meme artise ne crée pas deux album ayant le meme nom
+id -> titre
+id -> année_de_sortie
+id -> duree_totale
+id -> artiste_principal
+(titre, artiste_principal) -> id
+Pas de dépendances titre -> id car nous partons du principe que des album de meme nom peuvent exister.
+En revanche (titre, artiste_principal) est bien une clé, car on suppose qu'un meme artise ne crée pas deux album ayant le meme nom
 La durée totale de l'album est techniquement dépendantes des chansons présentes dans l'album. (mais cela suppose d'avoir une parfaite connaissance de la table Chanson)
-Il n'y a pas d'autre dépendances
+
+Cette table est 3NF.
 
 Table Chanson :
-Pas de dépendances apparente dans cette classe.
-Notement pas de dépendance entre id et titre car nous partons du principe que des chansons avec le même nom peuvent exister.
+id -> titre
+id -> duree
+id -> album
+id -> createurice
+id -> genre_musical
+(titre,createurice) -> id
+Pas de dépendance entre  car nous titre -> id car nous partons du principe que des chansons avec le même nom peuvent exister.
+En revanche, il y a une dépendance (titre, createurice) car un même artiste ne crée pas deux chansons ayant le même nom.
+Cette table est 3NF.
 
 Table Compte : 
-Pas de dépendance.
+id -> nom
+nom -> id
+
+
 
 Table GenresMusicaux : 
 La table comporte un seul attribut donc pas de dépendance.
+Cette table est 3NF
 
 Table Pays : 
-Pas de dépendances.
+La table comporte un seul attribut donc pas de dépendance.
+Cette table est 3NF
 
 Table Playlist :
-Encore une fois, nous n'interdisons pas la créations de Playlist ayant le même nom qu'une playlist déjà crée. Donc il n'y a pas de dépendance entre id et nom
-Meme chose pour description
-
+id -> titre
+id -> description
+id -> autorisation_acces
+id -> createurice 
+(titre, createurice) -> id
+Encore une fois, nous n'interdisons pas la créations de Playlist ayant le même nom qu'une playlist déjà crée. Donc il n'y a pas de dépendance nom -> id
+Meme chose pour description. En revanche, on ne peut evidement pas créer une playlist ayant le meme nom et le meme créateur, d'où la dépendance (titre, createurice) -> id
+Cette table est 3NF.
 
 Table Profil_Artiste :
-Pas de dépendance
+id -> bio
+id -> type
+id -> groupe
+id -> pays
+Cette table est 3NF.
 
 Table Profil_Utilisateurice :
+id -> mail
+mail -> id
+id -> mdp
+id -> date_inscription
+id -> statut
 Il y a, à priori, une dépendance entre mail et id car par définition un mail est unique. La connaissance du mail de l'utilisateur 
 permet de retrouver l'id. 
 En revanche il n'y a pas de dépendance entre mail et mdp, les utilisateurs pouvant choisir exactement le meme mot de passe. 
 Il n'y a pas non plus de dépendances entre la date d'inscription et le mail, car deux personnes peuvent s'inscire exactement en meme temps.
+Cette table est 3NF.
+
+
 
 
 

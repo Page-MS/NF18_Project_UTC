@@ -12,3 +12,4 @@ CREATE TABLE Playlist(
     createurice INTEGER REFERENCES Profil_Utilisateurice(id) NOT NULL,
     UNIQUE(titre,createurice)
 );
+
