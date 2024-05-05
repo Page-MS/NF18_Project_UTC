@@ -1,5 +1,5 @@
 CREATE TABLE Chanson(
-    id INTEGER PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     titre VARCHAR(30) NOT NULL,
     duree INTEGER NOT NULL,
     album INTEGER REFERENCES Album(id) NOT NULL,

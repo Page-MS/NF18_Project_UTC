@@ -5,7 +5,7 @@ CREATE TYPE AUTORISATION AS ENUM(
     );
 
 CREATE TABLE Playlist(
-    id INTEGER PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     titre VARCHAR(30) NOT NULL,
     description VARCHAR(200),
     autorisation_acces AUTORISATION NOT NULL ,

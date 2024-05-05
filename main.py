@@ -3,7 +3,7 @@ import psycopg2
 
 HOST = "localhost"
 USER = "postgres"
-PASSWORD = "dIBH544%"
+PASSWORD = ""
 DATABASE = "postgres"
 
 
@@ -19,10 +19,34 @@ def entrer_donnees(conn):
     cur.execute(open("Profil_Artiste\Profil_Artiste_DATA.sql", "r").read())
     cur.execute(open("Profil_Utilisateurice\Profil_Utilisateurice_TABLE.sql", "r").read())
     cur.execute(open("Profil_Utilisateurice\Profil_Utilisateurice_DATA.sql", "r").read())
+    cur.execute(open("Album\Album_TABLE.sql", "r").read())
+    cur.execute(open("Album\Album_DATA.sql", "r").read())
+    cur.execute(open("Chanson\Chanson_TABLE.sql", "r").read())
+    cur.execute(open("Chanson\Chanson_DATA.sql", "r").read())
+    cur.execute(open("Playlist\Playlist_TABLE.sql", "r").read())
+    cur.execute(open("Playlist\Playlist_DATA.sql", "r").read())
+    cur.execute(open("Assos_Playlist_Album\Assos_Playlist_Album_TABLE.sql", "r").read())
+    cur.execute(open("Assos_Playlist_Album\Assos_Playlist_Album_DATA.sql", "r").read())
+    cur.execute(open("Assos_Playlist_Chanson\Assos_Playlist_Chanson_TABLE.sql", "r").read())
+    cur.execute(open("Assos_Playlist_Chanson\Assos_Playlist_Chanson_DATA.sql", "r").read())
+    cur.execute(open("Assos_Utilisateurice_Utilisateurice\Assos_Utilisateurice_Utilisateurice_TABLE.sql", "r").read())
+    cur.execute(open("Assos_Utilisateurice_Utilisateurice\Assos_Utilisateurice_Utilisateurice_DATA.sql", "r").read())
+    cur.execute(open("Assos_Utilisateurice_GenreMusicaux\Assos_Utilisateurice_GenreMusicaux_TABLE.sql", "r").read())
+    cur.execute(open("Assos_Utilisateurice_GenreMusicaux\Assos_Utilisateurice_GenreMusicaux_DATA.sql", "r").read())
+    cur.execute(open("DroitsAuteurs\DroitsAuteurs_TABLE.sql", "r").read())
+    cur.execute(open("DroitsAuteurs\DroitsAuteurs_DATA.sql", "r").read())
     conn.commit()
 
 def Suppr_tout(conn):
     cur = conn.cursor()
+    cur.execute(open("Assos_Playlist_Album\Assos_Playlist_Album_DELETE.sql", "r").read())
+    cur.execute(open("Assos_Playlist_Chanson\Assos_Playlist_Chanson_DELETE.sql", "r").read())
+    cur.execute(open("Assos_Utilisateurice_Utilisateurice\Assos_Utilisateurice_Utilisateurice_DELETE.sql", "r").read())
+    cur.execute(open("Assos_Utilisateurice_GenreMusicaux\Assos_Utilisateurice_GenreMusicaux_DELETE.sql", "r").read())
+    cur.execute(open("DroitsAuteurs\DroitsAuteurs_DELETE.sql", "r").read())
+    cur.execute(open("Playlist\Playlist_DELETE.sql", "r").read())
+    cur.execute(open("Chanson\Chanson_DELETE.sql", "r").read())
+    cur.execute(open("Album\Album_DELETE.sql", "r").read())
     cur.execute(open("Profil_Utilisateurice\Profil_Utilisateurice_DELETE.sql", "r").read())
     cur.execute(open("Profil_Artiste\Profil_Artiste_DELETE.sql", "r").read())
     cur.execute(open("Compte\Compte_DELETE.sql", "r").read())
