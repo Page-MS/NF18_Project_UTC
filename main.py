@@ -3,20 +3,32 @@ import psycopg2
 
 HOST = "localhost"
 USER = "postgres"
-PASSWORD = ""
+PASSWORD = "dIBH544%"
 DATABASE = "postgres"
 
 
 def entrer_donnees(conn):
     cur = conn.cursor()
     cur.execute(open("Pays\Pays_TABLE.sql", "r").read())
-    conn.commit()
     cur.execute(open("Pays\Pays_DATA.sql", "r").read())
+    cur.execute(open("Compte\Compte_TABLE.sql", "r").read())
+    cur.execute(open("Compte\Compte_DATA.sql", "r").read())
+    cur.execute(open("GenresMusicaux\GenresMusicaux_TABLE.sql", "r").read())
+    cur.execute(open("GenresMusicaux\GenresMusicaux_DATA.sql", "r").read())
+    cur.execute(open("Profil_Artiste\Profil_Artiste_TABLE.sql", "r").read())
+    cur.execute(open("Profil_Artiste\Profil_Artiste_DATA.sql", "r").read())
+    cur.execute(open("Profil_Utilisateurice\Profil_Utilisateurice_TABLE.sql", "r").read())
+    cur.execute(open("Profil_Utilisateurice\Profil_Utilisateurice_DATA.sql", "r").read())
     conn.commit()
 
 def Suppr_tout(conn):
     cur = conn.cursor()
+    cur.execute(open("Profil_Utilisateurice\Profil_Utilisateurice_DELETE.sql", "r").read())
+    cur.execute(open("Profil_Artiste\Profil_Artiste_DELETE.sql", "r").read())
+    cur.execute(open("Compte\Compte_DELETE.sql", "r").read())
+    cur.execute(open("GenresMusicaux\GenresMusicaux_DELETE.sql", "r").read())
     cur.execute(open("Pays\Pays_DELETE.sql", "r").read())
+
     conn.commit()
 
 
@@ -30,6 +42,7 @@ def main():
             print("__________________________________________________")
             print("Pour entrer les données de la base de donnée tapez 1")
             print("Pour supprimer les données, entrez 2")
+            print("Pour pour quitter entrez n'importe quel autre charactère")
 
             choice = input()
             if choice == '1':
