@@ -1,4 +1,5 @@
-CREATE TYPE IF NOT EXISTS STATUT AS ENUM ('premium', 'regulier');
+DROP TYPE IF EXISTS STATUT;
+CREATE TYPE  STATUT AS ENUM ('premium', 'regulier');
 
 CREATE TABLE IF NOT EXISTS Profil_Utilisateurice(
     id INTEGER REFERENCES Compte PRIMARY KEY,
