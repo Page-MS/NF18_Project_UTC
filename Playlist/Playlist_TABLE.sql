@@ -1,10 +1,10 @@
-CREATE TYPE AUTORISATION AS ENUM(
+CREATE TYPE IF NOT EXISTS AUTORISATION AS ENUM(
     'privée', 
     'publique', 
     'partagee_aux_amies'
     );
 
-CREATE TABLE Playlist(
+CREATE TABLE IF NOT EXISTS Playlist(
     id SERIAL PRIMARY KEY,
     titre VARCHAR(30) NOT NULL,
     description VARCHAR(200),

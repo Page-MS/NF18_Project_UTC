@@ -1,4 +1,4 @@
-CREATE TABLE Compte(
+CREATE TABLE IF NOT EXISTS Compte(
     id SERIAL PRIMARY KEY,
     nom varchar(30) UNIQUE NOT NULL
 );

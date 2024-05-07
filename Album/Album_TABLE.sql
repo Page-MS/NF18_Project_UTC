@@ -1,4 +1,4 @@
-CREATE TABLE Album(
+CREATE TABLE IF NOT EXISTS Album(
     id SERIAL PRIMARY KEY,
     titre VARCHAR(30) NOT NULL,
     annee_de_sortie DATE NOT NULL,

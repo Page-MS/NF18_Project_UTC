@@ -1,9 +1,9 @@
-CREATE TYPE TYPE_PROFIL AS ENUM(
+CREATE TYPE IF NOT EXISTS TYPE_PROFIL AS ENUM(
     'Profil_Groupe',
     'Profil_Artiste_Solo',
     'Profil_Artiste');
 
-CREATE TABLE Profil_Artiste(
+CREATE TABLE IF NOT EXISTS Profil_Artiste(
     id integer references Compte(id) PRIMARY KEY,
     bio varchar(500),
     type TYPE_PROFIL NOT NULL,
