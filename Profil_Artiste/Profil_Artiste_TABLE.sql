@@ -1,4 +1,6 @@
-CREATE TYPE IF NOT EXISTS TYPE_PROFIL AS ENUM(
+DROP TYPE IF EXISTS TYPE_PROFIL;
+
+CREATE TYPE TYPE_PROFIL AS ENUM(
     'Profil_Groupe',
     'Profil_Artiste_Solo',
     'Profil_Artiste');

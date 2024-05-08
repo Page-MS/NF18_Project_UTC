@@ -1,4 +1,5 @@
-CREATE TYPE IF NOT EXISTS PROFESSION AS ENUM('compositeur', 'editeur', 'auteur');
+DROP TYPE IF EXISTS PROFESSION;
+CREATE TYPE PROFESSION AS ENUM('compositeur', 'editeur', 'auteur');
 
 CREATE TABLE IF NOT EXISTS DroitsAuteurs(
     metier PROFESSION,
