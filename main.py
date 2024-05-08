@@ -6,66 +6,66 @@ USER = "postgres"
 
 def entrer_donnees(conn):
     cur = conn.cursor()
-    cur.execute(open("Pays\Pays_TABLE.sql", "r").read())
-    cur.execute(open("Pays\Pays_DATA.sql", "r").read())
-    cur.execute(open("Compte\Compte_TABLE.sql", "r").read())
-    cur.execute(open("Compte\Compte_DATA.sql", "r").read())
-    cur.execute(open("GenresMusicaux\GenresMusicaux_TABLE.sql", "r").read())
-    cur.execute(open("GenresMusicaux\GenresMusicaux_DATA.sql", "r").read())
-    cur.execute(open("Profil_Artiste\Profil_Artiste_TABLE.sql", "r").read())
-    cur.execute(open("Profil_Artiste\Profil_Artiste_DATA.sql", "r").read())
-    cur.execute(open("Profil_Utilisateurice\Profil_Utilisateurice_TABLE.sql", "r").read())
-    cur.execute(open("Profil_Utilisateurice\Profil_Utilisateurice_DATA.sql", "r").read())
-    cur.execute(open("Album\Album_TABLE.sql", "r").read())
-    cur.execute(open("Album\Album_DATA.sql", "r").read())
-    cur.execute(open("Chanson\Chanson_TABLE.sql", "r").read())
-    cur.execute(open("Chanson\Chanson_DATA.sql", "r").read())
-    cur.execute(open("Playlist\Playlist_TABLE.sql", "r").read())
-    cur.execute(open("Playlist\Playlist_DATA.sql", "r").read())
-    cur.execute(open("Assos_Playlist_Album\Assos_Playlist_Album_TABLE.sql", "r").read())
-    cur.execute(open("Assos_Playlist_Album\Assos_Playlist_Album_DATA.sql", "r").read())
-    cur.execute(open("Assos_Playlist_Chanson\Assos_Playlist_Chanson_TABLE.sql", "r").read())
-    cur.execute(open("Assos_Playlist_Chanson\Assos_Playlist_Chanson_DATA.sql", "r").read())
-    cur.execute(open("Assos_Utilisateurice_Utilisateurice\Assos_Utilisateurice_Utilisateurice_TABLE.sql", "r").read())
-    cur.execute(open("Assos_Utilisateurice_Utilisateurice\Assos_Utilisateurice_Utilisateurice_DATA.sql", "r").read())
-    cur.execute(open("Assos_Utilisateurice_GenreMusicaux\Assos_Utilisateurice_GenreMusicaux_TABLE.sql", "r").read())
-    cur.execute(open("Assos_Utilisateurice_GenreMusicaux\Assos_Utilisateurice_GenreMusicaux_DATA.sql", "r").read())
-    cur.execute(open("DroitsAuteurs\DroitsAuteurs_TABLE.sql", "r").read())
-    cur.execute(open("DroitsAuteurs\DroitsAuteurs_DATA.sql", "r").read())
+    cur.execute(open("Pays/Pays_TABLE.sql", "r").read())
+    cur.execute(open("Pays/Pays_DATA.sql", "r").read())
+    cur.execute(open("Compte/Compte_TABLE.sql", "r").read())
+    cur.execute(open("Compte/Compte_DATA.sql", "r").read())
+    cur.execute(open("GenresMusicaux/GenresMusicaux_TABLE.sql", "r").read())
+    cur.execute(open("GenresMusicaux/GenresMusicaux_DATA.sql", "r").read())
+    cur.execute(open("Profil_Artiste/Profil_Artiste_TABLE.sql", "r").read())
+    cur.execute(open("Profil_Artiste/Profil_Artiste_DATA.sql", "r").read())
+    cur.execute(open("Profil_Utilisateurice/Profil_Utilisateurice_TABLE.sql", "r").read())
+    cur.execute(open("Profil_Utilisateurice/Profil_Utilisateurice_DATA.sql", "r").read())
+    cur.execute(open("Album/Album_TABLE.sql", "r").read())
+    cur.execute(open("Album/Album_DATA.sql", "r").read())
+    cur.execute(open("Chanson/Chanson_TABLE.sql", "r").read())
+    cur.execute(open("Chanson/Chanson_DATA.sql", "r").read())
+    cur.execute(open("Playlist/Playlist_TABLE.sql", "r").read())
+    cur.execute(open("Playlist/Playlist_DATA.sql", "r").read())
+    cur.execute(open("Assos_Playlist_Album/Assos_Playlist_Album_TABLE.sql", "r").read())
+    cur.execute(open("Assos_Playlist_Album/Assos_Playlist_Album_DATA.sql", "r").read())
+    cur.execute(open("Assos_Playlist_Chanson/Assos_Playlist_Chanson_TABLE.sql", "r").read())
+    cur.execute(open("Assos_Playlist_Chanson/Assos_Playlist_Chanson_DATA.sql", "r").read())
+    cur.execute(open("Assos_Utilisateurice_Utilisateurice/Assos_Utilisateurice_Utilisateurice_TABLE.sql", "r").read())
+    cur.execute(open("Assos_Utilisateurice_Utilisateurice/Assos_Utilisateurice_Utilisateurice_DATA.sql", "r").read())
+    cur.execute(open("Assos_Utilisateurice_GenreMusicaux/Assos_Utilisateurice_GenreMusicaux_TABLE.sql", "r").read())
+    cur.execute(open("Assos_Utilisateurice_GenreMusicaux/Assos_Utilisateurice_GenreMusicaux_DATA.sql", "r").read())
+    cur.execute(open("DroitsAuteurs/DroitsAuteurs_TABLE.sql", "r").read())
+    cur.execute(open("DroitsAuteurs/DroitsAuteurs_DATA.sql", "r").read())
     conn.commit()
 
 def Suppr_tout(conn):
     cur = conn.cursor()
-    cur.execute(open("Assos_Playlist_Album\Assos_Playlist_Album_DELETE.sql", "r").read())
-    cur.execute(open("Assos_Playlist_Chanson\Assos_Playlist_Chanson_DELETE.sql", "r").read())
-    cur.execute(open("Assos_Utilisateurice_Utilisateurice\Assos_Utilisateurice_Utilisateurice_DELETE.sql", "r").read())
-    cur.execute(open("Assos_Utilisateurice_GenreMusicaux\Assos_Utilisateurice_GenreMusicaux_DELETE.sql", "r").read())
-    cur.execute(open("DroitsAuteurs\DroitsAuteurs_DELETE.sql", "r").read())
-    cur.execute(open("Playlist\Playlist_DELETE.sql", "r").read())
-    cur.execute(open("Chanson\Chanson_DELETE.sql", "r").read())
-    cur.execute(open("Album\Album_DELETE.sql", "r").read())
-    cur.execute(open("Profil_Utilisateurice\Profil_Utilisateurice_DELETE.sql", "r").read())
-    cur.execute(open("Profil_Artiste\Profil_Artiste_DELETE.sql", "r").read())
-    cur.execute(open("Compte\Compte_DELETE.sql", "r").read())
-    cur.execute(open("GenresMusicaux\GenresMusicaux_DELETE.sql", "r").read())
-    cur.execute(open("Pays\Pays_DELETE.sql", "r").read())
+    cur.execute(open("Assos_Playlist_Album/Assos_Playlist_Album_DELETE.sql", "r").read())
+    cur.execute(open("Assos_Playlist_Chanson/Assos_Playlist_Chanson_DELETE.sql", "r").read())
+    cur.execute(open("Assos_Utilisateurice_Utilisateurice/Assos_Utilisateurice_Utilisateurice_DELETE.sql", "r").read())
+    cur.execute(open("Assos_Utilisateurice_GenreMusicaux/Assos_Utilisateurice_GenreMusicaux_DELETE.sql", "r").read())
+    cur.execute(open("DroitsAuteurs/DroitsAuteurs_DELETE.sql", "r").read())
+    cur.execute(open("Playlist/Playlist_DELETE.sql", "r").read())
+    cur.execute(open("Chanson/Chanson_DELETE.sql", "r").read())
+    cur.execute(open("Album/Album_DELETE.sql", "r").read())
+    cur.execute(open("Profil_Utilisateurice/Profil_Utilisateurice_DELETE.sql", "r").read())
+    cur.execute(open("Profil_Artiste/Profil_Artiste_DELETE.sql", "r").read())
+    cur.execute(open("Compte/Compte_DELETE.sql", "r").read())
+    cur.execute(open("GenresMusicaux/GenresMusicaux_DELETE.sql", "r").read())
+    cur.execute(open("Pays/Pays_DELETE.sql", "r").read())
 
     conn.commit()
 
 def Commande_perso(conn):
-    cur=conn.cursor()
-    commande=input("Entrez votre commande : ")
+    cur = conn.cursor()
+    commande = input("Entrez votre commande : ")
     cur.execute(commande)
     # Fetch data line by line
     raw = cur.fetchone()
     while raw:
-        print("- %s (devoir n%s),  note : %s" % (raw[0], raw[1], raw[2]))
+        print(raw[0])
         raw = cur.fetchone()
     conn.commit()
 
 def chansons_longues(conn):
     cur = conn.cursor()
-    cur.execute(open("Interrogation\Artistes_chansons_longues.sql", "r").read())
+    cur.execute(open("Interrogation/Artistes_chansons_longues.sql", "r").read())
     # Fetch data line by line
     raw = cur.fetchone()
     if raw :
@@ -76,7 +76,7 @@ def chansons_longues(conn):
 
 def artistes_prolifiques(conn):
     cur = conn.cursor()
-    cur.execute(open("Interrogation\Artistes_Prolifiques.sql", "r").read())
+    cur.execute(open("Interrogation/Artistes_Prolifiques.sql", "r").read())
     # Fetch data line by line
     raw = cur.fetchone()
     if raw :
@@ -87,7 +87,7 @@ def artistes_prolifiques(conn):
 
 def duree_moyenne(conn):
     cur = conn.cursor()
-    cur.execute(open("Interrogation\Duree_moyenne_artiste.sql", "r").read())
+    cur.execute(open("Interrogation/Duree_moyenne_artiste.sql", "r").read())
     # Fetch data line by line
     raw = cur.fetchone()
     if raw :
@@ -120,6 +120,7 @@ def genre_prefere(conn):
 def main():
     try :
         conn = psycopg2.connect("host=%s dbname=%s user=%s password=%s" % (HOST, DATABASE, USER, PASSWORD))
+        conn.autocommit = True
         print("Connexion réussie")
         choice = '1'
 
@@ -133,7 +134,7 @@ def main():
             print("Pour afficher la durée moyenne des chansons d'un artiste, entrez 6")
             print("Pour afficher le genre musical préféré d'un.e utilisateurice, entrez 7")
             print("Pour pour quitter entrez n'importe quel autre charactère")
-            print("------------------------------\nVotre choix :",end='')
+            print("------------------------------\nVotre choix : ",end='')
 
             choice = input()
             if choice == '1':
