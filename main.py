@@ -1,11 +1,8 @@
 import psycopg2
-
+from postgres import DATABASE, PASSWORD
 
 HOST = "localhost"
 USER = "postgres"
-PASSWORD = ""
-DATABASE = "postgres"
-
 
 def entrer_donnees(conn):
     cur = conn.cursor()
