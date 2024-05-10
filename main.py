@@ -1,41 +1,42 @@
 import psycopg2
+from datetime import date
+
 from postgres import DATABASE, PASSWORD
 
 HOST = "localhost"
 USER = "postgres"
 
-def entrer_donnees(conn):
-    cur = conn.cursor()
+def creation_table(cur):
     cur.execute(open("Pays/Pays_TABLE.sql", "r").read())
-    cur.execute(open("Pays/Pays_DATA.sql", "r").read())
     cur.execute(open("Compte/Compte_TABLE.sql", "r").read())
-    cur.execute(open("Compte/Compte_DATA.sql", "r").read())
     cur.execute(open("GenresMusicaux/GenresMusicaux_TABLE.sql", "r").read())
-    cur.execute(open("GenresMusicaux/GenresMusicaux_DATA.sql", "r").read())
     cur.execute(open("Profil_Artiste/Profil_Artiste_TABLE.sql", "r").read())
-    cur.execute(open("Profil_Artiste/Profil_Artiste_DATA.sql", "r").read())
     cur.execute(open("Profil_Utilisateurice/Profil_Utilisateurice_TABLE.sql", "r").read())
-    cur.execute(open("Profil_Utilisateurice/Profil_Utilisateurice_DATA.sql", "r").read())
     cur.execute(open("Album/Album_TABLE.sql", "r").read())
-    cur.execute(open("Album/Album_DATA.sql", "r").read())
     cur.execute(open("Chanson/Chanson_TABLE.sql", "r").read())
-    cur.execute(open("Chanson/Chanson_DATA.sql", "r").read())
     cur.execute(open("Playlist/Playlist_TABLE.sql", "r").read())
-    cur.execute(open("Playlist/Playlist_DATA.sql", "r").read())
     cur.execute(open("Assos_Playlist_Album/Assos_Playlist_Album_TABLE.sql", "r").read())
-    cur.execute(open("Assos_Playlist_Album/Assos_Playlist_Album_DATA.sql", "r").read())
     cur.execute(open("Assos_Playlist_Chanson/Assos_Playlist_Chanson_TABLE.sql", "r").read())
-    cur.execute(open("Assos_Playlist_Chanson/Assos_Playlist_Chanson_DATA.sql", "r").read())
     cur.execute(open("Assos_Utilisateurice_Utilisateurice/Assos_Utilisateurice_Utilisateurice_TABLE.sql", "r").read())
-    cur.execute(open("Assos_Utilisateurice_Utilisateurice/Assos_Utilisateurice_Utilisateurice_DATA.sql", "r").read())
     cur.execute(open("Assos_Utilisateurice_GenreMusicaux/Assos_Utilisateurice_GenreMusicaux_TABLE.sql", "r").read())
-    cur.execute(open("Assos_Utilisateurice_GenreMusicaux/Assos_Utilisateurice_GenreMusicaux_DATA.sql", "r").read())
     cur.execute(open("DroitsAuteurs/DroitsAuteurs_TABLE.sql", "r").read())
-    cur.execute(open("DroitsAuteurs/DroitsAuteurs_DATA.sql", "r").read())
-    conn.commit()
 
-def Suppr_tout(conn):
-    cur = conn.cursor()
+def insertion_donnee(cur):
+    cur.execute(open("Pays/Pays_DATA.sql", "r").read())
+    cur.execute(open("Compte/Compte_DATA.sql", "r").read())
+    cur.execute(open("GenresMusicaux/GenresMusicaux_DATA.sql", "r").read())
+    cur.execute(open("Profil_Artiste/Profil_Artiste_DATA.sql", "r").read())
+    cur.execute(open("Profil_Utilisateurice/Profil_Utilisateurice_DATA.sql", "r").read())
+    cur.execute(open("Album/Album_DATA.sql", "r").read())
+    cur.execute(open("Chanson/Chanson_DATA.sql", "r").read())
+    cur.execute(open("Playlist/Playlist_DATA.sql", "r").read())
+    cur.execute(open("Assos_Playlist_Album/Assos_Playlist_Album_DATA.sql", "r").read())
+    cur.execute(open("Assos_Playlist_Chanson/Assos_Playlist_Chanson_DATA.sql", "r").read())
+    cur.execute(open("Assos_Utilisateurice_Utilisateurice/Assos_Utilisateurice_Utilisateurice_DATA.sql", "r").read())
+    cur.execute(open("Assos_Utilisateurice_GenreMusicaux/Assos_Utilisateurice_GenreMusicaux_DATA.sql", "r").read())
+    cur.execute(open("DroitsAuteurs/DroitsAuteurs_DATA.sql", "r").read())
+
+def suppression_bdd(cur):
     cur.execute(open("Assos_Playlist_Album/Assos_Playlist_Album_DELETE.sql", "r").read())
     cur.execute(open("Assos_Playlist_Chanson/Assos_Playlist_Chanson_DELETE.sql", "r").read())
     cur.execute(open("Assos_Utilisateurice_Utilisateurice/Assos_Utilisateurice_Utilisateurice_DELETE.sql", "r").read())
@@ -50,7 +51,138 @@ def Suppr_tout(conn):
     cur.execute(open("GenresMusicaux/GenresMusicaux_DELETE.sql", "r").read())
     cur.execute(open("Pays/Pays_DELETE.sql", "r").read())
 
-    conn.commit()
+def insertion(cur, table):
+    if table == 'a':
+        nom = input("Identifiant du compte à ajouter : ")
+        cur.execute("SELECT * from Compte where nom = %s", (nom,))
+        data = cur.fetchone()
+        if data:
+            print("Cet identifiant est déjà utilisé.")
+        else:
+            type = input("Type du compte à ajouter (utilisateurice/artiste) : ")
+            while type not in ['utilisateurice', 'artiste']:
+                print("/!\ Le type de compte renseigné n'est pas valide.\n")
+                type = input("Type du compte à ajouter (utilisateurice/artiste) : ")
+
+            cur.execute("INSERT INTO Compte(nom) VALUES (%s)", (nom,))
+            cur.execute("SELECT id from Compte where nom = %s", (nom,))
+            id = cur.fetchone()
+
+            if type == "utilisateurice":
+                mail = input("Mail : ")
+                mdp = input("Mot de passe : ")
+                statut = input("Statut (premium/regulier) : ")
+
+                while statut not in ['premium', 'regulier'] :
+                    print("/!\ Le statut renseigné n'est pas valide.\n")
+                    statut = input("Statut (premium/regulier) : ")
+
+                cur.execute("INSERT INTO Profil_Utilisateurice VALUES(%s,%s,%s,%s,%s)", (id,mail,mdp,date.today(), statut))
+                print("Donnée insérée avec succès.")
+
+            if type == "artiste":
+                bio = input("Biographie : ")
+                p = input("Pays : ")
+                cur.execute("SELECT * from Pays where nom = %s", (p,))
+                pays = cur.fetchone()
+                while not pays :
+                    print("/!\ Le pays renseigné n'appartient pas à la base de donnée.\n")
+                    p = input("Pays : ")
+                    cur.execute("SELECT * from Pays where nom = %s", (p,))
+                    pays = cur.fetchone()
+
+                type = input("Type (artiste/solo/groupe) : ")
+                while type not in ['artiste', 'solo', 'groupe']:
+                    print("/!\ Le type renseigné n'est pas valide.\n")
+                    type = input("Type (artiste/solo/groupe) : ")
+
+                if type == 'artiste' or type == 'groupe' :
+                    type = 'Profil_' + type.capitalize()
+                    cur.execute("INSERT INTO Profil_Artiste VALUES(%s,%s,%s,NULL,%s)", (id,bio,type,pays))
+                    print("Donnée insérée avec succès.")
+
+                if type == 'solo':
+                    type = 'Profil_Artiste_Solo'
+                    g = input("L'artiste appartient également à un groupe (y/n) : ")
+
+                    while g not in ['y', 'n']:
+                        print("/!\ La réponse à la question n'est pas valide.\n")
+                        g = input("L'artiste appartient également à un groupe (y/n) : ")
+
+                    if g == 'n' :
+                        cur.execute("INSERT INTO Profil_Artiste VALUES(%s,%s,%s,NULL,%s)", (id, bio, type, pays))
+                        print("Donnée insérée avec succès.")
+
+                    else :
+                        gr = input("Nom du groupe : ")
+                        cur.execute("SELECT type,id from Profil_Artiste where id = (SELECT id from Compte where nom = %s)",(gr,))
+                        data = cur.fetchone()
+                        while not data or (data and data[0] != 'Profil_Groupe' ):
+                            print("/!\ Le nom de groupe renseigné n'appartient pas à la base de donnée ou ne correspond pas au profil d'un groupe. \n")
+                            gr = input("Nom du groupe : ")
+                            cur.execute("SELECT type,id from Profil_Artiste where id = (SELECT id from Compte where nom = %s)",(gr,))
+                            data = cur.fetchone()
+
+                        cur.execute("INSERT INTO Profil_Artiste VALUES(%s,%s,%s,%s,%s)", (id, bio, type,data[1],pays))
+                        print("Donnée insérée avec succès.")
+
+    if table == 'b':
+        pass
+    if table == 'c':
+        pass
+    if table == 'd':
+        genre = input("Quel genre musical souhaitez vous ajoutez ? ")
+        cur.execute("SELECT * from GenresMusicaux where nom = %s", (genre,))
+        data = cur.fetchone()
+        if data:
+            print("Cette donnée est déjà présente dans la base de donnée.")
+        else :
+            cur.execute("INSERT INTO GenresMusicaux(nom) VALUES (%s)", (genre,))
+            print("Donnée insérée avec succès.")
+
+    if table == 'e':
+        pass
+
+    if table == 'f':
+        pays = input("Quel pays souhaitez vous ajoutez ? ")
+        cur.execute("SELECT * from Pays where nom = %s", (pays,))
+        data = cur.fetchone()
+        if data:
+            print("Cette donnée est déjà présente dans la base de donnée.")
+        else:
+            cur.execute("INSERT INTO Pays(nom) VALUES (%s)", (pays,))
+            print("Donnée insérée avec succès.")
+
+def modification(cur, table):
+    pass
+
+def suppression(cur, table):
+    pass
+
+def consultation(cur, table):
+    if table == 'a':
+        type = input("Quel type de compte souhaitez vous visualiser (utilisateurice/artiste/tous) ? ")
+        if type == "utilisateurice":
+            cur.execute("SELECT * FROM Compte JOIN Profil_Utilisateurice on Compte.id = Profil_Utilisateurice.id")
+        if type == "artiste":
+            cur.execute("SELECT * FROM Compte JOIN Profil_Artiste on Compte.id = Profil_Artiste.id")
+        if type == "tous":
+            cur.execute("SELECT * FROM Compte")
+
+    if table == 'b':
+        cur.execute("SELECT * FROM Chanson")
+    if table == 'c':
+        cur.execute("SELECT * FROM Album")
+    if table == 'd':
+        cur.execute("SELECT * FROM GenresMusicaux")
+    if table == 'e':
+        cur.execute("SELECT * FROM Playlist")
+    if table == 'f':
+        cur.execute("SELECT * FROM Pays")
+
+    data = cur.fetchall()
+    for row in data :
+        print(row)
 
 def Commande_perso(conn):
     cur = conn.cursor()
@@ -61,7 +193,6 @@ def Commande_perso(conn):
     while raw:
         print(raw[0])
         raw = cur.fetchone()
-    conn.commit()
 
 def chansons_longues(conn):
     cur = conn.cursor()
@@ -72,7 +203,6 @@ def chansons_longues(conn):
         while raw:
             print("- Nom de l'auteur %s" % (raw[0]))
             raw = cur.fetchone()
-    conn.commit()
 
 def artistes_prolifiques(conn):
     cur = conn.cursor()
@@ -83,7 +213,6 @@ def artistes_prolifiques(conn):
         while raw:
             print("- %s a sorti %s chansons" % (raw[0],raw[1]))
             raw = cur.fetchone()
-    conn.commit()
 
 def duree_moyenne(conn):
     cur = conn.cursor()
@@ -94,7 +223,6 @@ def duree_moyenne(conn):
         while raw:
             print("- Nom de l'auteur %s, durée moyenne %s : " % (raw[0], raw[1]))
             raw = cur.fetchone()
-    conn.commit()
 
 def genre_prefere(conn):
     cur = conn.cursor()
@@ -115,50 +243,71 @@ def genre_prefere(conn):
         while raw:
             print("- Le genre préféré de %s est : %s" % (raw[0], raw[1]))
             raw = cur.fetchone()
-    conn.commit()
 
 def main():
-    try :
+    try:
         conn = psycopg2.connect("host=%s dbname=%s user=%s password=%s" % (HOST, DATABASE, USER, PASSWORD))
         conn.autocommit = True
+        cur = conn.cursor()
         print("Connexion réussie")
         choice = '1'
 
-        while '1' <= choice <= '7':
+        # A exécuter si la base de donnée n'est pas déjà crée
+        # creation_table(cur)
+        # insertion_donnee(cur)
+
+        # A exécuter pour supprimer l'entièreté de la base de donnée
+        # suppression_bdd(cur)
+
+        while '1' <= choice <= '4':
             print("__________________________________________________")
-            print("Pour entrer les données de la base de donnée tapez 1")
-            print("Pour supprimer les données, entrez 2")
-            print("Pour executer une commande de votre choix en SQL, entrez 3")
-            print("Pour afficher les artistes aux chansons longues, entrez 4")
-            print("Pour afficher les artistes prolifiques, entrez 5")
-            print("Pour afficher la durée moyenne des chansons d'un artiste, entrez 6")
-            print("Pour afficher le genre musical préféré d'un.e utilisateurice, entrez 7")
-            print("Pour pour quitter entrez n'importe quel autre charactère")
-            print("------------------------------\nVotre choix : ",end='')
+            print("Pour effectuer une insertion dans la base de donnée, entrez 1")
+            print("Pour effectuer une modification dans la base de donnée, entrez 2")
+            print("Pour effectuer une suppression dans la base de donnée, entrez 3")
+            print("Pour effectuer une consultation dans la base de donnée, entrez 4")
 
-            choice = input()
-            if choice == '1':
-                entrer_donnees(conn)
-            if choice == '2':
-                Suppr_tout(conn)
-            if choice == '3':
-                Commande_perso(conn)
-            if choice == '4':
-                chansons_longues(conn)
-            if choice == '5':
-                artistes_prolifiques(conn)
+            '''
+            print("Pour executer une commande de votre choix en SQL, entrez 5")
+            print("Pour afficher les artistes aux chansons longues, entrez 6")
+            print("Pour afficher les artistes prolifiques, entrez 7")
+            print("Pour afficher la durée moyenne des chansons d'un artiste, entrez 8")
+            print("Pour afficher le genre musical préféré d'un.e utilisateurice, entrez 9")
+            '''
+            print("Pour quitter, entrez n'importe quel autre charactère")
+            print("__________________________________________________")
+            choice = input("Votre choix : ")
+
+            '''
             if choice == '6':
-                duree_moyenne(conn)
+                chansons_longues(conn)
             if choice == '7':
+                artistes_prolifiques(conn)
+            if choice == '8':
+                duree_moyenne(conn)
+            if choice == '9':
                 genre_prefere(conn)
+            '''
 
+            if '1' <= choice <= '4':
+                table = 'z'
+                print("\nChoisissez la table concernée : Compte(a), Chanson(b), Album(c), GenreMusicaux(d), Playlist(e), Pays(f)")
+                table = input("Table : ")
+                print("-----\n")
 
-            print(choice)
+                while 'a' <= table <= 'f':
+                    if choice == '1':
+                        insertion(cur, table)
+                    if choice == '2':
+                        modification(cur, table)
+                    if choice == '3':
+                        suppression(cur,table)
+                    if choice == '4':
+                        consultation(cur,table)
+                    table = 'z'
 
     except Exception as error :
         print("Une erreur s'est produite : ", error)
         print("Type d'exception : ", type(error))
-
 
 
 if __name__ == '__main__':
