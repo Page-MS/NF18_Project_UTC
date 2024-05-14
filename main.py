@@ -54,6 +54,276 @@ class Connexion:
 '''HOST = "localhost"
 USER = "postgres" '''
 
+class Compte() :
+    def __init__(self, cur):
+        self.cur = cur
+    def insertion(self):
+        nom = input("Identifiant du compte à ajouter : ")
+        self.cur.execute("SELECT * from Compte where nom = %s", (nom,))
+        data = self.cur.fetchone()
+        if data:
+            print("/!\ L'identifiant renseigné est déjà utilisé.\n")
+        else:
+            type = input("Type du compte à ajouter (utilisateurice/artiste) : ")
+            while type not in ['utilisateurice', 'artiste']:
+                print("/!\ Le type de compte renseigné n'est pas valide.\n")
+                type = input("Type du compte à ajouter (utilisateurice/artiste) : ")
+
+            self.cur.execute("INSERT INTO Compte(nom) VALUES (%s)", (nom,))
+            self.cur.execute("SELECT id from Compte where nom = %s", (nom,))
+            id = self.cur.fetchone()
+
+            if type == "utilisateurice":
+                mail = input("Mail : ")
+                mdp = input("Mot de passe : ")
+                statut = input("Statut (premium/regulier) : ")
+
+                while statut not in ['premium', 'regulier']:
+                    print("/!\ Le statut renseigné n'est pas valide.\n")
+                    statut = input("Statut (premium/regulier) : ")
+
+                self.cur.execute("INSERT INTO Profil_Utilisateurice VALUES(%s,%s,%s,%s,%s)",
+                            (id, mail, mdp, date.today(), statut))
+                print("Donnée insérée avec succès.")
+
+            if type == "artiste":
+                bio = input("Biographie : ")
+                p = input("Pays : ")
+                self.cur.execute("SELECT * from Pays where nom = %s", (p,))
+                pays = self.cur.fetchone()
+                while not pays:
+                    print("/!\ Le pays renseigné n'appartient pas à la base de donnée.\n")
+                    p = input("Pays : ")
+                    self.cur.execute("SELECT * from Pays where nom = %s", (p,))
+                    pays = self.cur.fetchone()
+
+                type = input("Type (artiste/solo/groupe) : ")
+                while type not in ['artiste', 'solo', 'groupe']:
+                    print("/!\ Le type renseigné n'est pas valide.\n")
+                    type = input("Type (artiste/solo/groupe) : ")
+
+                if type == 'artiste' or type == 'groupe':
+                    type = 'Profil_' + type.capitalize()
+                    self.cur.execute("INSERT INTO Profil_Artiste VALUES(%s,%s,%s,NULL,%s)", (id, bio, type, pays))
+                    print("Donnée insérée avec succès.")
+
+                if type == 'solo':
+                    type = 'Profil_Artiste_Solo'
+                    g = input("L'artiste appartient également à un groupe (y/n) : ")
+
+                    while g not in ['y', 'n']:
+                        print("/!\ La réponse à la question n'est pas valide.\n")
+                        g = input("L'artiste appartient également à un groupe (y/n) : ")
+
+                    if g == 'n':
+                        self.cur.execute("INSERT INTO Profil_Artiste VALUES(%s,%s,%s,NULL,%s)", (id, bio, type, pays))
+                        print("Donnée insérée avec succès.")
+
+                    else:
+                        gr = input("Nom du groupe : ")
+                        self.cur.execute(
+                            "SELECT type,id from Profil_Artiste where id = (SELECT id from Compte where nom = %s)",
+                            (gr,))
+                        data = self.cur.fetchone()
+                        while not data or (data and data[0] != 'Profil_Groupe'):
+                            print(
+                                "/!\ Le nom de groupe renseigné n'appartient pas à la base de donnée ou ne correspond pas au profil d'un groupe. \n")
+                            gr = input("Nom du groupe : ")
+                            self.cur.execute(
+                                "SELECT type,id from Profil_Artiste where id = (SELECT id from Compte where nom = %s)",
+                                (gr,))
+                            data = self.cur.fetchone()
+
+                        self.cur.execute("INSERT INTO Profil_Artiste VALUES(%s,%s,%s,%s,%s)", (id, bio, type, data[1], pays))
+                        print("Donnée insérée avec succès.")
+
+    def consultation(self):
+        type = input("Quel type de compte souhaitez vous visualiser (utilisateurice/artiste/tous) ? ")
+        if type == "utilisateurice":
+            self.cur.execute("SELECT * FROM Compte JOIN Profil_Utilisateurice on Compte.id = Profil_Utilisateurice.id")
+        if type == "artiste":
+            self.cur.execute("SELECT * FROM Compte JOIN Profil_Artiste on Compte.id = Profil_Artiste.id")
+        if type == "tous":
+            self.cur.execute("SELECT * FROM Compte")
+
+        headers = [i[0] for i in self.cur.description]
+        print(headers)
+        data = self.cur.fetchall()
+        for row in data:
+            print(row)
+
+class Chanson() :
+    def __init__(self, cur):
+        self.cur = cur
+
+    def insertion(self):
+        artiste = input("Interprète de la chanson : ")
+        self.cur.execute(
+            "SELECT Profil_Artiste.id from Profil_Artiste JOIN Compte ON Profil_Artiste.id = Compte.id where nom = %s",
+            (artiste,))
+        art = self.cur.fetchone()
+
+        while not art:
+            print("/!\ Le nom d'artiste renseigné n'appartient pas à la base de donnée.\n")
+            artiste = input("Interprète de la chanson : ")
+            self.cur.execute(
+                "SELECT Profil_Artiste.id from Profil_Artiste JOIN Compte ON Profil_Artiste.id = Compte.id where nom = %s",
+                (artiste,))
+            art = self.cur.fetchone()
+
+        titre = input("Titre de la chanson : ")
+        self.cur.execute(
+            "SELECT * from Chanson JOIN Profil_Artiste ON Chanson.createurice = Profil_Artiste.id JOIN Compte ON Profil_Artiste.id = Compte.id where Compte.nom = %s and Chanson.titre=%s ",
+            (artiste, titre))
+        data = self.cur.fetchone()
+
+        if data:
+            print("/!\ L'artiste possède dèjà une chanson du même nom.\n")
+
+        else:
+            album = input("Album de la chanson : ")
+            self.cur.execute("SELECT id, duree_totale from Album where titre = %s", (album,))
+            alb = self.cur.fetchone()
+
+            while not alb:
+                print("/!\ Le nom d'album renseigné n'appartient pas à la base de donnée.\n")
+                album = input("Album de la chanson : ")
+                self.cur.execute("SELECT id, duree_totale from Album where titre = %s", (album,))
+                alb = self.cur.fetchone()
+
+            genre = input("Genre musical de la chanson : ")
+            self.cur.execute("SELECT * from GenresMusicaux where nom = %s", (genre,))
+            gen = self.cur.fetchone()
+
+            while not gen:
+                print("/!\ Le genre musical renseigné n'appartient pas à la base de donnée.\n")
+                genre = input("Genre musical de la chanson : ")
+                self.cur.execute("SELECT * from GenresMusicaux where nom = %s", (genre,))
+                gen = self.cur.fetchone()
+
+            duree = int(input("Durée de la chanson (en seconde): "))
+            while duree < 0:
+                print("/!\ La durée renseignée n'est pas valide.\n")
+                duree = input("Durée de la chanson (en seconde): ")
+
+            self.cur.execute("INSERT INTO Chanson VALUES(DEFAULT,%s,%s,%s,%s,%s)", (titre, duree, alb[0], art[0], genre))
+            self.cur.execute("UPDATE Album SET duree_totale = %s where id = %s", (int(alb[1]) + duree, alb[0]))
+            print("Donnée insérée avec succès.")
+
+    def consultation(self):
+        self.cur.execute("SELECT * FROM Chanson")
+        headers = [i[0] for i in self.cur.description]
+        print(headers)
+        data = self.cur.fetchall()
+        for row in data:
+            print(row)
+
+class Album() :
+    def __init__(self, cur):
+        self.cur = cur
+
+    def insertion(self):
+        artiste = input("Artiste principal de l'album : ")
+        self.cur.execute(
+            "SELECT Profil_Artiste.id from Profil_Artiste JOIN Compte ON Profil_Artiste.id = Compte.id where nom = %s",
+            (artiste,))
+        art = self.cur.fetchone()
+
+        while not art:
+            print("/!\ Le nom d'artiste renseigné n'appartient pas à la base de donnée.\n")
+            artiste = input("Artiste principal de l'album : ")
+            self.cur.execute(
+                "SELECT Profil_Artiste.id from Profil_Artiste JOIN Compte ON Profil_Artiste.id = Compte.id where nom = %s",
+                (artiste,))
+            art = self.cur.fetchone()
+
+        titre = input("Titre de l'album : ")
+        self.cur.execute(
+            "SELECT * from Album JOIN Profil_Artiste ON Album.artiste_principal = Profil_Artiste.id JOIN Compte ON Profil_Artiste.id = Compte.id where Compte.nom = %s and Album.titre=%s ",
+            (artiste, titre))
+        data = self.cur.fetchone()
+
+        if data:
+            print("/!\ L'artiste possède dèjà un album du même nom.\n")
+
+        else:
+            annee = int(input("Année de sortie de l'album : "))
+            while annee < 1900 or annee > date.today().year:
+                print("/!\ L'année de sortie renseignée n'est pas valide.\n")
+                annee = int(input("Année de sortie de l'album : "))
+
+            ads = str(annee) + '-01-01'
+            self.cur.execute("INSERT INTO Album VALUES(DEFAULT,%s,%s,%s,%s)", (titre, ads, 0, art[0]))
+            print("Donnée insérée avec succès.")
+
+    def consultation(self):
+        self.cur.execute("SELECT * FROM Album")
+        headers = [i[0] for i in self.cur.description]
+        print(headers)
+        data = self.cur.fetchall()
+        for row in data:
+            print(row)
+
+class GenresMusicaux :
+    def __init__(self, cur):
+        self.cur = cur
+
+    def insertion(self):
+        genre = input("Quel genre musical souhaitez vous ajoutez ? ")
+        self.cur.execute("SELECT * from GenresMusicaux where nom = %s", (genre,))
+        data = self.cur.fetchone()
+        if data:
+            print("Cette donnée est déjà présente dans la base de donnée.")
+        else:
+            self.cur.execute("INSERT INTO GenresMusicaux(nom) VALUES (%s)", (genre,))
+            print("Donnée insérée avec succès.")
+
+    def consultation(self):
+        self.cur.execute("SELECT * FROM GenresMusicaux")
+        headers = [i[0] for i in self.cur.description]
+        print(headers)
+        data = self.cur.fetchall()
+        for row in data:
+            print(row)
+
+class Playlist():
+    def __init__(self,cur):
+        self.cur = cur
+
+    def insertion(self):
+        pass
+
+    def consultation(self):
+        self.cur.execute("SELECT * FROM Playlist")
+        headers = [i[0] for i in self.cur.description]
+        print(headers)
+        data = self.cur.fetchall()
+        for row in data:
+            print(row)
+
+class Pays():
+    def __init__(self, cur):
+        self.cur = cur
+
+    def insertion(self):
+        pays = input("Quel pays souhaitez vous ajoutez ? ")
+        self.cur.execute("SELECT * from Pays where nom = %s", (pays,))
+        data = self.cur.fetchone()
+        if data:
+            print("Cette donnée est déjà présente dans la base de donnée.")
+        else:
+            self.cur.execute("INSERT INTO Pays(nom) VALUES (%s)", (pays,))
+            print("Donnée insérée avec succès.")
+
+    def consultation(self):
+        self.cur.execute("SELECT * FROM Pays")
+        headers = [i[0] for i in self.cur.description]
+        print(headers)
+        data = self.cur.fetchall()
+        for row in data:
+            print(row)
+
+
 def creation_table(cur):
     cur.execute(open("Pays/Pays_TABLE.sql", "r").read())
     cur.execute(open("Compte/Compte_TABLE.sql", "r").read())
@@ -101,179 +371,17 @@ def suppression_bdd(cur):
 
 def insertion(cur, table):
     if table == 'a':
-        nom = input("Identifiant du compte à ajouter : ")
-        cur.execute("SELECT * from Compte where nom = %s", (nom,))
-        data = cur.fetchone()
-        if data:
-            print("/!\ L'identifiant renseigné est déjà utilisé.\n")
-        else:
-            type = input("Type du compte à ajouter (utilisateurice/artiste) : ")
-            while type not in ['utilisateurice', 'artiste']:
-                print("/!\ Le type de compte renseigné n'est pas valide.\n")
-                type = input("Type du compte à ajouter (utilisateurice/artiste) : ")
-
-            cur.execute("INSERT INTO Compte(nom) VALUES (%s)", (nom,))
-            cur.execute("SELECT id from Compte where nom = %s", (nom,))
-            id = cur.fetchone()
-
-            if type == "utilisateurice":
-                mail = input("Mail : ")
-                mdp = input("Mot de passe : ")
-                statut = input("Statut (premium/regulier) : ")
-
-                while statut not in ['premium', 'regulier'] :
-                    print("/!\ Le statut renseigné n'est pas valide.\n")
-                    statut = input("Statut (premium/regulier) : ")
-
-                cur.execute("INSERT INTO Profil_Utilisateurice VALUES(%s,%s,%s,%s,%s)", (id,mail,mdp,date.today(), statut))
-                print("Donnée insérée avec succès.")
-
-            if type == "artiste":
-                bio = input("Biographie : ")
-                p = input("Pays : ")
-                cur.execute("SELECT * from Pays where nom = %s", (p,))
-                pays = cur.fetchone()
-                while not pays :
-                    print("/!\ Le pays renseigné n'appartient pas à la base de donnée.\n")
-                    p = input("Pays : ")
-                    cur.execute("SELECT * from Pays where nom = %s", (p,))
-                    pays = cur.fetchone()
-
-                type = input("Type (artiste/solo/groupe) : ")
-                while type not in ['artiste', 'solo', 'groupe']:
-                    print("/!\ Le type renseigné n'est pas valide.\n")
-                    type = input("Type (artiste/solo/groupe) : ")
-
-                if type == 'artiste' or type == 'groupe' :
-                    type = 'Profil_' + type.capitalize()
-                    cur.execute("INSERT INTO Profil_Artiste VALUES(%s,%s,%s,NULL,%s)", (id,bio,type,pays))
-                    print("Donnée insérée avec succès.")
-
-                if type == 'solo':
-                    type = 'Profil_Artiste_Solo'
-                    g = input("L'artiste appartient également à un groupe (y/n) : ")
-
-                    while g not in ['y', 'n']:
-                        print("/!\ La réponse à la question n'est pas valide.\n")
-                        g = input("L'artiste appartient également à un groupe (y/n) : ")
-
-                    if g == 'n' :
-                        cur.execute("INSERT INTO Profil_Artiste VALUES(%s,%s,%s,NULL,%s)", (id, bio, type, pays))
-                        print("Donnée insérée avec succès.")
-
-                    else :
-                        gr = input("Nom du groupe : ")
-                        cur.execute("SELECT type,id from Profil_Artiste where id = (SELECT id from Compte where nom = %s)",(gr,))
-                        data = cur.fetchone()
-                        while not data or (data and data[0] != 'Profil_Groupe' ):
-                            print("/!\ Le nom de groupe renseigné n'appartient pas à la base de donnée ou ne correspond pas au profil d'un groupe. \n")
-                            gr = input("Nom du groupe : ")
-                            cur.execute("SELECT type,id from Profil_Artiste where id = (SELECT id from Compte where nom = %s)",(gr,))
-                            data = cur.fetchone()
-
-                        cur.execute("INSERT INTO Profil_Artiste VALUES(%s,%s,%s,%s,%s)", (id, bio, type,data[1],pays))
-                        print("Donnée insérée avec succès.")
-
+        Compte(cur).insertion()
     if table == 'b':
-        artiste = input("Interprète de la chanson : ")
-        cur.execute("SELECT Profil_Artiste.id from Profil_Artiste JOIN Compte ON Profil_Artiste.id = Compte.id where nom = %s", (artiste,))
-        art = cur.fetchone()
-
-        while not art:
-            print("/!\ Le nom d'artiste renseigné n'appartient pas à la base de donnée.\n")
-            artiste = input("Interprète de la chanson : ")
-            cur.execute("SELECT Profil_Artiste.id from Profil_Artiste JOIN Compte ON Profil_Artiste.id = Compte.id where nom = %s",(artiste,))
-            art = cur.fetchone()
-
-        titre = input("Titre de la chanson : ")
-        cur.execute("SELECT * from Chanson JOIN Profil_Artiste ON Chanson.createurice = Profil_Artiste.id JOIN Compte ON Profil_Artiste.id = Compte.id where Compte.nom = %s and Chanson.titre=%s ",(artiste,titre))
-        data = cur.fetchone()
-
-        if data:
-            print("/!\ L'artiste possède dèjà une chanson du même nom.\n")
-
-        else :
-            album = input("Album de la chanson : ")
-            cur.execute("SELECT id, duree_totale from Album where titre = %s",(album,))
-            alb = cur.fetchone()
-
-            while not alb:
-                print("/!\ Le nom d'album renseigné n'appartient pas à la base de donnée.\n")
-                album = input("Album de la chanson : ")
-                cur.execute("SELECT id, duree_totale from Album where titre = %s", (album,))
-                alb = cur.fetchone()
-
-            genre = input("Genre musical de la chanson : ")
-            cur.execute("SELECT * from GenresMusicaux where nom = %s", (genre,))
-            gen = cur.fetchone()
-
-            while not gen:
-                print("/!\ Le genre musical renseigné n'appartient pas à la base de donnée.\n")
-                genre = input("Genre musical de la chanson : ")
-                cur.execute("SELECT * from GenresMusicaux where nom = %s", (genre,))
-                gen = cur.fetchone()
-
-            duree = int(input("Durée de la chanson (en seconde): "))
-            while duree < 0 :
-                print("/!\ La durée renseignée n'est pas valide.\n")
-                duree = input("Durée de la chanson (en seconde): ")
-
-            cur.execute("INSERT INTO Chanson VALUES(DEFAULT,%s,%s,%s,%s,%s)", (titre, duree, alb[0], art[0], genre))
-            cur.execute("UPDATE Album SET duree_totale = %s where id = %s", (int(alb[1]) + duree, alb[0]))
-            print("Donnée insérée avec succès.")
-
-
+        Chanson(cur).insertion()
     if table == 'c':
-        artiste = input("Artiste principal de l'album : ")
-        cur.execute("SELECT Profil_Artiste.id from Profil_Artiste JOIN Compte ON Profil_Artiste.id = Compte.id where nom = %s",(artiste,))
-        art = cur.fetchone()
-
-        while not art:
-            print("/!\ Le nom d'artiste renseigné n'appartient pas à la base de donnée.\n")
-            artiste = input("Artiste principal de l'album : ")
-            cur.execute("SELECT Profil_Artiste.id from Profil_Artiste JOIN Compte ON Profil_Artiste.id = Compte.id where nom = %s",(artiste,))
-            art = cur.fetchone()
-
-        titre = input("Titre de l'album : ")
-        cur.execute("SELECT * from Album JOIN Profil_Artiste ON Album.artiste_principal = Profil_Artiste.id JOIN Compte ON Profil_Artiste.id = Compte.id where Compte.nom = %s and Album.titre=%s ",(artiste, titre))
-        data = cur.fetchone()
-
-        if data:
-            print("/!\ L'artiste possède dèjà un album du même nom.\n")
-
-        else:
-            annee = int(input("Année de sortie de l'album : "))
-            while annee < 1900 or annee > date.today().year :
-                print("/!\ L'année de sortie renseignée n'est pas valide.\n")
-                annee = int(input("Année de sortie de l'album : "))
-
-            ads = str(annee) + '-01-01'
-            cur.execute("INSERT INTO Album VALUES(DEFAULT,%s,%s,%s,%s)", (titre, ads, 0, art[0]))
-            print("Donnée insérée avec succès.")
-
+        Album(cur).insertion()
     if table == 'd':
-        genre = input("Quel genre musical souhaitez vous ajoutez ? ")
-        cur.execute("SELECT * from GenresMusicaux where nom = %s", (genre,))
-        data = cur.fetchone()
-        if data:
-            print("Cette donnée est déjà présente dans la base de donnée.")
-        else :
-            cur.execute("INSERT INTO GenresMusicaux(nom) VALUES (%s)", (genre,))
-            print("Donnée insérée avec succès.")
-
+        GenresMusicaux(cur).insertion()
     if table == 'e':
-        pass
-        #playlist
-
+        Playlist(cur).insertion()
     if table == 'f':
-        pays = input("Quel pays souhaitez vous ajoutez ? ")
-        cur.execute("SELECT * from Pays where nom = %s", (pays,))
-        data = cur.fetchone()
-        if data:
-            print("Cette donnée est déjà présente dans la base de donnée.")
-        else:
-            cur.execute("INSERT INTO Pays(nom) VALUES (%s)", (pays,))
-            print("Donnée insérée avec succès.")
+        Pays(cur).insertion()
 
 def modification(cur, table):
     pass
@@ -283,28 +391,17 @@ def suppression(cur, table):
 
 def consultation(cur, table):
     if table == 'a':
-        type = input("Quel type de compte souhaitez vous visualiser (utilisateurice/artiste/tous) ? ")
-        if type == "utilisateurice":
-            cur.execute("SELECT * FROM Compte JOIN Profil_Utilisateurice on Compte.id = Profil_Utilisateurice.id")
-        if type == "artiste":
-            cur.execute("SELECT * FROM Compte JOIN Profil_Artiste on Compte.id = Profil_Artiste.id")
-        if type == "tous":
-            cur.execute("SELECT * FROM Compte")
-
+        Compte(cur).consultation()
     if table == 'b':
-        cur.execute("SELECT * FROM Chanson")
+        Chanson(cur).consultation()
     if table == 'c':
-        cur.execute("SELECT * FROM Album")
+        Album(cur).consultation()
     if table == 'd':
-        cur.execute("SELECT * FROM GenresMusicaux")
+        GenresMusicaux(cur).consultation()
     if table == 'e':
-        cur.execute("SELECT * FROM Playlist")
+        Playlist(cur).consultation()
     if table == 'f':
-        cur.execute("SELECT * FROM Pays")
-
-    data = cur.fetchall()
-    for row in data :
-        print(row)
+        Pays(cur).consultation()
 
 def Commande_perso(conn):
     cur = conn.cursor()
@@ -386,12 +483,12 @@ def main():
         print("Connexion réussie")
         choice = '1'
 
+        # A exécuter pour supprimer l'entièreté de la base de donnée
+        # suppression_bdd(cur)
+
         # A exécuter si la base de donnée n'est pas déjà crée
         # creation_table(cur)
         # insertion_donnee(cur)
-
-        # A exécuter pour supprimer l'entièreté de la base de donnée
-        # suppression_bdd(cur)
 
         while '1' <= choice <= '4':
             print("__________________________________________________")
