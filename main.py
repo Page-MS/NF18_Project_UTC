@@ -51,9 +51,6 @@ class Connexion:
         self.__PASSWORD = value
 
 
-'''HOST = "localhost"
-USER = "postgres" '''
-
 class Compte() :
     def __init__(self, cur):
         self.cur = cur
@@ -334,7 +331,33 @@ class Playlist():
         self.cur = cur
 
     def insertion(self):
-        pass
+        compte = input("Compte duquel crée la playlist : ")
+        self.cur.execute("SELECT id from Compte where nom = %s",(compte,))
+        c = self.cur.fetchone()
+
+        while not c :
+            print("/!\ Le compte renseigné n'appartient pas à la base de donnée.\n")
+            compte = input("Compte duquel crée la playlist :")
+            self.cur.execute("SELECT id from Compte where nom = %s", (compte,))
+            c = self.cur.fetchone()
+
+        titre = input("Titre de la playlist : ")
+        self.cur.execute("SELECT * from Playlist JOIN Compte ON Playlist.createurice = Compte.id where Compte.id = %s and Playlist.titre=%s ",(c[0], titre))
+        data = self.cur.fetchone()
+
+        if data:
+            print("/!\ Le compte possède dèjà une playlist du même nom.\n")
+
+        else:
+            des = input("Description de la playlist : ")
+            aut = input("Paramètre d'autorisation de la playlist (privee/publique/partagee_aux_amies) : ")
+            while aut not in ['privee', 'publique','partagee_aux_amies'] :
+                print("/!\ Le paramètre d'autorisation de la playlist n'est pas valide.\n")
+                aut = input("Paramètre d'autorisation de la playlist (privee/publique/partagee_aux_amies) : ")
+
+            self.cur.execute("INSERT INTO Playlist VALUES(DEFAULT,%s,%s,%s,%s)", (titre, des, aut, c))
+            print("Donnée insérée avec succès.")
+
 
     def consultation(self):
         self.cur.execute("SELECT * FROM Playlist")
@@ -509,7 +532,7 @@ def genre_prefere(conn):
 
 def main():
     try:
-        print("\n Bienvenue dans le programme d'accès à votre base de donnée de streaming musical !")
+        print("\nBienvenue dans le programme d'accès à votre base de donnée de streaming musical !")
         type_connexion='z'
         while type_connexion != 'o' and type_connexion != 'n' :
             type_connexion=input("Souhaitez vous utiliser des identifiants personnalisés ? o/n : ")

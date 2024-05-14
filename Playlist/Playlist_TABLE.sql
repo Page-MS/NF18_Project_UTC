@@ -1,6 +1,6 @@
 DROP TYPE IF EXISTS AUTORISATION;
 CREATE TYPE AUTORISATION AS ENUM(
-    'privée', 
+    'privee',
     'publique', 
     'partagee_aux_amies'
     );
