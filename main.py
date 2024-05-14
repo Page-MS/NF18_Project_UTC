@@ -98,6 +98,8 @@ class Compte() :
         if type == "tous":
             self.cur.execute("SELECT * FROM Compte")
 
+        headers = [i[0] for i in self.cur.description]
+        print(headers)
         data = self.cur.fetchall()
         for row in data:
             print(row)
@@ -162,6 +164,8 @@ class Chanson() :
 
     def consultation(self):
         self.cur.execute("SELECT * FROM Chanson")
+        headers = [i[0] for i in self.cur.description]
+        print(headers)
         data = self.cur.fetchall()
         for row in data:
             print(row)
@@ -206,6 +210,8 @@ class Album() :
 
     def consultation(self):
         self.cur.execute("SELECT * FROM Album")
+        headers = [i[0] for i in self.cur.description]
+        print(headers)
         data = self.cur.fetchall()
         for row in data:
             print(row)
@@ -226,6 +232,8 @@ class GenresMusicaux :
 
     def consultation(self):
         self.cur.execute("SELECT * FROM GenresMusicaux")
+        headers = [i[0] for i in self.cur.description]
+        print(headers)
         data = self.cur.fetchall()
         for row in data:
             print(row)
@@ -239,6 +247,8 @@ class Playlist():
 
     def consultation(self):
         self.cur.execute("SELECT * FROM Playlist")
+        headers = [i[0] for i in self.cur.description]
+        print(headers)
         data = self.cur.fetchall()
         for row in data:
             print(row)
@@ -259,6 +269,8 @@ class Pays():
 
     def consultation(self):
         self.cur.execute("SELECT * FROM Pays")
+        headers = [i[0] for i in self.cur.description]
+        print(headers)
         data = self.cur.fetchall()
         for row in data:
             print(row)
@@ -411,12 +423,12 @@ def main():
         print("Connexion réussie")
         choice = '1'
 
+        # A exécuter pour supprimer l'entièreté de la base de donnée
+        # suppression_bdd(cur)
+
         # A exécuter si la base de donnée n'est pas déjà crée
         # creation_table(cur)
         # insertion_donnee(cur)
-
-        # A exécuter pour supprimer l'entièreté de la base de donnée
-        # suppression_bdd(cur)
 
         while '1' <= choice <= '4':
             print("__________________________________________________")
