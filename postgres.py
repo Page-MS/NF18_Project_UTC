@@ -1,2 +1,2 @@
-PASSWORD = "mdp"
+PASSWORD = ""
 DATABASE = "postgres"
