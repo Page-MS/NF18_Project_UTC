@@ -3,8 +3,56 @@ from datetime import date
 
 from postgres import DATABASE, PASSWORD
 
-HOST = "localhost"
-USER = "postgres"
+class Connexion:
+    def __init__(self):
+        self.__HOST = "localhost"
+        self.__USER = "postgres"
+        self.__DATABASE = DATABASE
+        self.__PASSWORD = PASSWORD
+
+    @property
+    def HOST(self):
+        return self.__HOST
+
+    @HOST.setter
+    def HOST(self, value):
+        if type(value) != str:
+            raise TypeError("Host doit être une str")
+        self.__HOST = value
+
+    @property
+    def USER(self):
+        return self.__USER
+
+    @USER.setter
+    def USER(self, value):
+        if type(value) != str:
+            raise TypeError("User doit être une str")
+        self.__USER = value
+
+    @property
+    def DATABASE(self):
+        return self.__DATABASE
+
+    @DATABASE.setter
+    def DATABASE(self, value):
+        if type(value) != str:
+            raise TypeError("Database doit être une str")
+        self.__DATABASE = value
+
+    @property
+    def PASSWORD(self):
+        return self.__PASSWORD
+
+    @PASSWORD.setter
+    def PASSWORD(self, value):
+        if type(value) != str:
+            raise TypeError("Host doit être une str")
+        self.__PASSWORD = value
+
+
+'''HOST = "localhost"
+USER = "postgres" '''
 
 class Compte() :
     def __init__(self, cur):
@@ -443,7 +491,19 @@ def genre_prefere(conn):
 
 def main():
     try:
-        conn = psycopg2.connect("host=%s dbname=%s user=%s password=%s" % (HOST, DATABASE, USER, PASSWORD))
+        print("\n Bienvenue dans le programme d'accès à votre base de donnée de streaming musical !")
+        type_connexion='z'
+        while type_connexion != 'o' and type_connexion != 'n' :
+            type_connexion=input("Souhaitez vous utiliser des identifiants personnalisés ? o/n : ")
+        identifiants = Connexion()
+
+        if type_connexion =='o':
+            identifiants.HOST=input("Entrez votre le nom du serveur (HOST) : ")
+            identifiants.USER = input("Entrez votre nom d'utilisteur (USER) : ")
+            identifiants.PASSWORD = input("Entrez votre mot de passe (PASSWORD) : ")
+            identifiants.DATABASE = input("Entrez le nom de votre base de donnée (DATABASE) : ")
+
+        conn = psycopg2.connect("host=%s dbname=%s user=%s password=%s" % (identifiants.HOST, identifiants.DATABASE, identifiants.USER, identifiants.PASSWORD))
         conn.autocommit = True
         cur = conn.cursor()
         print("Connexion réussie")
