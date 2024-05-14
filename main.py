@@ -152,6 +152,49 @@ class Compte() :
         for row in data:
             print(row)
 
+    def suppression(self):
+        type = 'default'
+        while type != 'utilisateurice' and  type != 'artiste' and  type != 'personne' :
+            type = input("Quel type de compte souhaitez vous supprimer (utilisateurice/artiste/personne) ? ")
+        nom = input("Quel est le nom du compte à supprimer : ")
+        if type == "utilisateurice":
+            self.cur.execute("SELECT * FROM Compte JOIN Profil_Utilisateurice on Compte.id = Profil_Utilisateurice.id WHERE nom='%s'"%(nom))
+            data = self.cur.fetchall()
+            if data :
+                self.cur.execute('''DELETE FROM Profil_Utilisateurice
+                                                JOIN Compte
+                                                ON Compte.id = Profil_Utilisateurice.id
+                                                WHERE Compte.nom = '%s' ''' % (nom))
+                self.cur.execute('''DELETE FROM Compte
+                                WHERE Compte.nom = '%s' '''%(nom))
+            else :
+                print("Le compte spécifié n'existe pas")
+
+        if type == "artiste":
+            self.cur.execute("SELECT * FROM Compte JOIN Profil_Artiste on Compte.id = Profil_Artiste.id WHERE nom='%s'"%(nom))
+            data = self.cur.fetchall()
+            if data:
+                self.cur.execute('''DELETE FROM Compte
+                                USING Profil_Artiste
+                                WHERE Compte.id = Profil_Artiste.id
+                                AND Compte.nom = '%s' ''' %(nom))
+            else :
+                print("Le compte spécifié n'existe pas")
+
+        if type == "personne":
+            self.cur.execute("SELECT * FROM Compte WHERE nom='%s'"%(nom))
+            data = self.cur.fetchall()
+            if data:
+                self.cur.execute("DELETE FROM Compte WHERE nom='%s'"%(nom))
+            else :
+                print("Le compte spécifié n'existe pas")
+
+        headers = [i[0] for i in self.cur.description]
+        print(headers)
+        data = self.cur.fetchall()
+        for row in data:
+            print(row)
+
 class Chanson() :
     def __init__(self, cur):
         self.cur = cur
@@ -387,7 +430,8 @@ def modification(cur, table):
     pass
 
 def suppression(cur, table):
-    pass
+    if table == 'a':
+        Compte(cur).suppression()
 
 def consultation(cur, table):
     if table == 'a':
