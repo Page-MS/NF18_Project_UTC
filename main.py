@@ -51,9 +51,6 @@ class Connexion:
         self.__PASSWORD = value
 
 
-'''HOST = "localhost"
-USER = "postgres" '''
-
 class Compte() :
     def __init__(self, cur):
         self.cur = cur
@@ -291,7 +288,7 @@ class Playlist():
         self.cur = cur
 
     def insertion(self):
-        compte = input("Compte duquel crée la playlist :")
+        compte = input("Compte duquel crée la playlist : ")
         self.cur.execute("SELECT id from Compte where nom = %s",(compte,))
         c = self.cur.fetchone()
 
@@ -302,7 +299,7 @@ class Playlist():
             c = self.cur.fetchone()
 
         titre = input("Titre de la playlist : ")
-        self.cur.execute("SELECT * from Playlist JOIN Compte ON Playlist.createurice = Compte.id where Compte.nom = %s and Playlist.titre=%s ",(c, titre))
+        self.cur.execute("SELECT * from Playlist JOIN Compte ON Playlist.createurice = Compte.id where Compte.id = %s and Playlist.titre=%s ",(c[0], titre))
         data = self.cur.fetchone()
 
         if data:
@@ -491,7 +488,7 @@ def genre_prefere(conn):
 
 def main():
     try:
-        print("\n Bienvenue dans le programme d'accès à votre base de donnée de streaming musical !")
+        print("\nBienvenue dans le programme d'accès à votre base de donnée de streaming musical !")
         type_connexion='z'
         while type_connexion != 'o' and type_connexion != 'n' :
             type_connexion=input("Souhaitez vous utiliser des identifiants personnalisés ? o/n : ")
