@@ -155,53 +155,107 @@ class Compte() :
             self.cur.execute("SELECT id from Compte where nom = %s", (nom,))
             id = self.cur.fetchone()
 
-        """
-        type = 'default'
-        while type != 'utilisateurice' and  type != 'artiste' and  type != 'personne' :
-            type = input("Quel type de compte souhaitez vous supprimer (utilisateurice/artiste/personne) ? ")
-        nom = input("Quel est le nom du compte à supprimer : ")
-        if type == "utilisateurice":
-            self.cur.execute("SELECT * FROM Compte JOIN Profil_Utilisateurice on Compte.id = Profil_Utilisateurice.id WHERE nom='%s'"%(nom))
-            data = self.cur.fetchall()
-            if data :
-                self.cur.execute(
-                    "DELETE FROM Assos_Playlist_Chanson WHERE playlist IN (SELECT id FROM Playlist WHERE createurice IN (SELECT id FROM Compte WHERE nom='%s'))" % (nom))
-                self.cur.execute(
-                    "DELETE FROM Assos_Playlist_Album WHERE id_Playlist IN (SELECT id FROM Playlist WHERE  createurice IN (SELECT id FROM Compte WHERE nom='%s'))" % (nom))
-                self.cur.execute(
-                    "DELETE FROM Playlist WHERE createurice IN (SELECT id FROM Compte WHERE nom='%s')" % (nom))
-                self.cur.execute("DELETE FROM Profil_Utilisateurice WHERE id IN (SELECT id FROM Compte WHERE nom ='%s') "%(nom))
-                self.cur.execute("DELETE FROM Compte WHERE Compte.nom = '%s' "%(nom))
-            else :
-                print("Le compte spécifié n'existe pas")
-
-        if type == "artiste":
-            self.cur.execute("SELECT * FROM Compte JOIN Profil_Artiste on Compte.id = Profil_Artiste.id WHERE nom='%s'"%(nom))
-            data = self.cur.fetchall()
-            if data:
-                self.cur.execute('''DELETE FROM Profil_Artiste
-                                WHERE id IN (SELECT id FROM Compte WHERE nom ='%s') ''' % (nom))
-                self.cur.execute('''DELETE FROM Compte
-                                                WHERE Compte.nom = '%s' ''' % (nom))
-            else :
-                print("Le compte spécifié n'existe pas")
-
-        if type == "personne":
-            self.cur.execute("SELECT * FROM Compte WHERE nom='%s'"%(nom))
-            data = self.cur.fetchall()
-            if data:
-                self.cur.execute("DELETE FROM Compte WHERE nom='%s'"%(nom))
-            else :
-                print("Le compte spécifié n'existe pas")
-                
-        """
-
+        self.cur.execute("DELETE FROM Assos_Playlist_Chanson WHERE playlist IN (SELECT id FROM Playlist WHERE createurice = %s)",(id,))
+        self.cur.execute("DELETE FROM Assos_Playlist_Album WHERE id_Playlist IN (SELECT id FROM Playlist WHERE  createurice =%s)",(id,))
+        self.cur.execute("DELETE FROM Assos_Utilisateurice_GenreMusicaux WHERE utilisateurice =%s",(id,))
+        self.cur.execute("DELETE FROM Assos_Utilisateurice_Utilisateurice WHERE ami_1 =%s OR ami_2=%s",(id,id))
+        self.cur.execute("DELETE FROM Assos_Utilisateurice_Utilisateurice WHERE ami_1 =%s OR ami_2=%s",(id,id))
+        self.cur.execute("DELETE FROM DroitsAuteurs WHERE compte=%s",(id,))
+        self.cur.execute("DELETE FROM Playlist WHERE createurice = %s", (id[0],))
         self.cur.execute("DELETE FROM Chanson WHERE createurice = %s", (id,))
         self.cur.execute("DELETE FROM Album WHERE artiste_principal = %s", (id,))
         self.cur.execute("DELETE FROM Profil_Utilisateurice WHERE id = %s", (id,))
         self.cur.execute("DELETE FROM Profil_Artiste WHERE id = %s", (id,))
-        self.cur.execute("DELETE FROM Compte WHERE Compte.id = %s", (id,))
-        print("Donnée supprimer avec succès.")
+        self.cur.execute("DELETE FROM Compte WHERE id = %s", (id,))
+        print("Donnée supprimée avec succès.")
+
+class Amitie():
+    def __init__(self, cur):
+        self.cur = cur
+
+    def insertion(self):
+        print("Ajout d'un lien d'amitié entre deux utilisateur•ice•s.")
+        nom_1 = input("Nom du premièr compte : ")
+        self.cur.execute("SELECT Compte.id from Compte JOIN Profil_Utilisateurice ON Profil_Utilisateurice.id = Compte.id where nom = %s", (nom_1,))
+        id_1 = self.cur.fetchone()
+
+        while not id_1:
+            print("/!\ Le nom de compte renseigné n'appartient pas à la base de donnée ou n'est pas calui d'un•e utilisateur•ice.\n")
+            nom = input("Nom du premièr compte : ")
+            self.cur.execute("SELECT Compte.id from Compte JOIN Profil_Utilisateurice ON Profil_Utilisateurice.id = Compte.id where nom = %s",(nom_1,))
+            id_1 = self.cur.fetchone()
+
+        nom_2 = input("Nom du deuxième compte : ")
+        self.cur.execute("SELECT Compte.id from Compte JOIN Profil_Utilisateurice ON Profil_Utilisateurice.id = Compte.id where nom = %s",(nom_2,))
+        id_2 = self.cur.fetchone()
+
+        while not id_2:
+            print("/!\ Le nom de compte renseigné n'appartient pas à la base de donnée ou n'est pas calui d'un•e utilisateur•ice.\n")
+            nom_2 = input("Nom du deuxième compte : ")
+            self.cur.execute("SELECT Compte.id from Compte JOIN Profil_Utilisateurice ON Profil_Utilisateurice.id = Compte.id where nom = %s",(nom_2,))
+            id_2 = self.cur.fetchone()
+
+        if id_1 == id_2 :
+            print("/!\ Les deux comptes renseignés sont les mêmes. L'insertion n'est pas possible.\n")
+        else :
+            self.cur.execute("SELECT * FROM  Assos_Utilisateurice_utilisateurice where (ami_1 = %s and ami_2 = %s) or (ami_2 = %s and ami_1 = %s)", (id_1,id_2,id_1,id_2))
+            data = self.cur.fetchone()
+
+        if data :
+            print("Cette relation existe déjà dans la base de donnée.")
+
+        else :
+            self.cur.execute("INSERT INTO Assos_Utilisateurice_Utilisateurice VALUES(%s,%s)", (id_1, id_2))
+            print("Donnée insérée avec succès.")
+
+    def consultation(self):
+        self.cur.execute("SELECT * FROM Assos_Utilisateurice_Utilisateurice")
+        h1, h2 = [i[0] for i in self.cur.description]
+        print(h1 + " | " + h2)
+        data = self.cur.fetchall()
+        for compte_1, compte_2 in data:
+            self.cur.execute("SELECT nom FROM Compte where id = %s", (compte_1,))
+            nom_1 = self.cur.fetchone()[0]
+            self.cur.execute("SELECT nom FROM Compte where id = %s", (compte_2,))
+            nom_2 = self.cur.fetchone()[0]
+            print(nom_1 + " | " + nom_2)
+
+    def suppression(self):
+        print("Suppression d'un lien d'amitié entre deux utilisateur•ice•s.")
+        nom_1 = input("Nom du premièr compte : ")
+        self.cur.execute("SELECT Compte.id from Compte JOIN Profil_Utilisateurice ON Profil_Utilisateurice.id = Compte.id where nom = %s",(nom_1,))
+        id_1 = self.cur.fetchone()
+
+        while not id_1:
+            print("/!\ Le nom de compte renseigné n'appartient pas à la base de donnée ou n'est pas calui d'un•e utilisateur•ice.\n")
+            nom = input("Nom du premièr compte : ")
+            self.cur.execute("SELECT Compte.id from Compte JOIN Profil_Utilisateurice ON Profil_Utilisateurice.id = Compte.id where nom = %s",(nom_1,))
+            id_1 = self.cur.fetchone()
+
+        nom_2 = input("Nom du deuxième compte : ")
+        self.cur.execute("SELECT Compte.id from Compte JOIN Profil_Utilisateurice ON Profil_Utilisateurice.id = Compte.id where nom = %s",(nom_2,))
+        id_2 = self.cur.fetchone()
+
+        while not id_2:
+            print("/!\ Le nom de compte renseigné n'appartient pas à la base de donnée ou n'est pas calui d'un•e utilisateur•ice.\n")
+            nom_2 = input("Nom du deuxième compte : ")
+            self.cur.execute("SELECT Compte.id from Compte JOIN Profil_Utilisateurice ON Profil_Utilisateurice.id = Compte.id where nom = %s",(nom_2,))
+            id_2 = self.cur.fetchone()
+
+        if id_1 == id_2:
+            print("/!\ Les deux comptes renseignés sont les mêmes. La suppression n'est pas possible.\n")
+        else:
+            self.cur.execute("SELECT * FROM  Assos_Utilisateurice_utilisateurice where (ami_1 = %s and ami_2 = %s) or (ami_2 = %s and ami_1 = %s)",(id_1, id_2, id_1, id_2))
+            data = self.cur.fetchone()
+
+        if not data:
+            print("Cette relation n'existe pas.")
+
+        else:
+            self.cur.execute("DELETE FROM Assos_Utilisateurice_Utilisateurice Where ami_1 = %s and ami_2=%s", (id_1, id_2))
+            self.cur.execute("DELETE FROM Assos_Utilisateurice_Utilisateurice Where ami_1 = %s and ami_2=%s", (id_2, id_1))
+            print("Donnée supprimée avec succès.")
+
 
 class Chanson() :
     def __init__(self, cur):
@@ -209,23 +263,17 @@ class Chanson() :
 
     def insertion(self):
         artiste = input("Interprète de la chanson : ")
-        self.cur.execute(
-            "SELECT Profil_Artiste.id from Profil_Artiste JOIN Compte ON Profil_Artiste.id = Compte.id where nom = %s",
-            (artiste,))
+        self.cur.execute("SELECT Profil_Artiste.id from Profil_Artiste JOIN Compte ON Profil_Artiste.id = Compte.id where nom = %s",(artiste,))
         art = self.cur.fetchone()
 
         while not art:
             print("/!\ Le nom d'artiste renseigné n'appartient pas à la base de donnée.\n")
             artiste = input("Interprète de la chanson : ")
-            self.cur.execute(
-                "SELECT Profil_Artiste.id from Profil_Artiste JOIN Compte ON Profil_Artiste.id = Compte.id where nom = %s",
-                (artiste,))
+            self.cur.execute("SELECT Profil_Artiste.id from Profil_Artiste JOIN Compte ON Profil_Artiste.id = Compte.id where nom = %s",(artiste,))
             art = self.cur.fetchone()
 
         titre = input("Titre de la chanson : ")
-        self.cur.execute(
-            "SELECT * from Chanson JOIN Profil_Artiste ON Chanson.createurice = Profil_Artiste.id JOIN Compte ON Profil_Artiste.id = Compte.id where Compte.nom = %s and Chanson.titre=%s ",
-            (artiste, titre))
+        self.cur.execute("SELECT * from Chanson JOIN Profil_Artiste ON Chanson.createurice = Profil_Artiste.id JOIN Compte ON Profil_Artiste.id = Compte.id where Compte.nom = %s and Chanson.titre=%s ",(artiste, titre))
         data = self.cur.fetchone()
 
         if data:
@@ -349,7 +397,7 @@ class GenresMusicaux :
         self.cur = cur
 
     def insertion(self):
-        genre = input("Quel genre musical souhaitez vous ajoutez ? ")
+        genre = input("Genre musical à ajoutez : ")
         self.cur.execute("SELECT * from GenresMusicaux where nom = %s", (genre,))
         data = self.cur.fetchone()
         if data:
@@ -465,17 +513,18 @@ class Pays():
         self.cur.execute("SELECT * from Pays where nom = '%s' "%(pays))
         data = self.cur.fetchone()
 
-        if data:
-            self.cur.execute("SELECT id from Profil_Artiste where pays = '%s' " %(pays))
-            profils={}
-            profils = self.cur.fetchone()
-            self.cur.execute("DELETE FROM Profil_Artiste WHERE pays='%s' " % (pays))
-            for i in profils :
-                self.cur.execute("DELETE FROM Compte WHERE Compte.id = '%s' " % (i))
-            self.cur.execute("DELETE FROM Pays WHERE nom='%s' "%(pays))
-            print("Suppression réalisée avec succès ! \n")
+        if not data:
+            print(f"/!\ Le pays renseigné n'appartient pas à la base de donnée.\n")
         else :
-                print(f"Le pays {pays} n'a ps été trouvé dans la base de donnée")
+            self.cur.execute("SELECT id from Profil_Artiste where pays = '%s' " %(pays))
+            profils = self.cur.fetchall()
+            self.cur.execute("DELETE FROM Profil_Artiste WHERE pays = '%s' " % (pays))
+            for id in profils :
+                self.cur.execute("DELETE FROM Compte WHERE id = %s " % (id))
+
+            self.cur.execute("DELETE FROM Pays WHERE nom='%s' "%(pays))
+            print("Donnée supprimée avec succès ! \n")
+
 
 
 def creation_table(cur):
@@ -526,16 +575,18 @@ def suppression_bdd(cur):
 def insertion(cur, table):
     if table == 'a':
         Compte(cur).insertion()
-    if table == 'b':
+    elif table == 'b':
         Chanson(cur).insertion()
-    if table == 'c':
+    elif table == 'c':
         Album(cur).insertion()
-    if table == 'd':
+    elif table == 'd':
         GenresMusicaux(cur).insertion()
-    if table == 'e':
+    elif table == 'e':
         Playlist(cur).insertion()
-    if table == 'f':
+    elif table == 'f':
         Pays(cur).insertion()
+    elif table == 'g':
+        Amitie(cur).insertion()
 
 def modification(cur, table):
     pass
@@ -553,6 +604,8 @@ def suppression(cur, table):
         Playlist(cur).suppression()
     if table == 'f':
         Pays(cur).suppression()
+    if table == 'g':
+        Amitie(cur).suppression()
 
 def consultation(cur, table):
     if table == 'a':
@@ -567,6 +620,8 @@ def consultation(cur, table):
         Playlist(cur).consultation()
     if table == 'f':
         Pays(cur).consultation()
+    if table == 'g':
+        Amitie(cur).consultation()
 
 def Commande_perso(conn):
     cur = conn.cursor()
@@ -610,7 +665,7 @@ def duree_moyenne(conn):
 
 def genre_prefere(conn):
     cur = conn.cursor()
-    user=input("De quel utilisateurice cherchez vous le genre préféré : ")
+    user=input("De quel utilisateur•ice cherchez vous le genre préféré : ")
     sql ='''Select Compte.nom, Chanson.genre_musical, COUNT(Chanson.genre_musical) as "nombre_musiques_du_genre" 
         FROM Compte
         JOIN Playlist ON playlist.createurice = Compte.id
@@ -667,11 +722,11 @@ def main():
             print("Pour afficher les artistes aux chansons longues, entrez 6")
             print("Pour afficher les artistes prolifiques, entrez 7")
             print("Pour afficher la durée moyenne des chansons d'un artiste, entrez 8")
-            print("Pour afficher le genre musical préféré d'un.e utilisateurice, entrez 9")
+            print("Pour afficher le genre musical préféré d'un•e utilisateur•ice, entrez 9")
             '''
             print("Pour quitter, entrez n'importe quel autre charactère")
             print("__________________________________________________")
-            choice = input("Votre choix : ")
+
 
             '''
             if choice == '6':
@@ -684,13 +739,14 @@ def main():
                 genre_prefere(conn)
             '''
 
+            choice = input("Votre choix : ")
             if '1' <= choice <= '4':
                 table = 'z'
-                print("\nChoisissez la table concernée : Compte(a), Chanson(b), Album(c), GenreMusicaux(d), Playlist(e), Pays(f)")
+                print("\nChoisissez la table concernée : Compte(a), Chanson(b), Album(c), GenreMusicaux(d), Playlist(e), Pays(f), Amitié(g)")
                 table = input("Table : ")
                 print("-----\n")
 
-                while 'a' <= table <= 'f':
+                while 'a' <= table <= 'g':
                     if choice == '1':
                         insertion(cur, table)
                     if choice == '2':
