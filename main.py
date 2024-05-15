@@ -158,12 +158,8 @@ class Compte() :
             self.cur.execute("SELECT * FROM Compte JOIN Profil_Utilisateurice on Compte.id = Profil_Utilisateurice.id WHERE nom='%s'"%(nom))
             data = self.cur.fetchall()
             if data :
-                self.cur.execute('''DELETE FROM Profil_Utilisateurice
-                                                JOIN Compte
-                                                ON Compte.id = Profil_Utilisateurice.id
-                                                WHERE Compte.nom = '%s' ''' % (nom))
-                self.cur.execute('''DELETE FROM Compte
-                                WHERE Compte.nom = '%s' '''%(nom))
+                self.cur.execute("DELETE FROM Profil_Utilisateurice WHERE id IN (SELECT id FROM Compte WHERE nom ='%s') "%(nom))
+                self.cur.execute("DELETE FROM Compte WHERE Compte.nom = '%s' "%(nom))
             else :
                 print("Le compte spécifié n'existe pas")
 
@@ -171,10 +167,10 @@ class Compte() :
             self.cur.execute("SELECT * FROM Compte JOIN Profil_Artiste on Compte.id = Profil_Artiste.id WHERE nom='%s'"%(nom))
             data = self.cur.fetchall()
             if data:
+                self.cur.execute('''DELETE FROM Profil_Artiste
+                                WHERE id IN (SELECT id FROM Compte WHERE nom ='%s') ''' % (nom))
                 self.cur.execute('''DELETE FROM Compte
-                                USING Profil_Artiste
-                                WHERE Compte.id = Profil_Artiste.id
-                                AND Compte.nom = '%s' ''' %(nom))
+                                                WHERE Compte.nom = '%s' ''' % (nom))
             else :
                 print("Le compte spécifié n'existe pas")
 
@@ -186,11 +182,7 @@ class Compte() :
             else :
                 print("Le compte spécifié n'existe pas")
 
-        headers = [i[0] for i in self.cur.description]
-        print(headers)
-        data = self.cur.fetchall()
-        for row in data:
-            print(row)
+
 
 class Chanson() :
     def __init__(self, cur):
@@ -258,6 +250,20 @@ class Chanson() :
         for row in data:
             print(row)
 
+    def suppression(self):
+        artiste = input("Nom de l'artiste de la chanson à supprimer : ")
+        titre = input("Titre de la chanson à supprimer : ")
+        self.cur.execute(
+            "SELECT * from Chanson JOIN Profil_Artiste ON Chanson.createurice = Profil_Artiste.id JOIN Compte ON Profil_Artiste.id = Compte.id where Compte.nom = %s and Chanson.titre=%s ",
+            (artiste, titre))
+        data = self.cur.fetchone()
+
+        if data:
+                self.cur.execute("DELETE FROM Chanson WHERE createurice IN (SELECT id FROM Compte WHERE nom ='%s') AND titre='%s' "%(artiste,titre))
+        else :
+                print(f"{artiste} n'a pas de chanson {titre}")
+
+
 class Album() :
     def __init__(self, cur):
         self.cur = cur
@@ -303,6 +309,21 @@ class Album() :
         data = self.cur.fetchall()
         for row in data:
             print(row)
+
+    def suppression(self):
+        artiste = input("Nom de l'artiste de l'album à supprimer : ")
+        titre = input("Titre de l'album à supprimer : ")
+        self.cur.execute(
+            "SELECT * from Album JOIN Profil_Artiste ON Album.artiste_principal = Profil_Artiste.id JOIN Compte ON Profil_Artiste.id = Compte.id where Compte.nom = %s and Album.titre=%s ",
+            (artiste, titre))
+        data = self.cur.fetchone()
+
+        if data:
+            self.cur.execute(
+                "DELETE FROM Chanson WHERE album IN (SELECT id FROM Album WHERE titre ='%s')" % (titre))
+            self.cur.execute("DELETE FROM Album WHERE artiste_principal IN (SELECT id FROM Compte WHERE nom ='%s') AND titre='%s' "%(artiste,titre))
+        else :
+                print(f"{artiste} n'a pas d'album' {titre}")
 
 class GenresMusicaux :
     def __init__(self, cur):
@@ -455,6 +476,16 @@ def modification(cur, table):
 def suppression(cur, table):
     if table == 'a':
         Compte(cur).suppression()
+    if table == 'b':
+        Chanson(cur).suppression()
+    if table == 'c':
+        Album(cur).suppression()
+    '''if table == 'd':
+        GenresMusicaux(cur).suppression()
+    if table == 'e':
+        Playlist(cur).suppression()
+    if table == 'f':
+        Pays(cur).suppression()'''
 
 def consultation(cur, table):
     if table == 'a':
