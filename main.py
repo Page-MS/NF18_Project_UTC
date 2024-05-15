@@ -347,6 +347,20 @@ class GenresMusicaux :
         for row in data:
             print(row)
 
+    def suppression(self):
+        genre = input("Titre du genre musical à supprimer : ")
+        self.cur.execute("SELECT * from GenresMusicaux where nom = '%s'" %(genre))
+        data = self.cur.fetchone()
+        if data:
+            self.cur.execute(
+                "DELETE FROM Assos_Utilisateurice_GenreMusicaux WHERE genre IN (SELECT nom FROM GenresMusicaux WHERE nom ='%s')" % (genre))
+            self.cur.execute(
+                "DELETE FROM Chanson WHERE genre_musical IN (SELECT nom FROM GenresMusicaux WHERE nom ='%s')" % (genre))
+            self.cur.execute("DELETE FROM GenresMusicaux WHERE nom='%s' "%(genre))
+            print("Suppression réalisée avec succès ! \n")
+        else :
+                print(f"Le genre {genre} n'existe pas")
+
 class Playlist():
     def __init__(self,cur):
         self.cur = cur
@@ -480,9 +494,9 @@ def suppression(cur, table):
         Chanson(cur).suppression()
     if table == 'c':
         Album(cur).suppression()
-    '''if table == 'd':
+    if table == 'd':
         GenresMusicaux(cur).suppression()
-    if table == 'e':
+    '''if table == 'e':
         Playlist(cur).suppression()
     if table == 'f':
         Pays(cur).suppression()'''
