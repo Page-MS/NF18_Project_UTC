@@ -158,6 +158,12 @@ class Compte() :
             self.cur.execute("SELECT * FROM Compte JOIN Profil_Utilisateurice on Compte.id = Profil_Utilisateurice.id WHERE nom='%s'"%(nom))
             data = self.cur.fetchall()
             if data :
+                self.cur.execute(
+                    "DELETE FROM Assos_Playlist_Chanson WHERE playlist IN (SELECT id FROM Playlist WHERE createurice IN (SELECT id FROM Compte WHERE nom='%s'))" % (nom))
+                self.cur.execute(
+                    "DELETE FROM Assos_Playlist_Album WHERE id_Playlist IN (SELECT id FROM Playlist WHERE  createurice IN (SELECT id FROM Compte WHERE nom='%s'))" % (nom))
+                self.cur.execute(
+                    "DELETE FROM Playlist WHERE createurice IN (SELECT id FROM Compte WHERE nom='%s')" % (nom))
                 self.cur.execute("DELETE FROM Profil_Utilisateurice WHERE id IN (SELECT id FROM Compte WHERE nom ='%s') "%(nom))
                 self.cur.execute("DELETE FROM Compte WHERE Compte.nom = '%s' "%(nom))
             else :
@@ -359,7 +365,7 @@ class GenresMusicaux :
             self.cur.execute("DELETE FROM GenresMusicaux WHERE nom='%s' "%(genre))
             print("Suppression réalisée avec succès ! \n")
         else :
-                print(f"Le genre {genre} n'existe pas")
+                print(f"Le genre musical {genre} n'existe pas")
 
 class Playlist():
     def __init__(self,cur):
@@ -402,6 +408,23 @@ class Playlist():
         for row in data:
             print(row)
 
+    def suppression(self):
+        titre = input("Titre de la playlist à supprimer : ")
+        createurice = input("Nom de le.a createurice de la playlist : ")
+        self.cur.execute("SELECT * from Playlist JOIN Compte ON Playlist.createurice = Compte.id where Compte.id IN (SELECT id FROM Compte WHERE nom='%s') AND Playlist.titre='%s' "%(createurice, titre))
+        data = self.cur.fetchone()
+
+        if data:
+            self.cur.execute(
+                "DELETE FROM Assos_Playlist_Chanson WHERE playlist IN (SELECT id FROM Playlist WHERE titre ='%s' AND createurice IN (SELECT id FROM Compte WHERE nom='%s'))" % (titre, createurice))
+            self.cur.execute(
+                "DELETE FROM Assos_Playlist_Album WHERE id_Playlist IN (SELECT id FROM Playlist WHERE titre ='%s' AND createurice IN (SELECT id FROM Compte WHERE nom='%s'))" % (titre, createurice))
+
+            self.cur.execute("DELETE FROM Playlist WHERE titre='%s' AND createurice IN (SELECT id FROM Compte WHERE nom='%s')"%(titre, createurice))
+            print("Suppression réalisée avec succès ! \n")
+        else :
+                print(f"{createurice} n'a pas de playlist {titre}")
+
 class Pays():
     def __init__(self, cur):
         self.cur = cur
@@ -423,6 +446,23 @@ class Pays():
         data = self.cur.fetchall()
         for row in data:
             print(row)
+
+    def suppression(self):
+        pays = input("Nom du pays à supprimer : ")
+        self.cur.execute("SELECT * from Pays where nom = '%s' "%(pays))
+        data = self.cur.fetchone()
+
+        if data:
+            self.cur.execute("SELECT id from Profil_Artiste where pays = '%s' " %(pays))
+            profils={}
+            profils = self.cur.fetchone()
+            self.cur.execute("DELETE FROM Profil_Artiste WHERE pays='%s' " % (pays))
+            for i in profils :
+                self.cur.execute("DELETE FROM Compte WHERE Compte.id = '%s' " % (i))
+            self.cur.execute("DELETE FROM Pays WHERE nom='%s' "%(pays))
+            print("Suppression réalisée avec succès ! \n")
+        else :
+                print(f"Le pays {pays} n'a ps été trouvé dans la base de donnée")
 
 
 def creation_table(cur):
@@ -496,10 +536,10 @@ def suppression(cur, table):
         Album(cur).suppression()
     if table == 'd':
         GenresMusicaux(cur).suppression()
-    '''if table == 'e':
+    if table == 'e':
         Playlist(cur).suppression()
     if table == 'f':
-        Pays(cur).suppression()'''
+        Pays(cur).suppression()
 
 def consultation(cur, table):
     if table == 'a':
