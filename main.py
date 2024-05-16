@@ -580,7 +580,27 @@ class Pays():
         print("Donnée supprimée avec succès.\n")
 
     def modification(self):
-        pass
+
+        nom = input("Nom du pays à modifier : ")
+        self.cur.execute("SELECT * from Pays where nom = '%s' " % (nom))
+        pays = self.cur.fetchone()
+
+        while not pays:
+            print(f"/!\ Le pays renseigné n'appartient pas à la base de donnée.\n")
+            nom = input("Nom du pays à supprimer : ")
+            self.cur.execute("SELECT * from Pays where nom = '%s' " % (nom))
+            pays = self.cur.fetchone()
+
+        new = input("Nouveau nom de pays : ")
+        self.cur.execute("SELECT * from Pays where nom = %s", (new,))
+        data = self.cur.fetchone()
+        if data:
+            print("Un pays possède déjà ce nom. La modification n'est pas possible.")
+        else:
+            self.cur.execute("INSERT INTO PAYS VALUES (%s)", (new,))
+            self.cur.execute("UPDATE Profil_Artiste set pays = %s WHERE pays = %s",(new, pays))
+            self.cur.execute("DELETE from Pays where nom= %s", (pays,))
+            print("Donnée modifié avec succès.")
 
 
 def creation_table(cur):
