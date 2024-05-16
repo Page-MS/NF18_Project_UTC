@@ -168,6 +168,10 @@ class Compte() :
         self.cur.execute("DELETE FROM Compte WHERE id = %s", (id,))
         print("Donnée supprimée avec succès.")
 
+
+    def modification(self):
+        pass
+
 class Amitie():
     def __init__(self, cur):
         self.cur = cur
@@ -255,6 +259,9 @@ class Amitie():
             self.cur.execute("DELETE FROM Assos_Utilisateurice_Utilisateurice Where ami_1 = %s and ami_2=%s", (id_2, id_1))
             print("Donnée supprimée avec succès.")
 
+    def modification(self):
+        pass
+
 
 class Chanson() :
     def __init__(self, cur):
@@ -340,6 +347,9 @@ class Chanson() :
             self.cur.execute("DELETE FROM Chanson WHERE createurice = %s AND titre=%s ", (art[0],titre))
             print("Donnée supprimée avec succès.")
 
+    def modification(self):
+        pass
+
 
 class Album() :
     def __init__(self, cur):
@@ -406,6 +416,9 @@ class Album() :
             self.cur.execute("DELETE FROM Album WHERE artiste_principal =%s AND titre=%s ", (art[0], titre))
             print("Donnée supprimée avec succès.")
 
+    def modification(self):
+        pass
+
 class GenresMusicaux :
     def __init__(self, cur):
         self.cur = cur
@@ -444,6 +457,9 @@ class GenresMusicaux :
         self.cur.execute("DELETE FROM Chanson WHERE genre_musical =%s", (genre,))
         self.cur.execute("DELETE FROM GenresMusicaux WHERE nom=%s ", (genre,))
         print("Donnée suppprimée avec succès.")
+
+    def modification(self):
+        pass
 
 class Playlist():
     def __init__(self,cur):
@@ -510,6 +526,10 @@ class Playlist():
             self.cur.execute("DELETE FROM Playlist WHERE id %s)", (playlist,))
             print("Donnée supprimée avec succès.")
 
+
+    def modification(self):
+        pass
+
 class Pays():
     def __init__(self, cur):
         self.cur = cur
@@ -558,6 +578,9 @@ class Pays():
 
         self.cur.execute("DELETE FROM Pays WHERE nom='%s' " % (pays))
         print("Donnée supprimée avec succès.\n")
+
+    def modification(self):
+        pass
 
 
 def creation_table(cur):
@@ -622,7 +645,20 @@ def insertion(cur, table):
         Amitie(cur).insertion()
 
 def modification(cur, table):
-    pass
+    if table == 'a':
+        Compte(cur).modification()
+    if table == 'b':
+        Chanson(cur).modification()
+    if table == 'c':
+        Album(cur).modification()
+    if table == 'd':
+        GenresMusicaux(cur).modification()
+    if table == 'e':
+        Playlist(cur).modification()
+    if table == 'f':
+        Pays(cur).modification()
+    if table == 'g':
+        Amitie(cur).modification()
 
 def suppression(cur, table):
     if table == 'a':
