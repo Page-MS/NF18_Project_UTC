@@ -1,1 +1,1 @@
-DROP TABLE Assos_Playlist_Chanson;
+DROP TABLE IF EXISTS Assos_Playlist_Chanson;

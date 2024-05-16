@@ -1,1 +1,1 @@
-DROP TABLE GenresMusicaux;
+DROP TABLE IF EXISTS GenresMusicaux;

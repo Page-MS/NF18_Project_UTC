@@ -1,1 +1,1 @@
-DROP TABLE Chanson;
+DROP TABLE IF EXISTS Chanson;
