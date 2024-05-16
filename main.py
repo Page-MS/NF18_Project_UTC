@@ -737,11 +737,11 @@ def main():
         choice = '1'
 
         # A exécuter pour supprimer l'entièreté de la base de donnée
-        # suppression_bdd(cur)
+        suppression_bdd(cur)
 
         # A exécuter si la base de donnée n'est pas déjà crée
-        # creation_table(cur)
-        # insertion_donnee(cur)
+        creation_table(cur)
+        insertion_donnee(cur)
 
         while '1' <= choice <= '4':
             print("__________________________________________________")
