@@ -157,7 +157,7 @@ class Compte() :
 
         self.cur.execute("DELETE FROM Assos_Playlist_Chanson WHERE playlist IN (SELECT id FROM Playlist WHERE createurice = %s)",(id,))
         self.cur.execute("DELETE FROM Assos_Playlist_Album WHERE id_Playlist IN (SELECT id FROM Playlist WHERE  createurice =%s)",(id,))
-        self.cur.execute("DELETE FROM Assos_Utilisateurice_GenreMusicaux WHERE utilisateurice =%s",(id,))
+        self.cur.execute("DELETE FROM Assos_Utilisateurice_GenresMusicaux WHERE utilisateurice =%s",(id,))
         self.cur.execute("DELETE FROM Assos_Utilisateurice_Utilisateurice WHERE ami_1 =%s OR ami_2=%s",(id,id))
         self.cur.execute("DELETE FROM DroitsAuteurs WHERE compte=%s",(id,))
         self.cur.execute("DELETE FROM Playlist WHERE createurice = %s", (id[0],))
@@ -452,14 +452,34 @@ class GenresMusicaux :
             self.cur.execute("SELECT * from GenresMusicaux where nom = %s", (genre,))
             data = self.cur.fetchone()
 
-        self.cur.execute("DELETE FROM Assos_Utilisateurice_GenreMusicaux WHERE genre =%s",(genre,))
+        self.cur.execute("DELETE FROM Assos_Utilisateurice_GenresMusicaux WHERE genre =%s",(genre,))
         self.cur.execute("DELETE FROM Assos_Playlist_Chanson WHERE chanson IN (SELECT id FROM Chanson WHERE genre_musical =%s)", (genre,))
         self.cur.execute("DELETE FROM Chanson WHERE genre_musical =%s", (genre,))
         self.cur.execute("DELETE FROM GenresMusicaux WHERE nom=%s ", (genre,))
         print("Donnée suppprimée avec succès.")
 
     def modification(self):
-        pass
+        nom = input("Nom du genre musical à modifier : ")
+        self.cur.execute("SELECT * from GenresMusicaux where nom = '%s' " % (nom))
+        genre = self.cur.fetchone()
+
+        while not genre:
+            print(f"/!\ Le genre musical renseigné n'appartient pas à la base de donnée.\n")
+            nom = input("Nom du genre musical à modifier : ")
+            self.cur.execute("SELECT * from GenresMusicaux where nom = '%s' " % (nom))
+            genre = self.cur.fetchone()
+
+        new = input("Nouveau nom du genre musical : ")
+        self.cur.execute("SELECT * from GenresMusicaux where nom = %s", (new,))
+        data = self.cur.fetchone()
+        if data:
+            print("Un genre musical possède déjà ce nom. La modification n'est pas possible.")
+        else:
+            self.cur.execute("INSERT INTO GenresMusicaux VALUES (%s)", (new,))
+            self.cur.execute("UPDATE Chanson set genre_musical = %s WHERE genre_musical = %s", (new, genre))
+            self.cur.execute("UPDATE Assos_Utilisateurice_GenresMusicaux set genre = %s WHERE genre = %s", (new, genre))
+            self.cur.execute("DELETE from GenresMusicaux where nom= %s", (genre,))
+            print("Donnée modifié avec succès.")
 
 class Playlist():
     def __init__(self,cur):
@@ -615,7 +635,7 @@ def creation_table(cur):
     cur.execute(open("Assos_Playlist_Album/Assos_Playlist_Album_TABLE.sql", "r").read())
     cur.execute(open("Assos_Playlist_Chanson/Assos_Playlist_Chanson_TABLE.sql", "r").read())
     cur.execute(open("Assos_Utilisateurice_Utilisateurice/Assos_Utilisateurice_Utilisateurice_TABLE.sql", "r").read())
-    cur.execute(open("Assos_Utilisateurice_GenreMusicaux/Assos_Utilisateurice_GenreMusicaux_TABLE.sql", "r").read())
+    cur.execute(open("Assos_Utilisateurice_GenresMusicaux/Assos_Utilisateurice_GenresMusicaux_TABLE.sql", "r").read())
     cur.execute(open("DroitsAuteurs/DroitsAuteurs_TABLE.sql", "r").read())
 
 def insertion_donnee(cur):
@@ -630,14 +650,14 @@ def insertion_donnee(cur):
     cur.execute(open("Assos_Playlist_Album/Assos_Playlist_Album_DATA.sql", "r").read())
     cur.execute(open("Assos_Playlist_Chanson/Assos_Playlist_Chanson_DATA.sql", "r").read())
     cur.execute(open("Assos_Utilisateurice_Utilisateurice/Assos_Utilisateurice_Utilisateurice_DATA.sql", "r").read())
-    cur.execute(open("Assos_Utilisateurice_GenreMusicaux/Assos_Utilisateurice_GenreMusicaux_DATA.sql", "r").read())
+    cur.execute(open("Assos_Utilisateurice_GenresMusicaux/Assos_Utilisateurice_GenresMusicaux_DATA.sql", "r").read())
     cur.execute(open("DroitsAuteurs/DroitsAuteurs_DATA.sql", "r").read())
 
 def suppression_bdd(cur):
     cur.execute(open("Assos_Playlist_Album/Assos_Playlist_Album_DELETE.sql", "r").read())
     cur.execute(open("Assos_Playlist_Chanson/Assos_Playlist_Chanson_DELETE.sql", "r").read())
     cur.execute(open("Assos_Utilisateurice_Utilisateurice/Assos_Utilisateurice_Utilisateurice_DELETE.sql", "r").read())
-    cur.execute(open("Assos_Utilisateurice_GenreMusicaux/Assos_Utilisateurice_GenreMusicaux_DELETE.sql", "r").read())
+    cur.execute(open("Assos_Utilisateurice_GenresMusicaux/Assos_Utilisateurice_GenresMusicaux_DELETE.sql", "r").read())
     cur.execute(open("DroitsAuteurs/DroitsAuteurs_DELETE.sql", "r").read())
     cur.execute(open("Playlist/Playlist_DELETE.sql", "r").read())
     cur.execute(open("Chanson/Chanson_DELETE.sql", "r").read())
