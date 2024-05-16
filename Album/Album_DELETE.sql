@@ -1,1 +1,1 @@
-DROP TABLE Album;
+DROP TABLE IF EXISTS Album;

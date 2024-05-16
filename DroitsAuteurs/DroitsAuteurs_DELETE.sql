@@ -1,2 +1,2 @@
-DROP TABLE DroitsAuteurs;
-DROP TYPE Profession;
+DROP TABLE IF EXISTS DroitsAuteurs;
+DROP TYPE IF EXISTS Profession;

@@ -1,1 +1,1 @@
-DROP TABLE Assos_Utilisateurice_Utilisateurice;
+DROP TABLE IF EXISTS Assos_Utilisateurice_Utilisateurice;
