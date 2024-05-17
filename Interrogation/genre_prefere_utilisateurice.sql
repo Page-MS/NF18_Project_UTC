@@ -5,8 +5,8 @@
 
 SELECT GenresMusicaux.nom, COUNT(Profil_Utilisateurice.id) AS nombre_utilisateurs
 FROM GenresMusicaux
-JOIN Assos_Utilisateurice_GenreMusicaux ON GenresMusicaux.nom = Assos_Utilisateurice_GenreMusicaux.genre
-JOIN Profil_Utilisateurice ON Assos_Utilisateurice_GenreMusicaux.utilisateurice = Profil_Utilisateurice.id
+JOIN Assos_Utilisateurice_GenresMusicaux ON GenresMusicaux.nom = Assos_Utilisateurice_GenresMusicaux.genre
+JOIN Profil_Utilisateurice ON Assos_Utilisateurice_GenresMusicaux.utilisateurice = Profil_Utilisateurice.id
 GROUP BY GenresMusicaux.nom
 ORDER BY nombre_utilisateurs DESC;
 

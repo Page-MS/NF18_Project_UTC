@@ -995,64 +995,55 @@ def consultation(cur, table):
     if table == 'h':
         Assos_Playlist_Chanson(cur).consultation()
 
-def Commande_perso(conn):
-    cur = conn.cursor()
-    commande = input("Entrez votre commande : ")
-    cur.execute(commande)
+def requete(cur, req) :
+    if req == 'a':
+        duree_moyenne(cur)
+    if req == 'b':
+        artistes_prolifiques(cur)
+    if req == 'c':
+        chansons_longues(cur)
+    if req == 'd':
+        genre_prefere(cur)
+
+def chansons_longues(cur):
+    cur.execute(open("Interrogation/Artistes_chansons_longues.sql", "r").read())
     # Fetch data line by line
+    print("Artiste")
+    print('_______')
     raw = cur.fetchone()
     while raw:
         print(raw[0])
         raw = cur.fetchone()
 
-def chansons_longues(conn):
-    cur = conn.cursor()
-    cur.execute(open("Interrogation/Artistes_chansons_longues.sql", "r").read())
-    # Fetch data line by line
-    raw = cur.fetchone()
-    if raw :
-        while raw:
-            print("- Nom de l'auteur %s" % (raw[0]))
-            raw = cur.fetchone()
-
-def artistes_prolifiques(conn):
-    cur = conn.cursor()
+def artistes_prolifiques(cur):
     cur.execute(open("Interrogation/Artistes_Prolifiques.sql", "r").read())
     # Fetch data line by line
+    print("Artiste | Nombre de chansons")
+    print('_______')
     raw = cur.fetchone()
-    if raw :
-        while raw:
-            print("- %s a sorti %s chansons" % (raw[0],raw[1]))
-            raw = cur.fetchone()
+    while raw:
+        print(raw[0] + " | " + str(raw[1]))
+        raw = cur.fetchone()
 
-def duree_moyenne(conn):
-    cur = conn.cursor()
-    cur.execute(open("Interrogation/Duree_moyenne_artiste.sql", "r").read())
+def duree_moyenne(cur):
+    cur.execute(open("Interrogation/duree_moyenne_artiste.sql", "r").read())
+    # Fetch data line by line
+    print("Artiste | Durée moyenne de ses chansons")
+    print('_______')
+    raw = cur.fetchone()
+    while raw:
+        print(raw[0] + " | " + str(raw[1]))
+        raw = cur.fetchone()
+
+def genre_prefere(cur):
+    cur.execute(open("Interrogation/genre_prefere_utilisateurice.sql", "r").read())
+    print("Genre Musical | Nombre d'amateurice")
+    print('_______')
     # Fetch data line by line
     raw = cur.fetchone()
     if raw :
         while raw:
-            print("- Nom de l'auteur %s, durée moyenne %s : " % (raw[0], raw[1]))
-            raw = cur.fetchone()
-
-def genre_prefere(conn):
-    cur = conn.cursor()
-    user=input("De quel utilisateur•ice cherchez vous le genre préféré : ")
-    sql ='''Select Compte.nom, Chanson.genre_musical, COUNT(Chanson.genre_musical) as "nombre_musiques_du_genre" 
-        FROM Compte
-        JOIN Playlist ON playlist.createurice = Compte.id
-        JOIN Assos_Playlist_Chanson ON Assos_Playlist_Chanson.playlist = Playlist.id
-        JOIN Chanson ON Chanson.id = Assos_Playlist_Chanson.chanson
-    WHERE nom = '%s'
-    GROUP BY Compte.nom, Chanson.genre_musical
-    ORDER BY nom, nombre_musiques_du_genre DESC
-    LIMIT 1'''%(user)
-    cur.execute(sql)
-    # Fetch data line by line
-    raw = cur.fetchone()
-    if raw :
-        while raw:
-            print("- Le genre préféré de %s est : %s" % (raw[0], raw[1]))
+            print(raw[0] + ' | '+  str(raw[1]))
             raw = cur.fetchone()
 
 def main():
@@ -1064,8 +1055,8 @@ def main():
         identifiants = Connexion()
 
         if type_connexion =='o':
-            identifiants.HOST=input("Entrez votre le nom du serveur (HOST) : ")
-            identifiants.USER = input("Entrez votre nom d'utilisteur (USER) : ")
+            identifiants.HOST=input("Entrez le nom du serveur (HOST) : ")
+            identifiants.USER = input("Entrez votre nom d'utilisteurice (USER) : ")
             identifiants.PASSWORD = input("Entrez votre mot de passe (PASSWORD) : ")
             identifiants.DATABASE = input("Entrez le nom de votre base de donnée (DATABASE) : ")
 
@@ -1082,34 +1073,15 @@ def main():
         # creation_table(cur)
         # insertion_donnee(cur)
 
-        while '1' <= choice <= '4':
+        while '1' <= choice <= '5':
             print("__________________________________________________")
             print("Pour effectuer une insertion dans la base de donnée, entrez 1")
             print("Pour effectuer une modification dans la base de donnée, entrez 2")
             print("Pour effectuer une suppression dans la base de donnée, entrez 3")
             print("Pour effectuer une consultation dans la base de donnée, entrez 4")
-
-            '''
-            print("Pour executer une commande de votre choix en SQL, entrez 5")
-            print("Pour afficher les artistes aux chansons longues, entrez 6")
-            print("Pour afficher les artistes prolifiques, entrez 7")
-            print("Pour afficher la durée moyenne des chansons d'un artiste, entrez 8")
-            print("Pour afficher le genre musical préféré d'un•e utilisateur•ice, entrez 9")
-            '''
+            print("Pour effectuer une requête spéciale, entrez 5")
             print("Pour quitter, entrez n'importe quel autre charactère")
             print("__________________________________________________")
-
-
-            '''
-            if choice == '6':
-                chansons_longues(conn)
-            if choice == '7':
-                artistes_prolifiques(conn)
-            if choice == '8':
-                duree_moyenne(conn)
-            if choice == '9':
-                genre_prefere(conn)
-            '''
 
             choice = input("Votre choix : ")
             if '1' <= choice <= '4':
@@ -1128,6 +1100,18 @@ def main():
                     if choice == '4':
                         consultation(cur,table)
                     table = 'z'
+
+            if choice == '5' :
+                print("Pour afficher la durée moyenne des chansons de chaque artiste (plus de 5 chansons), entrez a")
+                print("Pour afficher les 10 artistes les plus prolifiques de la base de donnée, entrez b")
+                print("Pour afficher les artistes ayant les chansons les plus longues (> 10 min), entrez c")
+                print("Pour afficher les 10 genres musicaux préférés des utilisateur•ice•s, entrez d")
+                req = input("Requête : ")
+                print("-----\n")
+
+                while 'a' <= req <= 'd':
+                    requete(cur, req)
+                    req = 'z'
 
         conn.close()
 
