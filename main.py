@@ -846,65 +846,36 @@ class Assos_Playlist_Chanson():
 
     def consultation(self):
         self.cur.execute("SELECT * FROM Assos_Playlist_Chanson")
-        headers = [i[0] for i in self.cur.description]
-        print(headers)
+        h1, h2 = [i[0] for i in self.cur.description]
+        print(h1 + " | " + h2)
         data = self.cur.fetchall()
-        for row in data:
-            self.cur.execute("SELECT titre FROM Chanson where id='%s' "%(row[0]))
-            chanson_a_afficher = self.cur.fetchall()
-            self.cur.execute("SELECT titre FROM Playlist where id='%s' " % (row[0]))
-            playlist_a_afficher = self.cur.fetchall()
-            print(f"{chanson_a_afficher} - {playlist_a_afficher}")
+        for playlist, chanson in data:
+            self.cur.execute("SELECT titre FROM Chanson where id='%s' "%(chanson))
+            chanson_a_afficher = self.cur.fetchone()[0]
+            self.cur.execute("SELECT titre FROM Playlist where id='%s' " % (playlist))
+            playlist_a_afficher = self.cur.fetchone()[0]
+            print(chanson_a_afficher + " | " + playlist_a_afficher)
+
 
     def suppression(self):
-        nom = input("Nom du pays à supprimer : ")
-        self.cur.execute("SELECT * from Pays where nom = '%s' "%(nom))
-        pays = self.cur.fetchone()
 
-        while not pays :
-            print(f"/!\ Le pays renseigné n'appartient pas à la base de donnée.\n")
-            nom = input("Nom du pays à supprimer : ")
-            self.cur.execute("SELECT * from Pays where nom = '%s' " % (nom))
-            pays = self.cur.fetchone()
-
-        self.cur.execute("DELETE FROM Assos_Playlist_Album WHERE id_Album IN (SELECT id from Album where artiste_principal IN (SELECT id from Profil_Artiste where pays = '%s')) " % (pays))
-        self.cur.execute("DELETE FROM Assos_Playlist_chanson WHERE chanson IN (SELECT id from Chanson where createurice IN (SELECT id from Profil_Artiste where pays = '%s')) " % (pays))
-        self.cur.execute("DELETE FROM DroitsAuteurs WHERE compte IN (SELECT id from Profil_Artiste where pays = '%s') " % (pays))
-        self.cur.execute("DELETE FROM Chanson WHERE createurice IN (SELECT id from Profil_Artiste where pays = '%s') " % (pays))
-        self.cur.execute("DELETE FROM Album WHERE artiste_principal IN (SELECT id from Profil_Artiste where pays = '%s') " % (pays))
-
-        self.cur.execute("SELECT id FROM Profil_Artiste WHERE pays = '%s' " % (pays))
-        artists = self.cur.fetchall()
-        self.cur.execute("DELETE FROM Profil_Artiste WHERE pays = '%s' " % (pays))
-
-        for artist in artists :
-            self.cur.execute("DELETE FROM Compte WHERE id = %s " % (artist))
-
-        self.cur.execute("DELETE FROM Pays WHERE nom='%s' " % (pays))
-        print("Donnée supprimée avec succès.\n")
+        playlist = input("Quel est le nom de la playlist ? ")
+        utilisateurice = input("Quel est le nom de l'auteurice  de la playlist ? ")
+        chanson = input("Quel est le nom de la chanson à supprimer de la playlist ? ")
+        artiste = input("Quel est le nom de l'auteurice de la chanson à supprimer de la playlist ? ")
+        self.cur.execute(
+            "SELECT * from Assos_Playlist_Chanson WHERE playlist IN (SELECT id FROM playlist WHERE titre= '%s' AND createurice IN (SELECT id FROM Compte WHERE nom='%s')) AND chanson IN (SELECT id FROM chanson WHERE titre='%s' AND createurice IN (SELECT id FROM Compte WHERE nom='%s')) " % (
+            playlist, utilisateurice, chanson, artiste))
+        data = self.cur.fetchone()
+        if not data:
+            print(f"La playlist {playlist} par {utilisateurice} ne contient pas de chanson {chanson} par {artiste}")
+        else :
+            self.cur.execute("DELETE FROM Assos_Playlist_Chanson WHERE playlist IN (SELECT id FROM playlist WHERE titre= '%s' AND createurice IN (SELECT id FROM Compte WHERE nom='%s')) AND chanson IN (SELECT id FROM chanson WHERE titre='%s' AND createurice IN (SELECT id FROM Compte WHERE nom='%s')) " % (
+            playlist, utilisateurice, chanson, artiste))
+            print("Donnée supprimée avec succès.\n")
 
     def modification(self):
-
-        nom = input("Nom du pays à modifier : ")
-        self.cur.execute("SELECT * from Pays where nom = '%s' " % (nom))
-        pays = self.cur.fetchone()
-
-        while not pays:
-            print(f"/!\ Le pays renseigné n'appartient pas à la base de donnée.\n")
-            nom = input("Nom du pays à supprimer : ")
-            self.cur.execute("SELECT * from Pays where nom = '%s' " % (nom))
-            pays = self.cur.fetchone()
-
-        new = input("Nouveau nom de pays : ")
-        self.cur.execute("SELECT * from Pays where nom = %s", (new,))
-        data = self.cur.fetchone()
-        if data:
-            print("Un pays possède déjà ce nom. La modification n'est pas possible.")
-        else:
-            self.cur.execute("INSERT INTO PAYS VALUES (%s)", (new,))
-            self.cur.execute("UPDATE Profil_Artiste set pays = %s WHERE pays = %s",(new, pays))
-            self.cur.execute("DELETE from Pays where nom= %s", (pays,))
-            print("Donnée modifié avec succès.")
+        print("Si vous voulez modifier une playlist ou une chanson faites le directement depuis ces classes")
 
 
 def creation_table(cur):
