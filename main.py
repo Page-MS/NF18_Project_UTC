@@ -7,8 +7,8 @@ class Connexion:
     def __init__(self):
         self.__HOST = "localhost"
         self.__USER = "postgres"
-        self.__DATABASE = DATABASE
-        self.__PASSWORD = PASSWORD
+        self.__DATABASE = ""
+        self.__PASSWORD = ""
 
     @property
     def HOST(self):
@@ -480,7 +480,94 @@ class Chanson() :
             print("Donnée supprimée avec succès.")
 
     def modification(self):
-        pass
+
+        titre = input("Titre de la chanson à modifier : ")
+        artiste = input("Interprète de la chanson : ")
+        self.cur.execute("SELECT Profil_Artiste.id from Profil_Artiste JOIN Compte ON Profil_Artiste.id = Compte.id where nom = %s",(artiste,))
+        art = self.cur.fetchone()
+
+        while not art:
+            print("/!\ Le nom d'artiste renseigné n'appartient pas à la base de donnée.\n")
+            artiste = input("Interprète de la chanson : ")
+            self.cur.execute(
+                "SELECT Profil_Artiste.id from Profil_Artiste JOIN Compte ON Profil_Artiste.id = Compte.id where nom = %s",
+                (artiste,))
+            art = self.cur.fetchone()
+
+        self.cur.execute("SELECT Chanson.id from Chanson JOIN Profil_Artiste ON Chanson.createurice = Profil_Artiste.id  where Profil_Artiste.id = %s and Chanson.titre=%s ",(art[0], titre))
+        chanson = self.cur.fetchone()
+
+        if not chanson:
+            print("L'artiste n'interprète aucune chanson ayant ce nom pour titre.")
+        else:
+            self.cur.execute("SELECT duree, album, genre_musical from Chanson where createurice=%s AND titre=%s", (art, titre))
+            duree, album, genre_musical = self.cur.fetchone()
+
+            print("Les modifications enregistrées ci-dessous seront prises en compte, si aucune donnée n'est insérée pour un attribut, la valeur restera inchangée.\n")
+
+            t = input("Titre de la chanson : ")
+            if t == '':
+                t = titre
+
+            i = input("Interprète de la chanson : ")
+            self.cur.execute("SELECT id from Compte where nom = %s", (i,))
+            i_ = self.cur.fetchone()
+
+            while i != '' and not i_:
+                print("/!\ Le compte renseigné n'appartient pas à la base de donné.\n")
+                i = input("Interprète de la chanson : ")
+                self.cur.execute("SELECT id from Compte where nom = %s", (i,))
+                i_ = self.cur.fetchone()
+
+            if i == '':
+                i_ = art
+
+            if t != titre or i_ != art:
+                self.cur.execute("SELECT * FROM Chanson where createurice = %s and titre = %s", (i_, t))
+                data = self.cur.fetchone()
+
+                if data:
+                    print("/!\ L'artiste interprète déjà une chanson du même nom.\n")
+                    return
+
+            d = input("Durée de la chanson (en seconde): ")
+            while d!= '' and int(d) < 0 :
+                print("/!\ La durée renseignée n'est pas valide.\n")
+                d = input("Durée de la chanson (en seconde): ")
+
+            if d == '' :
+                d = duree
+            else :
+                d = int(d)
+
+            alb = input("Album de la chanson : ")
+            self.cur.execute("SELECT id, duree_totale from Album where titre = %s", (alb,))
+            alb_ = self.cur.fetchone()
+
+            while alb != '' and not alb_:
+                print("/!\ Le nom d'album renseigné n'appartient pas à la base de donnée.\n")
+                alb = input("Album de la chanson : ")
+                self.cur.execute("SELECT id, duree_totale from Album where titre = %s", (alb,))
+                alb_ = self.cur.fetchone()
+
+            if alb == '' :
+                alb = album
+
+            genre = input("Genre musical de la chanson : ")
+            self.cur.execute("SELECT * from GenresMusicaux where nom = %s", (genre,))
+            gen = self.cur.fetchone()
+
+            while genre != '' and not gen:
+                print("/!\ Le genre musical renseigné n'appartient pas à la base de donnée.\n")
+                genre = input("Genre musical de la chanson : ")
+                self.cur.execute("SELECT * from GenresMusicaux where nom = %s", (genre,))
+                gen = self.cur.fetchone()
+
+            if genre == '' :
+                genre = genre_musical
+
+            self.cur.execute("UPDATE Chanson set titre = %s, duree = %s, createurice = %s, album = %s, genre_musical =%s where id = %s",(t, d, i_, alb, genre, chanson))
+            print("Donnée modifiée avec succès.")
 
 
 class Album() :
@@ -549,7 +636,7 @@ class Album() :
             print("Donnée supprimée avec succès.")
 
     def modification(self):
-        pass
+        print("Cette focntion n'est pas disponible pour l'instant.")
 
 class GenresMusicaux :
     def __init__(self, cur):
@@ -1174,16 +1261,12 @@ def genre_prefere(cur):
 def main():
     try:
         print("\nBienvenue dans le programme d'accès à votre base de donnée de streaming musical !")
-        type_connexion='z'
-        while type_connexion != 'o' and type_connexion != 'n' :
-            type_connexion=input("Souhaitez vous utiliser des identifiants personnalisés ? o/n : ")
-        identifiants = Connexion()
 
-        if type_connexion =='o':
-            identifiants.HOST=input("Entrez le nom du serveur (HOST) : ")
-            identifiants.USER = input("Entrez votre nom d'utilisteurice (USER) : ")
-            identifiants.PASSWORD = input("Entrez votre mot de passe (PASSWORD) : ")
-            identifiants.DATABASE = input("Entrez le nom de votre base de donnée (DATABASE) : ")
+        identifiants = Connexion()
+        identifiants.HOST = input("Entrez le nom du serveur (HOST) : ")
+        identifiants.USER = input("Entrez votre nom d'utilisteurice (USER) : ")
+        identifiants.PASSWORD = input("Entrez votre mot de passe (PASSWORD) : ")
+        identifiants.DATABASE = input("Entrez le nom de votre base de donnée (DATABASE) : ")
 
         conn = psycopg2.connect("host=%s dbname=%s user=%s password=%s" % (identifiants.HOST, identifiants.DATABASE, identifiants.USER, identifiants.PASSWORD))
         conn.autocommit = True
