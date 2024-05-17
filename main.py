@@ -392,7 +392,7 @@ class Amitie():
             print("Donnée supprimée avec succès.")
 
     def modification(self):
-        pass
+        print("La modification n'est pas disponible pour cette table. Si une information a changé merci de la supprimer puis d'inserer les nouvelles données.")
 
 
 class Chanson() :
@@ -875,7 +875,7 @@ class Assos_Playlist_Chanson():
             print("Donnée supprimée avec succès.\n")
 
     def modification(self):
-        print("Si vous voulez modifier une playlist ou une chanson faites le directement depuis ces classes")
+        print("La modification n'est pas disponible pour cette table. Si une information a changé merci de la supprimer puis d'inserer les nouvelles données.")
 
 
 class Droits():
