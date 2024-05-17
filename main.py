@@ -170,7 +170,139 @@ class Compte() :
 
 
     def modification(self):
-        pass
+
+        nom = input("Compte à modifier : ")
+        self.cur.execute("SELECT id from Compte where nom = %s", (nom,))
+        compte = self.cur.fetchone()
+
+        while not compte:
+            print("/!\ Le compte renseigné n'appartient pas à la base de donnée.\n")
+            nom = input("Compte à modifier : ")
+            self.cur.execute("SELECT id from Compte where nom = %s", (nom,))
+            compte = self.cur.fetchone()
+
+        print("Les modifications enregistrées ci-dessous seront prises en compte, si aucune donnée n'est insérée pour un attribut, la valeur restera inchangée.")
+        print("Il n'est pas possible de modifier un compte utilisateurice en compte artiste et inversement.\n")
+
+        identifiant = input("Nouvel identifiant du compte : ")
+        self.cur.execute("SELECT id from Compte where nom = %s", (identifiant,))
+        id = self.cur.fetchone()
+
+        while identifiant != '' and id :
+            print("/!\ Le compte renseigné appartient déjà à la base de donné.\n")
+            identifiant = input("Identifiant du compte: ")
+            self.cur.execute("SELECT id from Compte where id = %s", (identifiant,))
+            id = self.cur.fetchone()
+
+        if identifiant == '':
+            id = compte
+
+        self.cur.execute("SELECT id from Profil_Utilisateurice where id = %s", (compte,))
+        data = self.cur.fetchone()
+        if data :  # profil utilisateurice
+
+            self.cur.execute("SELECT mail, mdp, statut from Profil_Utilisateurice where id = %s", (compte,))
+            mail, mot_de_passe, statut = self.cur.fetchone()
+
+            mel = input("Mail du profil utilisateurice : ")
+            self.cur.execute("SELECT mail from Profil_Utilisateurice where mail =%s ", (mel,))
+            email = self.cur.fetchone()
+
+            while mel != '' and email:
+                print("/!\ Un compte est déjà enregistré avec cet email.\n")
+                mel = input("Mail du profil utilisateurice : ")
+                self.cur.execute("SELECT mail * Profil_Utilisateurice where mail =%s ", (mel,))
+                email = self.cur.fetchone()
+
+            if mel == '':
+                mel = email
+
+            mdp = input("Mot de passe de l'utilisateurice : ")
+
+            if mdp == '':
+                mdp = mot_de_passe
+
+            st = input("Statut du compte (premium/regulier) : ")
+
+            while st not in ['premium', 'regulier', '']:
+                print("/!\ Le status du compte n'est pas valide.\n")
+                st = input("Statut du compte (premium/regulier) : ")
+
+            if st == '':
+                st = statut
+
+            if id != compte :
+                self.cur.execute("UPDATE Compte set nom = %s where id = %s", (identifiant, compte))
+
+            self.cur.execute("UPDATE Profil_Utilisateurice set mail = %s, mdp = %s, statut = %s where id = %s", (mel, mdp, st, id))
+            print("Donnée modifiée avec succès.")
+
+
+        else : # profil artiste
+
+            self.cur.execute("SELECT bio, type, groupe, pays from Profil_Artiste where id = %s", (compte,))
+            biographie, type, groupe, pays = self.cur.fetchone()
+
+            bio = input("Biographie du profil artiste : ")
+
+            if bio == '':
+                bio = biographie
+
+            p = input("Pays du profil artiste : ")
+            self.cur.execute("SELECT * from Pays where nom = %s", (p,))
+            pay = self.cur.fetchone()
+            while p!='' and  not pay:
+                print("/!\ Le pays renseigné n'appartient pas à la base de donnée.\n")
+                p = input("Pays : ")
+                self.cur.execute("SELECT * from Pays where nom = %s", (p,))
+                pay = self.cur.fetchone()
+
+            if p =='':
+                p = pays
+
+            t = input("Type (artiste/solo/groupe) : ")
+            while t not in ['artiste', 'solo', 'groupe', '']:
+                print("/!\ Le type renseigné n'est pas valide.\n")
+                t = input("Type (artiste/solo/groupe) : ")
+
+            if t == '':
+                t = type
+                self.cur.execute("UPDATE Profil_Artiste set bio =%s, type= %s, groupe = %s, pays= %s where id=%s", (bio, t, groupe, p, id))
+
+            else :
+
+                if t == 'artiste' or t == 'groupe':
+                    t = "Profil_" + t.capitalize()
+                    self.cur.execute("UPDATE Profil_Artiste set bio =%s, type= %s, groupe = NULL, pays= %s where id=%s", (bio,t, p, id))
+
+                if t== 'solo' :
+                    t = 'Profil_Artiste_Solo'
+                    g = input("L'artiste appartient également à un groupe (y/n) : ")
+
+                    while g not in ['y', 'n']:
+                        print("/!\ La réponse à la question n'est pas valide.\n")
+                        g = input("L'artiste appartient également à un groupe (y/n) : ")
+
+                    if g == 'n':
+                        self.cur.execute("UPDATE Profil_Artiste set bio =%s, type= %s, groupe = NULL, pays= %s where id=%s", (bio,t, p, id))
+
+                    else:
+                        gr = input("Nom du groupe : ")
+                        self.cur.execute("SELECT type,id from Profil_Artiste where id = (SELECT id from Compte where nom = %s)", (gr,))
+                        data = self.cur.fetchone()
+                        while gr!='' and (not data or (data and data[0] != 'Profil_Groupe')):
+                            print("/!\ Le nom de groupe renseigné n'appartient pas à la base de donnée ou ne correspond pas au profil d'un groupe. \n")
+                            gr = input("Nom du groupe : ")
+                            self.cur.execute("SELECT type,id from Profil_Artiste where id = (SELECT id from Compte where nom = %s)",(gr,))
+                            data = self.cur.fetchone()
+
+                        self.cur.execute("UPDATE Profil_Artiste set bio =%s, type= %s, groupe = %s, pays= %s where id=%s", (bio, t, data[1], p, id))
+
+            if id != compte :
+                self.cur.execute("UPDATE Compte set nom = %s where id = %s", (identifiant, compte))
+
+            print("Donnée modifiée avec succès.")
+
 
 class Amitie():
     def __init__(self, cur):
@@ -694,16 +826,12 @@ class Assos_Playlist_Chanson():
         utilisateurice = input("Quel est le nom de l'auteurice  de la playlist ? ")
         chanson = input("Quel est le nom de la chanson à ajouter ? ")
         artiste = input("Quel est le nom de l'auteurice de la chanson à ajouter ? ")
-        self.cur.execute(
-            "SELECT * FROM playlist WHERE titre= '%s' AND createurice IN (SELECT id FROM Compte WHERE nom='%s') " % (
-            playlist, utilisateurice))
+        self.cur.execute("SELECT * FROM playlist WHERE titre= '%s' AND createurice IN (SELECT id FROM Compte WHERE nom='%s') " % (playlist, utilisateurice))
         data = self.cur.fetchone()
         if not data:
             print(f"La playlist {playlist} par {utilisateurice} n'existe pas.")
         else :
-            self.cur.execute(
-                "SELECT * FROM chanson WHERE titre='%s' AND createurice IN (SELECT id FROM Compte WHERE nom='%s') " % (
-                    chanson, artiste))
+            self.cur.execute("SELECT * FROM chanson WHERE titre='%s' AND createurice IN (SELECT id FROM Compte WHERE nom='%s') " % (chanson, artiste))
             data = self.cur.fetchone()
             if not data:
                 print(f"La chanson {chanson} par {artiste} n'existe pas.")
@@ -839,7 +967,7 @@ def insertion(cur, table):
         Pays(cur).insertion()
     elif table == 'g':
         Amitie(cur).insertion()
-    elif table =='h' :
+    elif table == 'h':
         Assos_Playlist_Chanson(cur).insertion()
 
 def modification(cur, table):
@@ -857,7 +985,7 @@ def modification(cur, table):
         Pays(cur).modification()
     if table == 'g':
         Amitie(cur).modification()
-    if table =='h' :
+    if table == 'h':
         Assos_Playlist_Chanson(cur).modification()
 
 def suppression(cur, table):
@@ -875,7 +1003,7 @@ def suppression(cur, table):
         Pays(cur).suppression()
     if table == 'g':
         Amitie(cur).suppression()
-    if table =='h' :
+    if table == 'h':
         Assos_Playlist_Chanson(cur).suppression()
 
 def consultation(cur, table):
@@ -977,11 +1105,11 @@ def main():
         choice = '1'
 
         # A exécuter pour supprimer l'entièreté de la base de donnée
-        #suppression_bdd(cur)
+        # suppression_bdd(cur)
 
         # A exécuter si la base de donnée n'est pas déjà crée
-        #creation_table(cur)
-        #insertion_donnee(cur)
+        # creation_table(cur)
+        # insertion_donnee(cur)
 
         while '1' <= choice <= '4':
             print("__________________________________________________")
