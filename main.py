@@ -877,6 +877,65 @@ class Assos_Playlist_Chanson():
     def modification(self):
         print("Si vous voulez modifier une playlist ou une chanson faites le directement depuis ces classes")
 
+class Assos_Playlist_Album():
+    def __init__(self, cur):
+        self.cur = cur
+
+    def insertion(self):
+        playlist = input("Quel est le nom de la playlist ? ")
+        utilisateurice = input("Quel est le nom de l'auteurice  de la playlist ? ")
+        album = input("Quel est le nom de l'album à ajouter ? ")
+        artiste = input("Quel est le nom de l'auteurice de l'album à ajouter ? ")
+        self.cur.execute("SELECT * FROM playlist WHERE titre= '%s' AND createurice IN (SELECT id FROM Compte WHERE nom='%s') " % (playlist, utilisateurice))
+        data = self.cur.fetchone()
+        if not data:
+            print(f"La playlist {playlist} par {utilisateurice} n'existe pas. (attention aux majuscules)")
+        else :
+            self.cur.execute("SELECT * FROM Album WHERE titre='%s' AND artiste_principal IN (SELECT id FROM Compte WHERE nom='%s') " % (album, artiste))
+            data = self.cur.fetchone()
+            if not data:
+                print(f"L'album {album} par {artiste} n'existe pas. (attention aux majuscules)")
+            else :
+                self.cur.execute("SELECT * from Assos_Playlist_Album WHERE id_playlist IN (SELECT id FROM playlist WHERE titre= '%s' AND createurice IN (SELECT id FROM Compte WHERE nom='%s')) AND id_album IN (SELECT id FROM Album WHERE titre='%s' AND artiste_principal IN (SELECT id FROM Compte WHERE nom='%s')) " %(playlist, utilisateurice, album, artiste ))
+                data = self.cur.fetchone()
+                if data:
+                    print("Cette donnée est déjà présente dans la base de donnée.")
+                else:
+                    self.cur.execute("INSERT INTO Assos_Playlist_Album(id_playlist, id_album) VALUES((SELECT id FROM playlist WHERE titre= '%s' AND createurice IN (SELECT id FROM Compte WHERE nom='%s')),(SELECT id FROM Album WHERE titre='%s' AND artiste_principal IN (SELECT id FROM Compte WHERE nom='%s')));"%(playlist, utilisateurice, album, artiste ))
+                    print("Donnée insérée avec succès.")
+
+    def consultation(self):
+        self.cur.execute("SELECT * FROM Assos_Playlist_Album")
+        h1, h2 = [i[0] for i in self.cur.description]
+        print(h1 + " | " + h2)
+        data = self.cur.fetchall()
+        for playlist, album in data:
+            self.cur.execute("SELECT titre FROM Album where id='%s' "%(album))
+            album_a_afficher = self.cur.fetchone()[0]
+            self.cur.execute("SELECT titre FROM Playlist where id='%s' " % (playlist))
+            playlist_a_afficher = self.cur.fetchone()[0]
+            print(album_a_afficher + " | " + playlist_a_afficher)
+
+
+    def suppression(self):
+
+        playlist = input("Quel est le nom de la playlist ? ")
+        utilisateurice = input("Quel est le nom de l'auteurice  de la playlist ? ")
+        album = input("Quel est le nom de l'album à supprimer de la playlist ? ")
+        artiste = input("Quel est le nom de l'auteurice de l'album à supprimer de la playlist ? ")
+        self.cur.execute(
+            "SELECT * from Assos_Playlist_Album WHERE id_playlist IN (SELECT id FROM playlist WHERE titre= '%s' AND createurice IN (SELECT id FROM Compte WHERE nom='%s')) AND id_album IN (SELECT id FROM Album WHERE titre='%s' AND artiste_principal IN (SELECT id FROM Compte WHERE nom='%s')) " % (
+            playlist, utilisateurice, album, artiste))
+        data = self.cur.fetchone()
+        if not data:
+            print(f"La playlist {playlist} par {utilisateurice} ne contient pas d'album' {album} par {artiste}")
+        else :
+            self.cur.execute("DELETE FROM Assos_Playlist_Album WHERE id_playlist IN (SELECT id FROM playlist WHERE titre= '%s' AND createurice IN (SELECT id FROM Compte WHERE nom='%s')) AND id_album IN (SELECT id FROM Album WHERE titre='%s' AND artiste_principal IN (SELECT id FROM Compte WHERE nom='%s')) " % (
+            playlist, utilisateurice, album, artiste))
+            print("Donnée supprimée avec succès.\n")
+
+    def modification(self):
+        print("Si vous voulez modifier une playlist ou un album faites le directement depuis ces classes")
 
 def creation_table(cur):
     cur.execute(open("Pays/Pays_TABLE.sql", "r").read())
@@ -940,6 +999,8 @@ def insertion(cur, table):
         Amitie(cur).insertion()
     elif table == 'h':
         Assos_Playlist_Chanson(cur).insertion()
+    elif table == 'i':
+        Assos_Playlist_Album(cur).insertion()
 
 def modification(cur, table):
     if table == 'a':
@@ -958,6 +1019,8 @@ def modification(cur, table):
         Amitie(cur).modification()
     if table == 'h':
         Assos_Playlist_Chanson(cur).modification()
+    if table == 'i':
+        Assos_Playlist_Album(cur).modification()
 
 def suppression(cur, table):
     if table == 'a':
@@ -976,6 +1039,8 @@ def suppression(cur, table):
         Amitie(cur).suppression()
     if table == 'h':
         Assos_Playlist_Chanson(cur).suppression()
+    if table == 'i':
+        Assos_Playlist_Album(cur).suppression()
 
 def consultation(cur, table):
     if table == 'a':
@@ -994,6 +1059,8 @@ def consultation(cur, table):
         Amitie(cur).consultation()
     if table == 'h':
         Assos_Playlist_Chanson(cur).consultation()
+    if table == 'i':
+        Assos_Playlist_Album(cur).consultation()
 
 def requete(cur, req) :
     if req == 'a':
@@ -1086,11 +1153,11 @@ def main():
             choice = input("Votre choix : ")
             if '1' <= choice <= '4':
                 table = 'z'
-                print("\nChoisissez la table concernée : Compte(a), Chanson(b), Album(c), GenreMusicaux(d), Playlist(e), Pays(f), Amitié(g), Chansons_dans_playlist(h)")
+                print("\nChoisissez la table concernée : Compte(a), Chanson(b), Album(c), GenreMusicaux(d), Playlist(e), Pays(f), Amitié(g), Chansons_dans_playlist(h), Album_dans_playlist(i)")
                 table = input("Table : ")
                 print("-----\n")
 
-                while 'a' <= table <= 'h':
+                while 'a' <= table <= 'i':
                     if choice == '1':
                         insertion(cur, table)
                     if choice == '2':
