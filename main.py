@@ -907,6 +907,117 @@ class Assos_Playlist_Chanson():
             print("Donnée modifié avec succès.")
 
 
+class Droits():
+    def __init__(self,cur):
+        self.cur = cur
+
+    def insertion(self):
+
+        titre = input("Titre de la chanson à laquelle ajouter des droits d'auteurs : ")
+        artiste = input("Interprète de la chanson : ")
+        self.cur.execute(
+            "SELECT Profil_Artiste.id from Profil_Artiste JOIN Compte ON Profil_Artiste.id = Compte.id where nom = %s",
+            (artiste,))
+        art = self.cur.fetchone()
+
+        while not art:
+            print("/!\ Le nom d'artiste renseigné n'appartient pas à la base de donnée.\n")
+            artiste = input("Interprète de la chanson : ")
+            self.cur.execute("SELECT Profil_Artiste.id from Profil_Artiste JOIN Compte ON Profil_Artiste.id = Compte.id where nom = %s",(artiste,))
+            art = self.cur.fetchone()
+
+        self.cur.execute("SELECT Chanson.id from Chanson JOIN Profil_Artiste ON Chanson.createurice = Profil_Artiste.id  where Profil_Artiste.id = %s and Chanson.titre=%s ",(art[0], titre))
+        chanson = self.cur.fetchone()
+
+        if not chanson:
+            print("L'artiste n'interprète aucune chanson ayant ce nom pour titre.")
+        else :
+            compte = input("Compte ayant travaillé sur la chanson : ")
+            self.cur.execute("SELECT Compte.id from Compte Join Profil_Artiste on Compte.id = Profil_Artiste.id where nom = %s", (compte,))
+            cre = self.cur.fetchone()
+
+            while not cre:
+                print("/!\ Le compte renseigné n'appartient pas à la base de donnée ou n'est pas celui d'un artiste.\n")
+                compte = input("Compte depuis lequel insérer des droits d'auteurs : ")
+                self.cur.execute("SELECT Compte.id from Compte Join Profil_Artiste on Compte.id = Profil_Artiste.id where nom = %s", (compte,))
+                cre = self.cur.fetchone()
+
+            metier = input("Sous quel activité (editeur/compositeur/auteur) : ")
+            while metier not in ['auteur', 'editeur', 'compositeur']:
+                print("/!\ L'activité renseignée n'est pas valide.\n")
+
+            self.cur.execute("SELECT * from DroitsAuteurs where metier = %s and compte = %s and chanson =%s", (metier, cre, chanson))
+            data = self.cur.fetchone()
+
+            if data :
+                print(f"Ce compte est déjà crédité sur cette chanson sur ce métier là.")
+
+            else :
+                self.cur.execute("INSERT INTO DroitsAuteurs Values (%s,%s,%s)", (metier, cre, chanson))
+                print("Donnée insérée avec succès.")
+
+    def suppression(self):
+
+        titre = input("Titre de la chanson pour laquelle supprimer des droits d'auteurs : ")
+        artiste = input("Interprète de la chanson : ")
+        self.cur.execute("SELECT Profil_Artiste.id from Profil_Artiste JOIN Compte ON Profil_Artiste.id = Compte.id where nom = %s",(artiste,))
+        art = self.cur.fetchone()
+
+        while not art:
+            print("/!\ Le nom d'artiste renseigné n'appartient pas à la base de donnée.\n")
+            artiste = input("Interprète de la chanson : ")
+            self.cur.execute(
+                "SELECT Profil_Artiste.id from Profil_Artiste JOIN Compte ON Profil_Artiste.id = Compte.id where nom = %s",
+                (artiste,))
+            art = self.cur.fetchone()
+
+        self.cur.execute("SELECT Chanson.id from Chanson JOIN Profil_Artiste ON Chanson.createurice = Profil_Artiste.id  where Profil_Artiste.id = %s and Chanson.titre=%s ",(art[0], titre))
+        chanson = self.cur.fetchone()
+
+        if not chanson:
+            print("L'artiste n'interprète aucune chanson ayant ce nom pour titre.")
+        else:
+            compte = input("Compte ayant travaillé sur la chanson : ")
+            self.cur.execute("SELECT Compte.id from Compte Join Profil_Artiste on Compte.id = Profil_Artiste.id where nom = %s", (compte,))
+            cre = self.cur.fetchone()
+
+            while not cre:
+                print("/!\ Le compte renseigné n'appartient pas à la base de donnée ou n'est pas celui d'un artiste.\n")
+                compte = input("Compte depuis lequel insérer des droits d'auteurs : ")
+                self.cur.execute(
+                    "SELECT Compte.id from Compte Join Profil_Artiste on Compte.id = Profil_Artiste.id where nom = %s",
+                    (compte,))
+                cre = self.cur.fetchone()
+
+            metier = input("Sous quel activité (editeur/compositeur/auteur) : ")
+            while metier not in ['auteur', 'editeur', 'compositeur']:
+                print("/!\ L'activité renseignée n'est pas valide.\n")
+
+            self.cur.execute("SELECT * from DroitsAuteurs where metier = %s and compte = %s and chanson =%s",(metier, cre, chanson))
+            data = self.cur.fetchone()
+
+            if not data:
+                print(f"Les crédits de cette chanson n'existe pas. La suppression n'est pas possible.")
+
+            else:
+                self.cur.execute("DELETE FROM DroitsAuteurs where metier = %s and compte = %s and chanson = %s ", (metier, cre, chanson))
+                print("Donnée supprimée avec succès.")
+
+    def consultation(self):
+        self.cur.execute("SELECT * FROM DroitsAuteurs")
+        headers = [i[0] for i in self.cur.description]
+        print(headers)
+        data = self.cur.fetchall()
+        for row in data:
+            self.cur.execute("SELECT nom FROM Compte where id='%s' " % (row[1]))
+            compte = self.cur.fetchone()
+            self.cur.execute("SELECT titre FROM Chanson where id='%s' " % (row[2]))
+            chanson = self.cur.fetchone()
+            print(row[0] +' | ' + compte[0] + ' | '+ chanson[0])
+
+    def modification(self):
+        print("La modification n'est pas disponible pour cette table. Si une information a changé merci de la supprimer puis d'inserer les nouvelles données.")
+
 def creation_table(cur):
     cur.execute(open("Pays/Pays_TABLE.sql", "r").read())
     cur.execute(open("Compte/Compte_TABLE.sql", "r").read())
@@ -970,6 +1081,9 @@ def insertion(cur, table):
     elif table == 'h':
         Assos_Playlist_Chanson(cur).insertion()
 
+    elif table == 'j':
+        Droits(cur).insertion()
+
 def modification(cur, table):
     if table == 'a':
         Compte(cur).modification()
@@ -987,6 +1101,10 @@ def modification(cur, table):
         Amitie(cur).modification()
     if table == 'h':
         Assos_Playlist_Chanson(cur).modification()
+
+
+    elif table == 'j':
+        Droits(cur).modification
 
 def suppression(cur, table):
     if table == 'a':
@@ -1006,6 +1124,10 @@ def suppression(cur, table):
     if table == 'h':
         Assos_Playlist_Chanson(cur).suppression()
 
+
+    elif table == 'j':
+        Droits(cur).suppression()
+
 def consultation(cur, table):
     if table == 'a':
         Compte(cur).consultation()
@@ -1023,6 +1145,9 @@ def consultation(cur, table):
         Amitie(cur).consultation()
     if table == 'h':
         Assos_Playlist_Chanson(cur).consultation()
+
+    elif table == 'j':
+        Droits(cur).consultation()
 
 def requete(cur, req) :
     if req == 'a':
@@ -1115,11 +1240,11 @@ def main():
             choice = input("Votre choix : ")
             if '1' <= choice <= '4':
                 table = 'z'
-                print("\nChoisissez la table concernée : Compte(a), Chanson(b), Album(c), GenreMusicaux(d), Playlist(e), Pays(f), Amitié(g), Chansons_dans_playlist(h)")
+                print("\nChoisissez la table concernée : Compte(a), Chanson(b), Album(c), GenreMusicaux(d), Playlist(e), Pays(f), Amitié(g), Chansons dans playlist(h), Droit d'auteurs (j) ")
                 table = input("Table : ")
                 print("-----\n")
 
-                while 'a' <= table <= 'h':
+                while 'a' <= table <= 'j':
                     if choice == '1':
                         insertion(cur, table)
                     if choice == '2':
