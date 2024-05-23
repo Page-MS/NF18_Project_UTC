@@ -79,8 +79,7 @@ class Compte() :
                     print("/!\ Le statut renseigné n'est pas valide.\n")
                     statut = input("Statut (premium/regulier) : ")
 
-                self.cur.execute("INSERT INTO Profil_Utilisateurice VALUES(%s,%s,%s,%s,%s)",
-                            (id, mail, mdp, date.today(), statut))
+                self.cur.execute("INSERT INTO Profil_Utilisateurice VALUES(%s,%s,%s,%s,%s)",(id, mail, mdp, date.today(), statut))
                 print("Donnée insérée avec succès.")
 
             if type == "artiste":
@@ -130,19 +129,34 @@ class Compte() :
                         print("Donnée insérée avec succès.")
 
     def consultation(self):
-        type = input("Type de compte à visualiser (utilisateurice/artiste/tous) ? ")
-        if type == "utilisateurice":
-            self.cur.execute("SELECT * FROM Compte JOIN Profil_Utilisateurice on Compte.id = Profil_Utilisateurice.id")
-        if type == "artiste":
-            self.cur.execute("SELECT * FROM Compte JOIN Profil_Artiste on Compte.id = Profil_Artiste.id")
-        if type == "tous":
-            self.cur.execute("SELECT * FROM Compte")
+        type = input("Type de compte à visualiser (utilisateurice/artiste) ? ")
 
-        headers = [i[0] for i in self.cur.description]
-        print(headers)
-        data = self.cur.fetchall()
-        for row in data:
-            print(row)
+        while type not in ['utilisateurice', 'artiste']:
+            print("/!\ Le type de compte n'est pas valide.\n")
+            type = input("Type de compte à visualiser (utilisateurice/artiste) ? ")
+
+        if type == "utilisateurice":
+            self.cur.execute("SELECT Compte.id, nom, mail, mdp, date_inscription, statut  FROM Compte JOIN Profil_Utilisateurice on Compte.id = Profil_Utilisateurice.id")
+
+            h1, h2, h3, h4, h5, h6 = [i[0] for i in self.cur.description]
+            print(h1 + " | " + h2 + " | " + h3 + " | " + h4 + " | " + h5 + " | " + h6 )
+            data = self.cur.fetchall()
+            for id, nom, mail, mdp, date_inscription, statut in data:
+                print(str(id) + " | " + nom + " | " + mail + " | " + mdp + " | " + str(date_inscription) + " | " + statut)
+
+        if type == "artiste":
+            self.cur.execute("SELECT Compte.id, nom, bio, type, groupe, pays  FROM Compte JOIN Profil_Artiste on Compte.id = Profil_Artiste.id")
+            h1, h2, h3, h4, h5, h6 = [i[0] for i in self.cur.description]
+            print(h1 + " | " + h2 + " | " + h3 + " | " + h4 + " | " + h5 + " | " + h6)
+            data = self.cur.fetchall()
+            for id, nom, bio, type, gr, pays in data:
+                self.cur.execute("SELECT Compte.nom from COMPTE JOIN Profil_Artiste on Compte.id = Profil_Artiste.id where Profil_Artiste.groupe = %s ", (gr,))
+                groupe = self.cur.fetchone()
+                if not groupe :
+                    groupe = ''
+
+                print(str(id) + " | " + nom + " | " + bio + " | " + type + " | " + groupe + " | " + pays)
+
 
     def suppression(self):
 
@@ -1330,12 +1344,12 @@ def main():
         print("\nBienvenue dans le programme d'accès à votre base de donnée de streaming musical !")
 
         identifiants = Connexion()
-        identifiants.HOST = input("Entrez le nom du serveur (HOST) : ")
-        identifiants.USER = input("Entrez votre nom d'utilisteurice (USER) : ")
-        identifiants.PASSWORD = input("Entrez votre mot de passe (PASSWORD) : ")
-        identifiants.DATABASE = input("Entrez le nom de votre base de donnée (DATABASE) : ")
+        identifiants.HOST = 'localhost'  #input("Entrez le nom du serveur (HOST) : ")
+        identifiants.USER = 'postgres'  #input("Entrez votre nom d'utilisteurice (USER) : ")
+        # identifiants.PASSWORD = input("Entrez votre mot de passe (PASSWORD) : ")
+        # identifiants.DATABASE = input("Entrez le nom de votre base de donnée (DATABASE) : ")
 
-        conn = psycopg2.connect("host=%s dbname=%s user=%s password=%s" % (identifiants.HOST, identifiants.DATABASE, identifiants.USER, identifiants.PASSWORD))
+        conn = psycopg2.connect("host=%s dbname=%s user=%s password=%s" % (identifiants.HOST, DATABASE, identifiants.USER, PASSWORD))
         conn.autocommit = True
         cur = conn.cursor()
         print("Connexion réussie")
@@ -1384,6 +1398,7 @@ def main():
                     req = 'z'
 
             if choice == '*':
+                suppression_bdd(cur)
                 creation_table(cur)
                 insertion_donnee(cur)
                 print("La base de données a bien été crée.")
