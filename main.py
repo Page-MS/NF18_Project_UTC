@@ -1430,10 +1430,10 @@ def main():
         print("\nBienvenue dans le programme d'accès à votre base de donnée de streaming musical !")
 
         identifiants = Connexion()
-        identifiants.HOST = 'localhost'  #input("Entrez le nom du serveur (HOST) : ")
-        identifiants.USER = 'postgres'  #input("Entrez votre nom d'utilisteurice (USER) : ")
-        # identifiants.PASSWORD = input("Entrez votre mot de passe (PASSWORD) : ")
-        # identifiants.DATABASE = input("Entrez le nom de votre base de donnée (DATABASE) : ")
+        identifiants.HOST = input("Entrez le nom du serveur (HOST) : ")
+        identifiants.USER = input("Entrez votre nom d'utilisteurice (USER) : ")
+        identifiants.PASSWORD = input("Entrez votre mot de passe (PASSWORD) : ")
+        identifiants.DATABASE = input("Entrez le nom de votre base de donnée (DATABASE) : ")
 
         conn = psycopg2.connect("host=%s dbname=%s user=%s password=%s" % (identifiants.HOST, DATABASE, identifiants.USER, PASSWORD))
         conn.autocommit = True
