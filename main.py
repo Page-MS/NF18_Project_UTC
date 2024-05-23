@@ -150,13 +150,13 @@ class Compte() :
             print(h1 + " | " + h2 + " | " + h3 + " | " + h4 + " | " + h5 + " | " + h6)
             data = self.cur.fetchall()
             for id, nom, bio, type, gr, pays in data:
-                self.cur.execute("SELECT Compte.nom from COMPTE JOIN Profil_Artiste on Compte.id = Profil_Artiste.id where Profil_Artiste.groupe = %s ", (gr,))
-                groupe = self.cur.fetchone()
-                if not groupe :
+                if not gr :
                     groupe = ''
 
+                else :
+                    self.cur.execute("SELECT nom from COMPTE where id = %s ", (gr,))
+                    groupe = self.cur.fetchone()[0]
                 print(str(id) + " | " + nom + " | " + bio + " | " + type + " | " + groupe + " | " + pays)
-
 
     def suppression(self):
 
@@ -187,35 +187,37 @@ class Compte() :
 
         nom = input("Compte à modifier : ")
         self.cur.execute("SELECT id from Compte where nom = %s", (nom,))
-        compte = self.cur.fetchone()
+        id_compte = self.cur.fetchone()
 
-        while not compte:
+        while not id_compte:
             print("/!\ Le compte renseigné n'appartient pas à la base de donnée.\n")
             nom = input("Compte à modifier : ")
             self.cur.execute("SELECT id from Compte where nom = %s", (nom,))
-            compte = self.cur.fetchone()
+            id_compte = self.cur.fetchone()
 
         print("Les modifications enregistrées ci-dessous seront prises en compte, si aucune donnée n'est insérée pour un attribut, la valeur restera inchangée.")
         print("Il n'est pas possible de modifier un compte utilisateurice en compte artiste et inversement.\n")
 
-        identifiant = input("Nouvel identifiant du compte : ")
-        self.cur.execute("SELECT id from Compte where nom = %s", (identifiant,))
+        new_name = input("Nouvel identifiant du compte : ")
+        self.cur.execute("SELECT id from Compte where nom = %s", (new_name,))
         id = self.cur.fetchone()
 
-        while identifiant != '' and id :
+        while new_name != '' and id :
             print("/!\ Le compte renseigné appartient déjà à la base de donné.\n")
-            identifiant = input("Identifiant du compte: ")
-            self.cur.execute("SELECT id from Compte where id = %s", (identifiant,))
+            new_name = input("Identifiant du compte: ")
+            self.cur.execute("SELECT id from Compte where id = %s", (new_name,))
             id = self.cur.fetchone()
 
-        if identifiant == '':
-            id = compte
+        id = id_compte
+        if new_name != nom :
+            self.cur.execute("UPDATE Compte set nom = %s where id = %s", (new_name, id))
 
-        self.cur.execute("SELECT id from Profil_Utilisateurice where id = %s", (compte,))
+        self.cur.execute("SELECT id from Profil_Utilisateurice where id = %s", (id,))
         data = self.cur.fetchone()
+
         if data :  # profil utilisateurice
 
-            self.cur.execute("SELECT mail, mdp, statut from Profil_Utilisateurice where id = %s", (compte,))
+            self.cur.execute("SELECT mail, mdp, statut from Profil_Utilisateurice where id = %s", (id,))
             mail, mot_de_passe, statut = self.cur.fetchone()
 
             mel = input("Mail du profil utilisateurice : ")
@@ -232,7 +234,6 @@ class Compte() :
                 mel = email
 
             mdp = input("Mot de passe de l'utilisateurice : ")
-
             if mdp == '':
                 mdp = mot_de_passe
 
@@ -245,16 +246,13 @@ class Compte() :
             if st == '':
                 st = statut
 
-            if id != compte :
-                self.cur.execute("UPDATE Compte set nom = %s where id = %s", (identifiant, compte))
-
-            self.cur.execute("UPDATE Profil_Utilisateurice set mail = %s, mdp = %s, statut = %s where id = %s", (mel, mdp, st, id))
+            self.cur.execute("UPDATE Profil_Utilisateurice set mail = %s, mdp = %s, statut = %s where id = %s", (mel, mdp, st, id ))
             print("Donnée modifiée avec succès.")
 
 
         else : # profil artiste
 
-            self.cur.execute("SELECT bio, type, groupe, pays from Profil_Artiste where id = %s", (compte,))
+            self.cur.execute("SELECT bio, type, groupe, pays from Profil_Artiste where id = %s", (id,))
             biographie, type, groupe, pays = self.cur.fetchone()
 
             bio = input("Biographie du profil artiste : ")
@@ -284,7 +282,6 @@ class Compte() :
                 self.cur.execute("UPDATE Profil_Artiste set bio =%s, type= %s, groupe = %s, pays= %s where id=%s", (bio, t, groupe, p, id))
 
             else :
-
                 if t == 'artiste' or t == 'groupe':
                     t = "Profil_" + t.capitalize()
                     self.cur.execute("UPDATE Profil_Artiste set bio =%s, type= %s, groupe = NULL, pays= %s where id=%s", (bio,t, p, id))
@@ -312,9 +309,6 @@ class Compte() :
 
                         self.cur.execute("UPDATE Profil_Artiste set bio =%s, type= %s, groupe = %s, pays= %s where id=%s", (bio, t, data[1], p, id))
 
-            if id != compte :
-                self.cur.execute("UPDATE Compte set nom = %s where id = %s", (identifiant, compte))
-
             print("Donnée modifiée avec succès.")
 
 
@@ -323,6 +317,7 @@ class Amitie():
         self.cur = cur
 
     def insertion(self):
+
         print("Ajout d'un lien d'amitié entre deux utilisateur•ice•s.")
         nom_1 = input("Nom du premièr compte : ")
         self.cur.execute("SELECT Compte.id from Compte JOIN Profil_Utilisateurice ON Profil_Utilisateurice.id = Compte.id where nom = %s", (nom_1,))
@@ -330,7 +325,7 @@ class Amitie():
 
         while not id_1:
             print("/!\ Le nom de compte renseigné n'appartient pas à la base de donnée ou n'est pas calui d'un•e utilisateur•ice.\n")
-            nom = input("Nom du premièr compte : ")
+            nom_1 = input("Nom du premièr compte : ")
             self.cur.execute("SELECT Compte.id from Compte JOIN Profil_Utilisateurice ON Profil_Utilisateurice.id = Compte.id where nom = %s",(nom_1,))
             id_1 = self.cur.fetchone()
 
@@ -377,7 +372,7 @@ class Amitie():
 
         while not id_1:
             print("/!\ Le nom de compte renseigné n'appartient pas à la base de donnée ou n'est pas calui d'un•e utilisateur•ice.\n")
-            nom = input("Nom du premièr compte : ")
+            nom_1 = input("Nom du premièr compte : ")
             self.cur.execute("SELECT Compte.id from Compte JOIN Profil_Utilisateurice ON Profil_Utilisateurice.id = Compte.id where nom = %s",(nom_1,))
             id_1 = self.cur.fetchone()
 
@@ -432,15 +427,40 @@ class Chanson() :
             print("/!\ L'artiste possède dèjà une chanson du même nom.\n")
 
         else:
-            album = input("Album de la chanson : ")
-            self.cur.execute("SELECT id, duree_totale from Album where titre = %s", (album,))
-            alb = self.cur.fetchone()
+            album = input("Titre de l'album de la chanson : ")
+            self.cur.execute("SELECT count(*) from Album where titre = %s", (album,))
+            nb_album = self.cur.fetchone()[0]
 
-            while not alb:
+            while nb_album == 0:
                 print("/!\ Le nom d'album renseigné n'appartient pas à la base de donnée.\n")
-                album = input("Album de la chanson : ")
-                self.cur.execute("SELECT id, duree_totale from Album where titre = %s", (album,))
-                alb = self.cur.fetchone()
+                album = input("Titre de l'album de la chanson : ")
+                self.cur.execute("SELECT count(*) from Album where titre = %s", (album,))
+                nb_album = self.cur.fetchone()[0]
+
+            data = None
+
+            if nb_album > 1 :
+                print("\nPlusieurs artistes possèdent un album du même nom. \nChoisissez parmis la liste suivante l'artiste principale de l'album concerné : ")
+                self.cur.execute("SELECT Compte.nom from Album JOIN Compte ON Album.artiste_principal = Compte.id where titre = %s", (album,))
+                artistes = self.cur.fetchall()
+                for row in artistes:
+                    print("- " + row[0])
+                print("---")
+
+                artiste_album = input("Artiste principal de l'album : ")
+                artiste_album = (artiste_album,)
+
+                while artiste_album not in artistes :
+                    print("/!\ Le nom d'artiste renseigné n'est pas valide.\n")
+                    artiste_album = input("Artiste principal de l'album : ")
+                    artiste_album = (artiste_album,)
+
+                self.cur.execute("SELECT Album.id, Album.duree_totale from Album JOIN Profil_Artiste ON Album.artiste_principal = Profil_Artiste.id JOIN Compte ON Profil_Artiste.id = Compte.id where Compte.nom = %s and Album.titre=%s ",(artiste_album, album))
+                data = self.cur.fetchone()
+
+            if not data :
+                self.cur.execute("SELECT Album.id, Album.duree_totale from Album where Album.titre=%s ",(album,))
+                data = self.cur.fetchone()
 
             genre = input("Genre musical de la chanson : ")
             self.cur.execute("SELECT * from GenresMusicaux where nom = %s", (genre,))
@@ -457,17 +477,19 @@ class Chanson() :
                 print("/!\ La durée renseignée n'est pas valide.\n")
                 duree = input("Durée de la chanson (en seconde): ")
 
-            self.cur.execute("INSERT INTO Chanson VALUES(DEFAULT,%s,%s,%s,%s,%s)", (titre, duree, alb[0], art[0], genre))
-            self.cur.execute("UPDATE Album SET duree_totale = %s where id = %s", (int(alb[1]) + duree, alb[0]))
+            self.cur.execute("INSERT INTO Chanson VALUES(DEFAULT,%s,%s,%s,%s,%s)", (titre, duree, data[0], art, genre))
+            self.cur.execute("UPDATE Album SET duree_totale = %s where id = %s", (int(data[1]) + duree, data[0]))
             print("Donnée insérée avec succès.")
 
     def consultation(self):
-        self.cur.execute("SELECT * FROM Chanson")
-        headers = [i[0] for i in self.cur.description]
-        print(headers)
+        self.cur.execute("SELECT id, titre, duree, album, createurice, genre_musical FROM Chanson")
+        h1, h2, h3, h4, h5, h6 = [i[0] for i in self.cur.description]
+        print(h1 + " | " + h2 + " | " + h3 + " | " + h4 + " | " + h5 + " | " + h6)
         data = self.cur.fetchall()
-        for row in data:
-            print(row)
+        for id, titre, duree, album, createurice, genre_musical in data:
+            self.cur.execute("SELECT nom FROM Compte where id = %s", (createurice,))
+            cre = self.cur.fetchone()[0]
+            print(str(id) + " | " + titre + " | " + str(duree) + " | " + str(album) + " | " + cre + " | " + genre_musical)
 
     def suppression(self):
 
@@ -482,12 +504,17 @@ class Chanson() :
             self.cur.execute("SELECT Profil_Artiste.id from Profil_Artiste JOIN Compte ON Profil_Artiste.id = Compte.id where nom = %s",(artiste,))
             art = self.cur.fetchone()
 
-        self.cur.execute("SELECT Chanson.id from Chanson JOIN Profil_Artiste ON Chanson.createurice = Profil_Artiste.id  where Profil_Artiste.id = %s and Chanson.titre=%s ",(art[0], titre))
+        self.cur.execute("SELECT Chanson.id, Chanson.duree, Chanson.album from Chanson JOIN Profil_Artiste ON Chanson.createurice = Profil_Artiste.id  where Profil_Artiste.id = %s and Chanson.titre=%s ",(art[0], titre))
         chanson = self.cur.fetchone()
 
         if not chanson:
             print("L'artiste ne possède aucune chanson ayant ce nom pour titre.")
-        else :
+
+        else:
+            self.cur.execute("SELECT duree_totale from Album where id = %s", (chanson[2],))
+            duree = self.cur.fetchone()
+            self.cur.execute("UPDATE Album set duree_totale = %s where id=%s ", (duree[0] - chanson[1], chanson[2]))
+
             self.cur.execute("DELETE FROM Assos_Playlist_Chanson WHERE chanson = %s " ,(chanson[0],))
             self.cur.execute("DELETE FROM DroitsAuteurs WHERE chanson = %s ",(chanson[0],))
             self.cur.execute("DELETE FROM Chanson WHERE createurice = %s AND titre=%s ", (art[0],titre))
@@ -544,6 +571,9 @@ class Chanson() :
                     print("/!\ L'artiste interprète déjà une chanson du même nom.\n")
                     return
 
+            self.cur.execute("SELECT id, duree_totale from Album where Album.id=%s ",(album,))
+            data = self.cur.fetchone()
+
             d = input("Durée de la chanson (en seconde): ")
             while d!= '' and int(d) < 0 :
                 print("/!\ La durée renseignée n'est pas valide.\n")
@@ -553,19 +583,7 @@ class Chanson() :
                 d = duree
             else :
                 d = int(d)
-
-            alb = input("Album de la chanson : ")
-            self.cur.execute("SELECT id, duree_totale from Album where titre = %s", (alb,))
-            alb_ = self.cur.fetchone()
-
-            while alb != '' and not alb_:
-                print("/!\ Le nom d'album renseigné n'appartient pas à la base de donnée.\n")
-                alb = input("Album de la chanson : ")
-                self.cur.execute("SELECT id, duree_totale from Album where titre = %s", (alb,))
-                alb_ = self.cur.fetchone()
-
-            if alb == '' :
-                alb = album
+                self.cur.execute("UPDATE Album set duree_totale = %s where id=%s ", (data[1] - duree + d, data[0]))
 
             genre = input("Genre musical de la chanson : ")
             self.cur.execute("SELECT * from GenresMusicaux where nom = %s", (genre,))
@@ -580,7 +598,7 @@ class Chanson() :
             if genre == '' :
                 genre = genre_musical
 
-            self.cur.execute("UPDATE Chanson set titre = %s, duree = %s, createurice = %s, album = %s, genre_musical =%s where id = %s",(t, d, i_, alb, genre, chanson))
+            self.cur.execute("UPDATE Chanson set titre = %s, duree = %s, createurice = %s, album = %s, genre_musical =%s where id = %s",(t, d, i_, data[0], genre, chanson))
             print("Donnée modifiée avec succès.")
 
 
@@ -590,9 +608,7 @@ class Album() :
 
     def insertion(self):
         artiste = input("Artiste principal de l'album : ")
-        self.cur.execute(
-            "SELECT Profil_Artiste.id from Profil_Artiste JOIN Compte ON Profil_Artiste.id = Compte.id where nom = %s",
-            (artiste,))
+        self.cur.execute("SELECT Profil_Artiste.id from Profil_Artiste JOIN Compte ON Profil_Artiste.id = Compte.id where nom = %s",(artiste,))
         art = self.cur.fetchone()
 
         while not art:
@@ -619,12 +635,14 @@ class Album() :
             print("Donnée insérée avec succès.")
 
     def consultation(self):
-        self.cur.execute("SELECT * FROM Album")
-        headers = [i[0] for i in self.cur.description]
-        print(headers)
+        self.cur.execute("SELECT id, titre, annee_de_sortie, duree_totale, artiste_principal  FROM Album")
+        h1, h2, h3, h4, h5 = [i[0] for i in self.cur.description]
+        print(h1 + " | " + h2 + " | " + h3 + " | " + h4 + " | " + h5)
         data = self.cur.fetchall()
-        for row in data:
-            print(row)
+        for id, titre, annee_de_sortie, duree_totale, artiste_principal in data:
+            self.cur.execute("SELECT nom FROM Compte where id = %s", (artiste_principal,))
+            cre = self.cur.fetchone()[0]
+            print(str(id) + " | " + titre + " | " + str(annee_de_sortie) + " | " + str(duree_totale) + " | " + cre)
 
     def suppression(self):
         titre = input("Titre de l'album à supprimer : ")
@@ -652,9 +670,7 @@ class Album() :
     def modification(self):
         titre = input("Titre de l'album à modifier : ")
         artiste = input("Artiste principal de l'album : ")
-        self.cur.execute(
-            "SELECT Profil_Artiste.id from Profil_Artiste JOIN Compte ON Profil_Artiste.id = Compte.id where nom = %s",
-            (artiste,))
+        self.cur.execute("SELECT Profil_Artiste.id from Profil_Artiste JOIN Compte ON Profil_Artiste.id = Compte.id where nom = %s",(artiste,))
         art = self.cur.fetchone()
 
         while not art:
@@ -665,9 +681,7 @@ class Album() :
                 (artiste,))
             art = self.cur.fetchone()
 
-        self.cur.execute(
-            "SELECT Album.id from Album JOIN Profil_Artiste ON Album.artiste_principal = Profil_Artiste.id  where Profil_Artiste.id = %s and Album.titre=%s ",
-            (art[0], titre))
+        self.cur.execute("SELECT Album.id from Album JOIN Profil_Artiste ON Album.artiste_principal = Profil_Artiste.id  where Profil_Artiste.id = %s and Album.titre=%s ",(art[0], titre))
         album = self.cur.fetchone()
 
         if not album:
@@ -677,7 +691,7 @@ class Album() :
             print(
                 "Les modifications enregistrées ci-dessous seront prises en compte, si aucune donnée n'est insérée pour un attribut, la valeur restera inchangée.\n")
 
-            t = input("Titre de l'album' : ")
+            t = input("Titre de l'album : ")
             if t == '':
                 t = titre
 
@@ -695,28 +709,22 @@ class Album() :
                 i_ = art
 
             if t != titre or i_ != art:
-                self.cur.execute(
-                    "SELECT * from Album JOIN Profil_Artiste ON Album.artiste_principal = Profil_Artiste.id JOIN Compte ON Profil_Artiste.id = Compte.id where Compte.id = %s and Album.titre=%s ",
-                    (i_, t))
+                self.cur.execute("SELECT * from Album JOIN Profil_Artiste ON Album.artiste_principal = Profil_Artiste.id JOIN Compte ON Profil_Artiste.id = Compte.id where Compte.id = %s and Album.titre=%s ",(i_, t))
                 data = self.cur.fetchone()
 
                 if data:
                     print("/!\ L'artiste interprète déjà un album du même nom.\n")
                     return
 
-            annee_sortie = input("Année de sortie de l'album' : ")
-            self.cur.execute(
-                "SELECT annee_de_sortie from Album JOIN Profil_Artiste ON Album.artiste_principal = Profil_Artiste.id JOIN Compte ON Profil_Artiste.id = Compte.id where Compte.nom = %s and Album.titre=%s ",
-                (artiste, titre))
+            annee_sortie = input("Année de sortie de l'album : ")
+            self.cur.execute("SELECT annee_de_sortie from Album JOIN Profil_Artiste ON Album.artiste_principal = Profil_Artiste.id JOIN Compte ON Profil_Artiste.id = Compte.id where Compte.nom = %s and Album.titre=%s ",(artiste, titre))
             annee = self.cur.fetchone()
 
 
             while annee_sortie != '' and (int(annee_sortie) < 1900 or int(annee_sortie) > date.today().year):
                 print("/!\ Renseignez une donnée valide.\n")
                 annee_sortie = int(input("Année de sortie de l'album' : "))
-                self.cur.execute(
-                    "SELECT annee_de_sortie from Album JOIN Profil_Artiste ON Album.artiste_principal = Profil_Artiste.id JOIN Compte ON Profil_Artiste.id = Compte.id where Compte.nom = %s and Album.titre=%s ",
-                    (artiste, titre))
+                self.cur.execute("SELECT annee_de_sortie from Album JOIN Profil_Artiste ON Album.artiste_principal = Profil_Artiste.id JOIN Compte ON Profil_Artiste.id = Compte.id where Compte.nom = %s and Album.titre=%s ",(artiste, titre))
                 annee = self.cur.fetchone()
 
             if annee_sortie == '':
@@ -724,9 +732,7 @@ class Album() :
             else :
                 annee_sortie = str(annee_sortie) + '-01-01'
 
-            self.cur.execute(
-                "UPDATE Album set titre = %s, artiste_principal = %s, annee_de_sortie =%s where id = %s",
-                (t, i_, annee_sortie, album))
+            self.cur.execute("UPDATE Album set titre = %s, artiste_principal = %s, annee_de_sortie =%s where id = %s",(t, i_, annee_sortie, album))
             print("Donnée modifiée avec succès.")
 
 class GenresMusicaux :
@@ -745,11 +751,11 @@ class GenresMusicaux :
 
     def consultation(self):
         self.cur.execute("SELECT * FROM GenresMusicaux")
-        headers = [i[0] for i in self.cur.description]
-        print(headers)
+        print("nom")
         data = self.cur.fetchall()
-        for row in data:
-            print(row)
+        for nom, in data:
+            print(nom)
+
 
     def suppression(self):
         genre = input("Genre musical à supprimer : ")
@@ -825,12 +831,16 @@ class Playlist():
 
 
     def consultation(self):
-        self.cur.execute("SELECT * FROM Playlist")
-        headers = [i[0] for i in self.cur.description]
-        print(headers)
+
+        self.cur.execute("SELECT id, titre, description, autorisation_acces, createurice  FROM Playlist")
+        h1, h2, h3, h4, h5 = [i[0] for i in self.cur.description]
+        print(h1 + " | " + h2 + " | " + h3 + " | " + h4 + " | " + h5)
         data = self.cur.fetchall()
-        for row in data:
-            print(row)
+        for id, titre, description, autorisation_acces, createurice in data:
+            self.cur.execute("SELECT nom FROM Compte where id = %s", (createurice,))
+            cre = self.cur.fetchone()[0]
+            print(str(id) + " | " + titre + " | " + description + " | " + autorisation_acces + " | " + cre)
+
 
     def suppression(self):
         titre = input("Titre de la playlist à supprimer : ")
@@ -937,12 +947,13 @@ class Pays():
             print("Donnée insérée avec succès.")
 
     def consultation(self):
+
         self.cur.execute("SELECT * FROM Pays")
-        headers = [i[0] for i in self.cur.description]
-        print(headers)
+        print("nom")
         data = self.cur.fetchall()
-        for row in data:
-            print(row)
+        for nom, in data:
+            print(nom)
+
 
     def suppression(self):
         nom = input("Nom du pays à supprimer : ")
@@ -1084,16 +1095,14 @@ class Assos_Playlist_Album():
 
     def consultation(self):
         self.cur.execute("SELECT * FROM Assos_Playlist_Album")
-        h1, h2 = [i[0] for i in self.cur.description]
-        print(h1 + " | " + h2)
+        print("playlist | album" )
         data = self.cur.fetchall()
         for playlist, album in data:
-            self.cur.execute("SELECT titre FROM Album where id='%s' "%(album))
-            album_a_afficher = self.cur.fetchone()[0]
             self.cur.execute("SELECT titre FROM Playlist where id='%s' " % (playlist))
             playlist_a_afficher = self.cur.fetchone()[0]
-            print(album_a_afficher + " | " + playlist_a_afficher)
-
+            self.cur.execute("SELECT titre FROM Album where id='%s' "%(album))
+            album_a_afficher = self.cur.fetchone()[0]
+            print(playlist_a_afficher + " | " + album_a_afficher )
 
     def suppression(self):
 
@@ -1212,9 +1221,9 @@ class Droits():
                 print("Donnée supprimée avec succès.")
 
     def consultation(self):
-        self.cur.execute("SELECT * FROM DroitsAuteurs")
-        headers = [i[0] for i in self.cur.description]
-        print(headers)
+        self.cur.execute("SELECT metier, compte, chanson FROM DroitsAuteurs")
+        h1, h2, h3 = [i[0] for i in self.cur.description]
+        print(h1 +' | ' + h2 + ' | '+ h3)
         data = self.cur.fetchall()
         for row in data:
             self.cur.execute("SELECT nom FROM Compte where id='%s' " % (row[1]))
@@ -1433,6 +1442,7 @@ def main():
         choice = '1'
 
         while choice in ['1', '2', '3', '4', '5', '*', '#']:
+            cur = conn.cursor()
             print("__________________________________________________")
             print("Pour créer la base de donnée, entrez *")
             print("Pour supprimer l'entièreté de la base de donnée, entrez # ")
@@ -1483,7 +1493,6 @@ def main():
             if choice == '#' :
                 suppression_bdd(cur)
                 print("La base de donnée a été supprimée.")
-
 
         conn.close()
 
