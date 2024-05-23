@@ -1341,15 +1341,10 @@ def main():
         print("Connexion réussie")
         choice = '1'
 
-        # A exécuter pour supprimer l'entièreté de la base de donnée
-        # suppression_bdd(cur)
-
-        # A exécuter si la base de donnée n'est pas déjà crée
-        # creation_table(cur)
-        # insertion_donnee(cur)
-
-        while '1' <= choice <= '5':
+        while choice in ['1', '2', '3', '4', '5', '*', '#']:
             print("__________________________________________________")
+            print("Pour créer la base de donnée, entrez *")
+            print("Pour supprimer l'entièreté de la base de donnée, entrez # ")
             print("Pour effectuer une insertion dans la base de donnée, entrez 1")
             print("Pour effectuer une modification dans la base de donnée, entrez 2")
             print("Pour effectuer une suppression dans la base de donnée, entrez 3")
@@ -1387,6 +1382,16 @@ def main():
                 while 'a' <= req <= 'd':
                     requete(cur, req)
                     req = 'z'
+
+            if choice == '*':
+                creation_table(cur)
+                insertion_donnee(cur)
+                print("La base de données a bien été crée.")
+
+            if choice == '#' :
+                suppression_bdd(cur)
+                print("La base de donnée a été supprimée.")
+
 
         conn.close()
 
