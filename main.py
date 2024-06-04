@@ -804,13 +804,13 @@ class Playlist():
     def insertion(self):
         titre = input("Titre de la playlist : ")
         compte = input("Compte dupuis lequel créer la playlist : ")
-        self.cur.execute("SELECT id from Compte where nom = %s",(compte,))
+        self.cur.execute("SELECT Compte.id from Profil_Utilisateurice JOIN Compte on Compte.id = Profil_Utilisateurice.id  where Compte.nom = %s",(compte,))
         cre = self.cur.fetchone()
 
         while not cre :
-            print("/!\ Le compte renseigné n'appartient pas à la base de donnée.\n")
+            print("/!\ Le compte renseigné n'appartient pas à la base de donnée ou n'est pas celui d'un•e utilisateur•ice.\n")
             compte = input("Compte dupuis lequel créer la playlist :")
-            self.cur.execute("SELECT id from Compte where nom = %s", (compte,))
+            self.cur.execute("SELECT Compte.id from Profil_Utilisateurice JOIN Compte on Compte.id = Profil_Utilisateurice.id  where Compte.nom = %s",(compte,))
             cre = self.cur.fetchone()
 
         self.cur.execute("SELECT * from Playlist  where createurice = %s and titre=%s ",(cre, titre))
