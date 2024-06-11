@@ -1,2 +1,0 @@
-DROP TABLE IF EXISTS Profil_Utilisateurice;
-DROP TYPE IF EXISTS STATUT;
