@@ -1,0 +1,1 @@
+INSERT INTO NR_Playlist VALUES ( DEFAULT, 'Top Hits 2010', 'Tous les meilleurs hits de 2010 rassemblés dans une seul playliste !', 'publique', 1 , '[{"id": 1 , "titre" : "Salad Days", "duree" : 171 , "createurice" : 2 , "genre_musical" : "Lo-fi"}]', '[{"id" : 1, "titre" : "SHADYXV" }]');

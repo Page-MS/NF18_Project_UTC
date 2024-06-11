@@ -1,4 +1,4 @@
-CREATE TABLE Album(
+CREATE TABLE NR_Album(
     id SERIAL primary key,
     titre varchar(30) NOT NULL,
     annee_de_sortie date NOT NULL,
