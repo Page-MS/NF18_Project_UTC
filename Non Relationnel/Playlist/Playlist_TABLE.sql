@@ -4,7 +4,7 @@ CREATE TABLE NR_Playlist(
     titre VARCHAR(30) NOT NULL,
     description VARCHAR(200),
     autorisation_acces AUTORISATION NOT NULL ,
-    createurice INTEGER,
+    createurice REFERENCES NR_Profil_Artiste,
     chansons JSONB,
     albums JSONB,
     UNIQUE(titre,createurice)
