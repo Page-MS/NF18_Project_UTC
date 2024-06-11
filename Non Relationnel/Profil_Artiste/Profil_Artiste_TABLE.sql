@@ -5,7 +5,7 @@ CREATE TYPE TYPE_PROFIL AS ENUM(
     'Profil_Artiste_Solo',
     'Profil_Artiste');
 
-CREATE TABLE Profil_Artiste(
+CREATE TABLE NR_Profil_Artiste(
     id SERIAL PRIMARY KEY,
     nom VARCHAR(30) NOT NULL,
     bio varchar(500),

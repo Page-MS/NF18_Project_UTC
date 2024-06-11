@@ -1,7 +1,7 @@
 DROP TYPE IF EXISTS STATUT ;
 CREATE TYPE  STATUT AS ENUM ('premium', 'regulier');
 
-CREATE TABLE Profil_Utilisateurice(
+CREATE TABLE NR_Profil_Utilisateurice(
     id SERIAL PRIMARY KEY,
     nom VARCHAR(30) NOT NULL,
     mail VARCHAR(30) UNIQUE NOT NULL,
