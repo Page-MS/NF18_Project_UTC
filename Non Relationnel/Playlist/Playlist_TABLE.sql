@@ -1,5 +1,5 @@
 CREATE TYPE AUTORISATION AS ENUM('privée', 'publique', 'partagee_aux_amies');
-CREATE TABLE Playlist(
+CREATE TABLE NR_Playlist(
     id SERIAL PRIMARY KEY,
     titre VARCHAR(30) NOT NULL,
     description VARCHAR(200),
