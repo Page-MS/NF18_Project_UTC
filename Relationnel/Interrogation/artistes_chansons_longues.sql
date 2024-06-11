@@ -5,7 +5,7 @@
 --Puis on cherche la chanson la plus longue de chaque artistes,
 --On ajoute ensuite une condition pour ne considerer que les artistes ayant fait une chansons de durée superieur a par exemple 600 secondes soit 10min
 
-SELECT Compte.nom
+SELECT Compte.nom, Count(Chanson.id) as nb_chanson
 FROM Compte
 JOIN Chanson ON Chanson.createurice = Compte.id
 GROUP BY Compte.id
