@@ -4,6 +4,6 @@ CREATE TABLE NR_Album(
     annee_de_sortie date NOT NULL,
     duree_totale integer NOT NULL,
     artiste_principal integer,
-    chansons JSONB,
+    chansons JSON,
     UNIQUE (titre, artiste_principal)
 );
