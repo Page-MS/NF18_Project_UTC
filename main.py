@@ -1,8 +1,6 @@
 import psycopg2
 from datetime import date
 
-from postgres import DATABASE, PASSWORD
-
 class Connexion:
     def __init__(self):
         self.__HOST = "localhost"
@@ -1435,7 +1433,7 @@ def main():
         identifiants.PASSWORD = input("Entrez votre mot de passe (PASSWORD) : ")
         identifiants.DATABASE = input("Entrez le nom de votre base de donnée (DATABASE) : ")
 
-        conn = psycopg2.connect("host=%s dbname=%s user=%s password=%s" % (identifiants.HOST, DATABASE, identifiants.USER, PASSWORD))
+        conn = psycopg2.connect("host=%s dbname=%s user=%s password=%s" % (identifiants.HOST, identifiants.DATABASE, identifiants.USER, identifiants.PASSWORD))
         conn.autocommit = True
         cur = conn.cursor()
         print("Connexion réussie")
