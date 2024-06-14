@@ -1,3 +1,3 @@
-DROP TABLE IF EXISTS Profil_Artiste;
+DROP TABLE IF EXISTS NR_Profil_Artiste;
 DROP TYPE IF EXISTS Type_Profil;
 

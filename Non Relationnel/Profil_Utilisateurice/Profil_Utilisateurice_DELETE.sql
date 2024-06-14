@@ -1,2 +1,2 @@
-DROP TABLE IF EXISTS Profil_Utilisateurice;
+DROP TABLE IF EXISTS NR_Profil_Utilisateurice;
 DROP TYPE IF EXISTS STATUT;
