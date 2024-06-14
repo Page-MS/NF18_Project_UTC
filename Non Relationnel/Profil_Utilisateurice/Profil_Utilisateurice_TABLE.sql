@@ -8,5 +8,5 @@ CREATE TABLE NR_Profil_Utilisateurice(
     mdp VARCHAR(30) NOT NULL,
     date_inscription DATE NOT NULL,
     statut STATUT NOT NULL,
-    genres JSONB,
+    genres JSONB
 );
