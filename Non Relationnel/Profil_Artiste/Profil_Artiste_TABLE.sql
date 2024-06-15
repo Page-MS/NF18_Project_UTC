@@ -10,7 +10,7 @@ CREATE TABLE NR_Profil_Artiste(
     nom VARCHAR(30) NOT NULL,
     bio varchar(500),
     type TYPE_PROFIL NOT NULL,
-    groupe integer references Profil_Artiste(id),
+    groupe integer references NR_Profil_Artiste(id),
     pays varchar(30), 
     CONSTRAINT check_solo_or_group CHECK (
         (type = 'Profil_Artiste_Solo')
