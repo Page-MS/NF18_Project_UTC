@@ -1,6 +1,7 @@
 CREATE VIEW V_Chansons
 AS SELECT
-        CAST(c->>'id' as INTEGER) as id, c->>'titre' as titre, CAST(c->>'duree' as INTEGER) as duree,
+        a.id as id_album, a.titre as album ,CAST(c->>'id' as INTEGER) as id_chanson,
+        c->>'titre' as titre, CAST(c->>'duree' as INTEGER) as duree,
         c->>'createurice' as interprète, c->>'genre_musical' as genre,
         c->'droit_auteurice'-> 'auteurs' as auteurices,
         c->'droit_auteurice'-> 'compositeurs' as compositeurices,
