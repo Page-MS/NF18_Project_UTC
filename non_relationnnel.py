@@ -96,6 +96,8 @@ class Chanson():
         table = PrettyTable()
         self.cur.execute(open("Non_Relationnel/Views/Chanson_view.sql", "r").read())
         self.cur.execute("SELECT * from V_Chansons")
+        print("Chansons")
+        print('_______')
         table.field_names = [i[0] for i in self.cur.description]
         data = self.cur.fetchall()
         table.add_rows(data)
