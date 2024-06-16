@@ -1,4 +1,4 @@
-CREATE VIEW V_Albums
+CREATE OR REPLACE VIEW V_Albums
 AS SELECT
         a.id, a.titre, EXTRACT(YEAR FROM a.annee_de_sortie) AS annee_de_sortie, jsonb_array_length(chansons::jsonb) AS nombre_de_chansons,
         SUM((c.chanson ->> 'duree')::integer) AS durée_totale

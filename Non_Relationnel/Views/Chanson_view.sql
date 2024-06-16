@@ -1,4 +1,4 @@
-CREATE VIEW V_Chansons
+CREATE OR REPLACE VIEW V_Chansons
 AS SELECT
         a.id as id_album, a.titre as album ,CAST(c->>'id' as INTEGER) as id_chanson,
         c->>'titre' as titre, CAST(c->>'duree' as INTEGER) as duree,

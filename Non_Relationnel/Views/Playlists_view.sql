@@ -1,4 +1,4 @@
-CREATE VIEW V_Playlists
+CREATE OR REPLACE VIEW V_Playlists
 AS SELECT
         p.id as id_playlist, p.titre, p.description,
         jsonb_agg(c.chanson) AS chansons_de_l_album,
