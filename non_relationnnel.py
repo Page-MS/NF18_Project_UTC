@@ -54,7 +54,71 @@ class Playlist():
         self.cur = cur
 
     def modification(self):
-        pass
+        titre = input("Titre de la playlist à modifier : ")
+        compte = input("Compte dupuis lequel modifier la playlist : ")
+        self.cur.execute("SELECT id from NR_Profil_Utilisateurice where nom = %s", (compte,))
+        cre = self.cur.fetchone()
+
+        while not cre:
+            print("/!\ Le compte renseigné n'appartient pas à la base de donnée.\n")
+            compte = input("Compte dupuis lequel modifier la playlist : ")
+            self.cur.execute("SELECT id from NR_Profil_Utilisateurice where nom = %s", (compte,))
+            cre = self.cur.fetchone()
+
+        self.cur.execute("SELECT id from NR_Playlist where createurice=%s AND titre=%s", (cre, titre))
+        playlist = self.cur.fetchone()
+
+        if not playlist:
+            print("/!\ Le profil ne possède aucune playlist ayant ce nom pour titre.\n")
+
+        else:
+            self.cur.execute("SELECT description, autorisation_acces FROM NR_Playlist where id = %s", (playlist[0],))
+            des, aut = self.cur.fetchone()
+            print(
+                "Les modifications enregistrées ci-dessous seront prises en compte, si aucune donnée n'est insérée pour un attribut, la valeur restera inchangée.\n")
+
+            t = input("Titre de la playlist : ")
+            if t == '':
+                t = titre
+
+            c = input("Créateur•ice de la playlist : ")
+            self.cur.execute("SELECT id from NR_Profil_Utilisateurice where nom = %s", (c,))
+            c_ = self.cur.fetchone()
+
+            while c != '' and not c_:
+                print("/!\ Le compte renseigné n'appartient pas à la base de donné.\n")
+                c = input("Créateur•ice de la playlist : ")
+                self.cur.execute("SELECT id from NR_Profil_Utilisateurice where nom = %s", (c,))
+                c_ = self.cur.fetchone()
+
+            if c == '':
+                c_ = cre
+
+            if t != titre or c_ != cre:
+                self.cur.execute("SELECT * FROM NR_Playlist where createurice = %s and titre = %s", (c_, t))
+                data = self.cur.fetchone()
+
+                if data:
+                    print("/!\ Le compte possède dèjà une playlist du même nom.\n")
+                    return
+
+            d = input("Description de la playlist : ")
+            if d == '':
+                d = des
+
+            a = input("Paramètre d'autorisation de la playlist (privee/publique/partagee_aux_amies) : ")
+
+            while a not in ['privee', 'publique', 'partagee_aux_amies', '']:
+                print("/!\ Le paramètre d'autorisation de la playlist n'est pas valide.\n")
+                a = input("Paramètre d'autorisation de la playlist (privee/publique/partagee_aux_amies) : ")
+
+            if a == '':
+                a = aut
+
+            self.cur.execute(
+                "UPDATE NR_Playlist set titre = %s, createurice = %s, description = %s, autorisation_acces = %s where id = %s",
+                (t, c_, d, a, playlist))
+            print("Donnée modifiée avec succès.")
 
     def consultation(self):
         table = PrettyTable()
