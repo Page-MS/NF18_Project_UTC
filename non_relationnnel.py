@@ -56,7 +56,14 @@ class Playlist():
         pass
 
     def consultation(self):
-        pass
+        self.cur.execute(open("Non_Relationnel/Views/Playlists_view.sql", "r").read())
+        self.cur.execute("SELECT * from V_Playlists")
+        print("Playlist")
+        print('_______')
+        raw = self.cur.fetchone()
+        while raw:
+            print( raw[1],raw[2], raw[3])
+            raw = self.cur.fetchone()
 
 class Album():
     def __init__(self,cur):
@@ -66,7 +73,14 @@ class Album():
         pass
 
     def consultation(self):
-        pass
+        self.cur.execute(open("Non_Relationnel/Views/Albums_view.sql", "r").read())
+        self.cur.execute("SELECT * from V_Albums")
+        print("Albums")
+        print('_______')
+        raw = self.cur.fetchone()
+        while raw:
+            print(raw[1] + " | " + str(raw[2]))
+            raw = self.cur.fetchone()
 
 class Chanson():
     def __init__(self,cur):
@@ -76,7 +90,14 @@ class Chanson():
         pass
 
     def consultation(self):
-        pass
+        self.cur.execute(open("Non_Relationnel/Views/Chanson_view.sql", "r").read())
+        self.cur.execute("SELECT * from V_Chansons")
+        print("Chansons")
+        print('_______')
+        raw = self.cur.fetchone()
+        while raw:
+            print(str(raw[3]) + " | " + str(raw[1]))
+            raw = self.cur.fetchone()
 
 
 def creation_table(cur):
@@ -92,6 +113,9 @@ def insertion_donnee(cur):
     cur.execute(open("Non_Relationnel/Playlist/Playlist_INSERTION.sql", "r").read())
 
 def suppression_bdd(cur):
+    cur.execute("DROP VIEW IF EXISTS V_Chansons")
+    cur.execute("DROP VIEW IF EXISTS V_Playlists")
+    cur.execute("DROP VIEW IF EXISTS V_Albums")
     cur.execute(open("Non_Relationnel/Playlist/Playlist_DELETE.sql", "r").read())
     cur.execute(open("Non_Relationnel/Album/Album_DELETE.sql", "r").read())
     cur.execute(open("Non_Relationnel/Profil_Utilisateurice/Profil_Utilisateurice_DELETE.sql", "r").read())
@@ -147,7 +171,7 @@ def main():
                 table = input("Table : ")
                 print("-----\n")
 
-                while 'a' <= table <= 'j':
+                while 'a' <= table <= 'c':
                     if choice == '1':
                         modification(cur, table)
                     if choice == '2':

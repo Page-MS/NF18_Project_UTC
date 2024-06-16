@@ -1,4 +1,4 @@
-CREATE VIEW V_Playlists
+CREATE OR REPLACE VIEW V_Playlists
 AS SELECT p.id, p.titre, p.description, p.autorisation_acces, u.nom as createurice,
        jsonb_array_length(jsonb_agg(DISTINCT c.chanson)) AS nb_chansons,
        SUM((c.chanson ->> 'duree')::integer) AS durée_totale,
