@@ -1,4 +1,5 @@
 import psycopg2
+from prettytable import PrettyTable
 from datetime import date
 
 class Connexion:
@@ -56,14 +57,15 @@ class Playlist():
         pass
 
     def consultation(self):
+        table = PrettyTable()
         self.cur.execute(open("Non_Relationnel/Views/Playlists_view.sql", "r").read())
         self.cur.execute("SELECT * from V_Playlists")
         print("Playlist")
         print('_______')
-        raw = self.cur.fetchone()
-        while raw:
-            print( raw[1],raw[2], raw[3])
-            raw = self.cur.fetchone()
+        table.field_names = [i[0] for i in self.cur.description]
+        data = self.cur.fetchall()
+        table.add_rows(data)
+        print(table)
 
 class Album():
     def __init__(self,cur):
@@ -73,14 +75,15 @@ class Album():
         pass
 
     def consultation(self):
+        table = PrettyTable()
         self.cur.execute(open("Non_Relationnel/Views/Albums_view.sql", "r").read())
         self.cur.execute("SELECT * from V_Albums")
         print("Albums")
         print('_______')
-        raw = self.cur.fetchone()
-        while raw:
-            print(raw[1] + " | " + str(raw[2]))
-            raw = self.cur.fetchone()
+        table.field_names = [i[0] for i in self.cur.description]
+        data = self.cur.fetchall()
+        table.add_rows(data)
+        print(table)
 
 class Chanson():
     def __init__(self,cur):
@@ -90,15 +93,13 @@ class Chanson():
         pass
 
     def consultation(self):
+        table = PrettyTable()
         self.cur.execute(open("Non_Relationnel/Views/Chanson_view.sql", "r").read())
         self.cur.execute("SELECT * from V_Chansons")
-        print("Chansons")
-        print('_______')
-        raw = self.cur.fetchone()
-        while raw:
-            print(str(raw[3]) + " | " + str(raw[1]))
-            raw = self.cur.fetchone()
-
+        table.field_names = [i[0] for i in self.cur.description]
+        data = self.cur.fetchall()
+        table.add_rows(data)
+        print(table)
 
 def creation_table(cur):
     cur.execute(open("Non_Relationnel/Profil_Artiste/Profil_Artiste_TABLE.sql", "r").read())
@@ -150,7 +151,6 @@ def main():
 
         conn = psycopg2.connect("host=%s dbname=%s user=%s password=%s" % (identifiants.HOST, identifiants.DATABASE, identifiants.USER, identifiants.PASSWORD))
         conn.autocommit = True
-        cur = conn.cursor()
         print("Connexion réussie")
         choice = '1'
 
@@ -167,7 +167,7 @@ def main():
             choice = input("Votre choix : ")
             if '1' <= choice <= '2':
                 table = 'z'
-                print("\nChoisissez la table concernée : , Playlist(a), Chanson(b), Album(c) ")
+                print("\nChoisissez la table concernée : Playlist(a), Chanson(b), Album(c)")
                 table = input("Table : ")
                 print("-----\n")
 
