@@ -281,7 +281,6 @@ class Chanson():
 
             for i, chanson in enumerate(chansons_list):
                 if chanson['titre'] == chanson_choisit:
-                    print("Les modifications enregistrées ci-dessous seront prises en compte, si aucune donnée n'est insérée pour attribut, la valeur restera inchangée.\n")
 
                     # Choix des attributs à modifier
                     nouveau_titre = input("Nouveau titre de la chanson : ") or chanson['titre']
@@ -300,9 +299,9 @@ class Chanson():
                         'createurice': int(nouvel_interprete),
                         'genre_musical': nouveau_genre,
                         'droit_auteurice': {
-                            'auteurs': nouveaux_auteurices.split(',') if nouveaux_auteurices else [],
-                            'compositeurs': nouveaux_compositeurices.split(',') if nouveaux_compositeurices else [],
-                            'éditeurs': nouveaux_editeurices.split(',') if nouveaux_editeurices else []
+                        'auteurs': nouveaux_auteurices,
+                        'compositeurs': nouveaux_compositeurices,
+                        'éditeurs': nouveaux_editeurices
                         }
                     }
 
