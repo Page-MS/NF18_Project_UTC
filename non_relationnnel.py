@@ -235,11 +235,13 @@ class Chanson():
         while not true_exit : 
             chanson_choisit = input("Chanson à modifier : ") #nom de la chanson à modifier
             self.cur.execute("SELECT chansons FROM NR_Album WHERE titre = %s", (album,)) 
-            chansons = self.cur.fetchone()[0] #recupt de toutes les chansons dans le Json de l'album selectionné
+            chansons_list = self.cur.fetchone()[0] #recupt de toutes les chansons dans le Json de l'album selectionné
+            # print(chansons)
         
-            chansons_list = json.loads(chansons) #liste de toutes les chansons dans le JSON
+            # chansons_list = json.loads(chansons) #liste de toutes les chansons dans le JSON
             for chanson in chansons_list:
                 if chanson['titre'] == chanson_choisit:
+                    
                     print("Les modifications enregistrées ci-dessous seront prises en compte, si aucune donnée n'est insérée pour attribut, la valeur restera inchangée.\n")
 
                     #choix des attributs à modifier
