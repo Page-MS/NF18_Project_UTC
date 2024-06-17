@@ -230,96 +230,92 @@ class Chanson():
     def __init__(self,cur):
         self.cur = cur
 
-    # def modification(self):
-    #     album = input("Album auquel appartient la chanson à modifier : ") #nom de l'album
-    #     true_exit = False
-    #     while not true_exit : 
-    #         chanson_choisit = input("Chanson à modifier : ") #nom de la chanson à modifier
-    #         self.cur.execute("SELECT chansons FROM NR_Album WHERE titre = %s", (album,)) 
-    #         chansons_list = self.cur.fetchone()[0] #recupt de toutes les chansons dans le Json de l'album selectionné
-    #         # print(chansons)
-        
-    #         # chansons_list = json.loads(chansons) #liste de toutes les chansons dans le JSON
-    #         for chanson in chansons_list:
-    #             if chanson['titre'] == chanson_choisit:
-                    
-    #                 print("Les modifications enregistrées ci-dessous seront prises en compte, si aucune donnée n'est insérée pour attribut, la valeur restera inchangée.\n")
-
-    #                 #choix des attributs à modifier
-    #                 nouveau_titre = input("Nouveau titre de la chanson : ")
-    #                 nouvelle_duree = input("Nouvelle durée de la chanson : ")
-    #                 nouvel_interprete = input("Nouvel•le interprète de la chanson : ")
-    #                 nouveau_genre = input("Nouveau genre de la chanson : ")
-    #                 nouveaux_auteurices = input("Nouveau•lle auteur•ice•s de la chanson : ")
-    #                 nouveaux_compositeurices = input("Nouveau•lle compositeur•ice•s de la chanson : ")
-    #                 nouveaux_editeurices = input("Nouveau•lle editeur•ice•s de la chanson : ")
-
-    #                 #modification des attributs de la chanson
-    #                 if nouveau_titre != '': chanson['titre'] = nouveau_titre
-    #                 if nouvelle_duree != '': chanson['duree'] = nouvelle_duree
-    #                 if nouvel_interprete != '': chanson['interprete'] = nouvel_interprete
-    #                 if nouveau_genre != '': chanson['genre'] = nouveau_genre
-    #                 if nouveaux_auteurices != '': chanson['auteurices'] = nouveaux_auteurices
-    #                 if nouveaux_compositeurices != '': chanson['compositeurices'] = nouveaux_compositeurices
-    #                 if nouveaux_editeurices != '': chanson['editeurices'] = nouveaux_editeurices
-
-                    
-
-    #                 true_exit = True
-    #                 break
-    #         if not true_exit: #gestion du cas ou l'utilisateur ne choisit pas de chanson prsente
-    #             print("La chanson n'existe pas dans l'album selectionné")
-
-
     def modification(self):
-        album = input("Album auquel appartient la chanson à modifier : ")
-        true_exit = False
-        while not true_exit:
-            chanson_choisit = input("Chanson à modifier : ")
-            self.cur.execute("SELECT chansons FROM NR_Album WHERE titre = %s", (album,))
-            chansons_list = self.cur.fetchone()[0]
+        titre = input("Titre de l'album de la chanson à modifier : ")
+        artiste = input("Artiste principal de l'album : ")
+        self.cur.execute("SELECT art.id from NR_Profil_Artiste art where nom = %s", (artiste,))
+        art = self.cur.fetchone()
 
-            for i, chanson in enumerate(chansons_list):
-                if chanson['titre'] == chanson_choisit:
+        while not art:
+            print("/!\ Le nom d'artiste renseigné n'appartient pas à la base de donnée.\n")
+            artiste = input("Artiste principal de l'album : ")
+            self.cur.execute("SELECT art.id from NR_Profil_Artiste art where nom = %s", (artiste,))
+            art = self.cur.fetchone()
 
-                    # Choix des attributs à modifier
-                    nouveau_titre = input("Nouveau titre de la chanson : ") or chanson['titre']
-                    nouvelle_duree = input("Nouvelle durée de la chanson : ") or chanson['duree']
-                    nouvel_interprete = input("Nouvel•le interprète de la chanson : ") or chanson['createurice']
-                    nouveau_genre = input("Nouveau genre de la chanson : ") or chanson['genre_musical']
-                    nouveaux_auteurices = input("Nouveau•lle auteur•ice•s de la chanson : ") or chanson['droit_auteurice']['auteurs']
-                    nouveaux_compositeurices = input("Nouveau•lle compositeur•ice•s de la chanson : ") or chanson['droit_auteurice']['compositeurs']
-                    nouveaux_editeurices = input("Nouveau•lle editeur•ice•s de la chanson : ") or chanson['droit_auteurice']['éditeurs']
+        self.cur.execute("SELECT a.id from NR_Album a where a.artiste_principal=%s and a.titre=%s ", (art[0], titre))
+        album = self.cur.fetchone()
 
-                    # Modification de la chanson dans la liste
-                    chansons_list[i] = {
-                        'id': chanson['id'],
-                        'titre': nouveau_titre,
-                        'duree': int(nouvelle_duree),
-                        'createurice': int(nouvel_interprete),
-                        'genre_musical': nouveau_genre,
-                        'droit_auteurice': {
-                        'auteurs': nouveaux_auteurices,
-                        'compositeurs': nouveaux_compositeurices,
-                        'éditeurs': nouveaux_editeurices
+        if not album:
+            print("L'artiste n'interprète aucune album ayant ce nom pour titre.")
+
+        else :
+            true_exit = False
+            while not true_exit :
+                chanson_choisit = input("Titre de la chanson à modifier : ")
+                self.cur.execute("SELECT chansons FROM NR_Album WHERE id = %s", (album,))
+                chansons_list = self.cur.fetchone()[0]
+
+                for i, chanson in enumerate(chansons_list):
+                    if chanson['titre'] == chanson_choisit:
+
+                        print( "Les modifications enregistrées ci-dessous seront prises en compte, si aucune donnée n'est insérée pour un attribut, la valeur restera inchangée.\n")
+
+                        # Choix des attributs à modifier
+                        nouveau_titre = input("Nouveau titre de la chanson : ") or chanson['titre']
+
+                        nouvel_interprete = input("Nouvel•le interprète de la chanson : ")
+                        self.cur.execute("SELECT id from NR_Profil_Artiste where nom = %s", (nouvel_interprete,))
+                        nouvel_interprete_id = self.cur.fetchone()
+
+                        while nouvel_interprete != '' and not nouvel_interprete_id:
+                            print("/!\ L'artiste renseigné n'appartient pas à la base de donné.\n")
+                            nouvel_interprete = input("Nouvel•le interprète de la chanson : ")
+                            self.cur.execute("SELECT id from NR_Profil_Artiste where nom = %s", (nouvel_interprete,))
+                            nouvel_interprete_id = self.cur.fetchone()
+
+                        if nouvel_interprete == '':
+                            nouvel_interprete_id = chanson['createurice']
+
+                        nouvelle_duree = input("Nouvelle durée de la chanson (en seconde) : ")
+                        while nouvelle_duree != '' and int(nouvelle_duree) < 0:
+                            print("/!\ La durée renseignée n'est pas valide.\n")
+                            nouvelle_duree = input("Nouvelle durée de la chanson (en seconde) : ")
+
+                        if nouvelle_duree == '':
+                            nouvelle_duree = chanson['duree']
+
+                        nouveau_genre = input("Nouveau genre de la chanson : ") or chanson['genre_musical']
+
+                        nouveaux_auteurices = input("Nouvelles•aux auteur•ice•s de la chanson : ") or chanson['droit_auteurice']['auteurs']
+                        nouveaux_compositeurices = input("Nouvelles•aux compositeur•ice•s de la chanson : ") or chanson['droit_auteurice']['compositeurs']
+                        nouveaux_editeurices = input("Nouvelles•aux editeur•ice•s de la chanson : ") or chanson['droit_auteurice']['éditeurs']
+
+                        # Modification de la chanson dans la liste
+                        chansons_list[i] = {
+                            'id': chanson['id'],
+                            'titre': nouveau_titre,
+                            'duree': int(nouvelle_duree),
+                            'createurice': int(nouvel_interprete_id[0]),
+                            'genre_musical': nouveau_genre,
+                            'droit_auteurice': {
+                            'auteurs': nouveaux_auteurices,
+                            'compositeurs': nouveaux_compositeurices,
+                            'éditeurs': nouveaux_editeurices
+                            }
                         }
-                    }
+                        true_exit = True
+                        break
 
-                    true_exit = True
-                    break
+                if not true_exit:
+                    print("La chanson n'existe pas dans l'album sélectionné")
 
-            if not true_exit:
-                print("La chanson n'existe pas dans l'album sélectionné")
+            # Mise à jour de l'attribut JSON dans la base de données
 
-        # Mise à jour de l'attribut JSON dans la base de données
-        update_query = f"""
-        UPDATE NR_Album
-        SET chansons = {Json(chansons_list)}::jsonb
-        WHERE titre = '{album}';
-        """
-        self.cur.execute(update_query)
-        # self.conn.commit()
+            update_query = "UPDATE NR_Album SET chansons = %s::jsonb WHERE id = %s ;"
 
+            # Exécution de la requête avec les paramètres sécurisés
+            self.cur.execute(update_query, (Json(chansons_list), album))
+            print("Donnée modifiée avec succès.")
 
 
     def consultation(self):
