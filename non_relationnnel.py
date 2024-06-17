@@ -1,4 +1,5 @@
 import psycopg2
+from prettytable import PrettyTable
 from datetime import date
 
 class Connexion:
@@ -53,34 +54,175 @@ class Playlist():
         self.cur = cur
 
     def modification(self):
-        pass
+        titre = input("Titre de la playlist à modifier : ")
+        compte = input("Compte dupuis lequel modifier la playlist : ")
+        self.cur.execute("SELECT id from NR_Profil_Utilisateurice where nom = %s", (compte,))
+        cre = self.cur.fetchone()
+
+        while not cre:
+            print("/!\ Le compte renseigné n'appartient pas à la base de donnée.\n")
+            compte = input("Compte dupuis lequel modifier la playlist : ")
+            self.cur.execute("SELECT id from NR_Profil_Utilisateurice where nom = %s", (compte,))
+            cre = self.cur.fetchone()
+
+        self.cur.execute("SELECT id from NR_Playlist where createurice=%s AND titre=%s", (cre, titre))
+        playlist = self.cur.fetchone()
+
+        if not playlist:
+            print("/!\ Le profil ne possède aucune playlist ayant ce nom pour titre.\n")
+
+        else:
+            self.cur.execute("SELECT description, autorisation_acces FROM NR_Playlist where id = %s", (playlist[0],))
+            des, aut = self.cur.fetchone()
+            print(
+                "Les modifications enregistrées ci-dessous seront prises en compte, si aucune donnée n'est insérée pour un attribut, la valeur restera inchangée.\n")
+
+            t = input("Titre de la playlist : ")
+            if t == '':
+                t = titre
+
+            c = input("Créateur•ice de la playlist : ")
+            self.cur.execute("SELECT id from NR_Profil_Utilisateurice where nom = %s", (c,))
+            c_ = self.cur.fetchone()
+
+            while c != '' and not c_:
+                print("/!\ Le compte renseigné n'appartient pas à la base de donné.\n")
+                c = input("Créateur•ice de la playlist : ")
+                self.cur.execute("SELECT id from NR_Profil_Utilisateurice where nom = %s", (c,))
+                c_ = self.cur.fetchone()
+
+            if c == '':
+                c_ = cre
+
+            if t != titre or c_ != cre:
+                self.cur.execute("SELECT * FROM NR_Playlist where createurice = %s and titre = %s", (c_, t))
+                data = self.cur.fetchone()
+
+                if data:
+                    print("/!\ Le compte possède dèjà une playlist du même nom.\n")
+                    return
+
+            d = input("Description de la playlist : ")
+            if d == '':
+                d = des
+
+            a = input("Paramètre d'autorisation de la playlist (privee/publique/partagee_aux_amies) : ")
+
+            while a not in ['privee', 'publique', 'partagee_aux_amies', '']:
+                print("/!\ Le paramètre d'autorisation de la playlist n'est pas valide.\n")
+                a = input("Paramètre d'autorisation de la playlist (privee/publique/partagee_aux_amies) : ")
+
+            if a == '':
+                a = aut
+
+            self.cur.execute(
+                "UPDATE NR_Playlist set titre = %s, createurice = %s, description = %s, autorisation_acces = %s where id = %s",
+                (t, c_, d, a, playlist))
+            print("Donnée modifiée avec succès.")
 
     def consultation(self):
+        table = PrettyTable()
         self.cur.execute(open("Non_Relationnel/Views/Playlists_view.sql", "r").read())
         self.cur.execute("SELECT * from V_Playlists")
         print("Playlist")
         print('_______')
-        raw = self.cur.fetchone()
-        while raw:
-            print( raw[1],raw[2], raw[3])
-            raw = self.cur.fetchone()
+        table.field_names = [i[0] for i in self.cur.description]
+        data = self.cur.fetchall()
+        table.add_rows(data)
+        print(table)
 
 class Album():
     def __init__(self,cur):
         self.cur = cur
 
     def modification(self):
-        pass
+        titre = input("Titre de l'album à modifier : ")
+        artiste = input("Artiste principal de l'album : ")
+        self.cur.execute(
+            "SELECT id from NR_Profil_Artiste where nom = %s",
+            (artiste,))
+        art = self.cur.fetchone()
+
+        while not art:
+            print("/!\ Le nom d'artiste renseigné n'appartient pas à la base de donnée.\n")
+            artiste = input("Artiste principal de l'album : ")
+            self.cur.execute(
+                "SELECT id from NR_Profil_Artiste where nom = %s",
+                (artiste,))
+            art = self.cur.fetchone()
+
+        self.cur.execute(
+            "SELECT NR_Album.id from NR_Album JOIN NR_Profil_Artiste ON NR_Album.artiste_principal = NR_Profil_Artiste.id  where NR_Profil_Artiste.id = %s and NR_Album.titre=%s ",
+            (art[0], titre))
+        album = self.cur.fetchone()
+
+        if not album:
+            print("L'artiste n'interprète aucune album ayant ce nom pour titre.")
+        else:
+
+            print(
+                "Les modifications enregistrées ci-dessous seront prises en compte, si aucune donnée n'est insérée pour un attribut, la valeur restera inchangée.\n")
+
+            t = input("Titre de l'album : ")
+            if t == '':
+                t = titre
+
+            i = input("Interprète de l'album : ")
+            self.cur.execute("SELECT id from NR_Profil_Artiste where nom = %s", (i,))
+            i_ = self.cur.fetchone()
+
+            while i != '' and not i_:
+                print("/!\ Le compte renseigné n'appartient pas à la base de donné.\n")
+                i = input("Artiste principal de l'album : ")
+                self.cur.execute("SELECT id from NR_Profil_Artiste where nom = %s", (i,))
+                i_ = self.cur.fetchone()
+
+            if i == '':
+                i_ = art
+
+            if t != titre or i_ != art:
+                self.cur.execute(
+                    "SELECT * from NR_Album JOIN NR_Profil_Artiste ON NR_Album.artiste_principal = NR_Profil_Artiste.id  where NR_Profil_Artiste.id = %s and NR_Album.titre=%s ",
+                    (i_, t))
+                data = self.cur.fetchone()
+
+                if data:
+                    print("/!\ L'artiste interprète déjà un album du même nom.\n")
+                    return
+
+            annee_sortie = input("Année de sortie de l'album : ")
+            self.cur.execute(
+                "SELECT annee_de_sortie from NR_Album JOIN NR_Profil_Artiste ON NR_Album.artiste_principal = NR_Profil_Artiste.id where NR_Profil_Artiste.nom = %s and NR_Album.titre=%s ",
+                (artiste, titre))
+            annee = self.cur.fetchone()
+
+            while annee_sortie != '' and (int(annee_sortie) < 1900 or int(annee_sortie) > date.today().year):
+                print("/!\ Renseignez une donnée valide.\n")
+                annee_sortie = int(input("Année de sortie de l'album' : "))
+                self.cur.execute(
+                    "SELECT annee_de_sortie from NR_Album JOIN NR_Profil_Artiste ON NR_Album.artiste_principal = NR_Profil_Artiste.id  where NR_Profil_Artiste.nom = %s and NR_Album.titre=%s ",
+                    (artiste, titre))
+                annee = self.cur.fetchone()
+
+            if annee_sortie == '':
+                annee_sortie = annee
+            else:
+                annee_sortie = str(annee_sortie) + '-01-01'
+
+            self.cur.execute("UPDATE NR_Album set titre = %s, artiste_principal = %s, annee_de_sortie =%s where id = %s",
+                             (t, i_, annee_sortie, album))
+            print("Donnée modifiée avec succès.")
 
     def consultation(self):
+        table = PrettyTable()
         self.cur.execute(open("Non_Relationnel/Views/Albums_view.sql", "r").read())
         self.cur.execute("SELECT * from V_Albums")
         print("Albums")
         print('_______')
-        raw = self.cur.fetchone()
-        while raw:
-            print(raw[1] + " | " + str(raw[2]))
-            raw = self.cur.fetchone()
+        table.field_names = [i[0] for i in self.cur.description]
+        data = self.cur.fetchall()
+        table.add_rows(data)
+        print(table)
 
 class Chanson():
     def __init__(self,cur):
@@ -90,15 +232,15 @@ class Chanson():
         pass
 
     def consultation(self):
+        table = PrettyTable()
         self.cur.execute(open("Non_Relationnel/Views/Chanson_view.sql", "r").read())
         self.cur.execute("SELECT * from V_Chansons")
         print("Chansons")
         print('_______')
-        raw = self.cur.fetchone()
-        while raw:
-            print(str(raw[3]) + " | " + str(raw[1]))
-            raw = self.cur.fetchone()
-
+        table.field_names = [i[0] for i in self.cur.description]
+        data = self.cur.fetchall()
+        table.add_rows(data)
+        print(table)
 
 def creation_table(cur):
     cur.execute(open("Non_Relationnel/Profil_Artiste/Profil_Artiste_TABLE.sql", "r").read())
@@ -150,7 +292,6 @@ def main():
 
         conn = psycopg2.connect("host=%s dbname=%s user=%s password=%s" % (identifiants.HOST, identifiants.DATABASE, identifiants.USER, identifiants.PASSWORD))
         conn.autocommit = True
-        cur = conn.cursor()
         print("Connexion réussie")
         choice = '1'
 
@@ -167,7 +308,7 @@ def main():
             choice = input("Votre choix : ")
             if '1' <= choice <= '2':
                 table = 'z'
-                print("\nChoisissez la table concernée : , Playlist(a), Chanson(b), Album(c) ")
+                print("\nChoisissez la table concernée : Playlist(a), Chanson(b), Album(c)")
                 table = input("Table : ")
                 print("-----\n")
 
