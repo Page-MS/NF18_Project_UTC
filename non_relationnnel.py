@@ -1,6 +1,7 @@
 import psycopg2
 from prettytable import PrettyTable
 from datetime import date
+import json
 
 class Connexion:
     def __init__(self):
@@ -229,7 +230,41 @@ class Chanson():
         self.cur = cur
 
     def modification(self):
-        pass
+        album = input("Album auquel appartient la chanson à modifier : ") #nom de l'album
+        true_exit = False
+        while not true_exit : 
+            chanson_choisit = input("Chanson à modifier : ") #nom de la chanson à modifier
+            self.cur.execute("SELECT chansons FROM NR_Album WHERE titre = %s", (album,)) 
+            chansons = self.cur.fetchone()[0] #recupt de toutes les chansons dans le Json de l'album selectionné
+        
+            chansons_list = json.loads(chansons) #liste de toutes les chansons dans le JSON
+            for chanson in chansons_list:
+                if chanson['titre'] == chanson_choisit:
+                    print("Les modifications enregistrées ci-dessous seront prises en compte, si aucune donnée n'est insérée pour attribut, la valeur restera inchangée.\n")
+
+                    #choix des attributs à modifier
+                    nouveau_titre = input("Nouveau titre de la chanson : ")
+                    nouvelle_duree = input("Nouvelle durée de la chanson : ")
+                    nouvel_interprete = input("Nouvel•le interprète de la chanson : ")
+                    nouveau_genre = input("Nouveau genre de la chanson : ")
+                    nouveaux_auteurices = input("Nouveau•lle auteur•ice•s de la chanson : ")
+                    nouveaux_compositeurices = input("Nouveau•lle compositeur•ice•s de la chanson : ")
+                    nouveaux_editeurices = input("Nouveau•lle editeur•ice•s de la chanson : ")
+
+                    #modification des attributs de la chanson
+                    if nouveau_titre != '': chanson['titre'] = nouveau_titre
+                    if nouvelle_duree != '': chanson['duree'] = nouvelle_duree
+                    if nouvel_interprete != '': chanson['interprete'] = nouvel_interprete
+                    if nouveau_genre != '': chanson['genre'] = nouveau_genre
+                    if nouveaux_auteurices != '': chanson['auteurices'] = nouveaux_auteurices
+                    if nouveaux_compositeurices != '': chanson['compositeurices'] = nouveaux_compositeurices
+                    if nouveaux_editeurices != '': chanson['editeurices'] = nouveaux_editeurices
+
+                    true_exit = True
+                    break
+            if not true_exit: #gestion du cas ou l'utilisateur ne choisit pas de chanson prsente
+                print("La chanson n'existe pas dans l'album selectionné")
+
 
     def consultation(self):
         table = PrettyTable()
