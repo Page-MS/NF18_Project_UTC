@@ -434,6 +434,8 @@ class Chanson():
 
                         if nouvel_interprete == '':
                             nouvel_interprete_id = chanson['createurice']
+                        else :
+                            nouvel_interprete_id = nouvel_interprete_id[0]
 
                         nouvelle_duree = input("Nouvelle durée de la chanson (en seconde) : ")
                         while nouvelle_duree != '' and int(nouvelle_duree) < 0:
@@ -454,7 +456,7 @@ class Chanson():
                             'id': chanson['id'],
                             'titre': nouveau_titre,
                             'duree': int(nouvelle_duree),
-                            'createurice': int(nouvel_interprete_id[0]),
+                            'createurice': int(nouvel_interprete_id),
                             'genre_musical': nouveau_genre,
                             'droit_auteurice': {
                             'auteurs': nouveaux_auteurices,
