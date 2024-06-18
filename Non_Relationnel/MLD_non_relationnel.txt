@@ -4,5 +4,4 @@ Profil_Utilisateurice(#id : integer, nom : varchar(30), mail : varchar(30), mdp 
 
 Album(#id : integer, titre : varchar(30), annee_de_sortie : date, duree_totale : integer, artiste_principal=>Profil_Artiste, chansons : JSON) WITH titre NOT NULL, annee_de_sortie NOT NULL, duree_totale NOT NULL, artiste_principale NOT NULL, (titre, artiste_principal) UNIQUE
 
-
 Playlists(#id : integer, titre: varchar(30), description : varchar(50), autorisation_acces : {"privée", "publique", "partagee_aux_amies"}, createurice => Profil_Utilisateurice, chansons : JSON, albums : JSON ) WITH titre NOT NULL, createurice NOT NULL, (titre, createurice) UNIQUE
