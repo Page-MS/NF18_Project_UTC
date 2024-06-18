@@ -478,44 +478,6 @@ class Chanson():
             self.cur.execute(update_query, (Json(chansons_list), album))
             print("Donnée modifiée avec succès.")
 
-<<<<<<< HEAD
-    #def suppresion(self):
-    #     titre = input("Titre de l'album de la chanson à modifier : ")
-    #     artiste = input("Artiste principal de l'album : ")
-    #     self.cur.execute("SELECT art.id from NR_Profil_Artiste art where nom = %s", (artiste,))
-    #     art = self.cur.fetchone()
-
-    #     while not art:
-    #         print("/!\ Le nom d'artiste renseigné n'appartient pas à la base de donnée.\n")
-    #         artiste = input("Artiste principal de l'album : ")
-    #         self.cur.execute("SELECT art.id from NR_Profil_Artiste art where nom = %s", (artiste,))
-    #         art = self.cur.fetchone()
-
-    #     self.cur.execute("SELECT a.id from NR_Album a where a.artiste_principal=%s and a.titre=%s ", (art[0], titre))
-    #     album = self.cur.fetchone()
-
-    #     if not album:
-    #         print("L'artiste n'interprète aucune album ayant ce nom pour titre.")
-
-    #     else :
-    #         true_exit = False
-    #         while not true_exit :
-    #             chanson_choisit = input("Titre de la chanson à modifier : ")
-    #             self.cur.execute("SELECT chansons FROM NR_Album WHERE id = %s", (album,))
-    #             chansons_list = self.cur.fetchone()[0]
-
-    #     for i, chanson in enumerate(chansons_list):
-    #         if chanson['titre'] == chanson_choisit:
-
-        
-    #             update_query = "UPDATE NR_Album SET chansons = %s::jsonb WHERE id = %s ;"
-
-    #             # Exécution de la requête avec les paramètres sécurisés
-    #             self.cur.execute(update_query, (Json(chansons_list), album))
-    #             print("Donnée modifiée avec succès.")
-
-=======
->>>>>>> 0ef03c8030281335fd1d06d5cc51a236e7727da8
     def suppression(self):
         titre = input("Titre de l'album de la chanson à supprimer : ")
         artiste = input("Artiste principal de l'album : ")
@@ -567,10 +529,6 @@ class Chanson():
         table.add_rows(data)
         print(table)
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 0ef03c8030281335fd1d06d5cc51a236e7727da8
 def creation_table(cur):
     cur.execute(open("Profil_Artiste/Profil_Artiste_TABLE.sql", "r").read())
     cur.execute(open("Profil_Utilisateurice/Profil_Utilisateurice_TABLE.sql", "r").read())
@@ -648,7 +606,7 @@ def main():
             print("__________________________________________________")
 
             choice = input("Votre choix : ")
-            if '1' <= choice <= '3':
+            if '1' <= choice <= '2':
                 table = 'z'
                 print("\nChoisissez la table concernée : Playlist(a), Chanson(b), Album(c), Profil_Artiste(d), Profil_Utilisateurice(e)")
                 table = input("Table : ")
@@ -662,6 +620,11 @@ def main():
                     if choice == '3':
                         suppression(cur, table)
                     table = 'z'
+            if choice == '3':
+                table = 'b'
+                print("-----\n")
+                suppression(cur, table)
+                table = 'z'
 
             if choice == '*':
                 suppression_bdd(cur)
