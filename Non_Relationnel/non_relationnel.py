@@ -478,6 +478,7 @@ class Chanson():
             self.cur.execute(update_query, (Json(chansons_list), album))
             print("Donnée modifiée avec succès.")
 
+<<<<<<< HEAD
     #def suppresion(self):
     #     titre = input("Titre de l'album de la chanson à modifier : ")
     #     artiste = input("Artiste principal de l'album : ")
@@ -513,6 +514,8 @@ class Chanson():
     #             self.cur.execute(update_query, (Json(chansons_list), album))
     #             print("Donnée modifiée avec succès.")
 
+=======
+>>>>>>> 0ef03c8030281335fd1d06d5cc51a236e7727da8
     def suppression(self):
         titre = input("Titre de l'album de la chanson à supprimer : ")
         artiste = input("Artiste principal de l'album : ")
@@ -553,7 +556,6 @@ class Chanson():
                     print("La chanson spécifiée n'a pas été trouvée dans l'album.")
 
 
-
     def consultation(self):
         table = PrettyTable()
         self.cur.execute(open("Views/Chanson_view.sql", "r").read())
@@ -565,7 +567,10 @@ class Chanson():
         table.add_rows(data)
         print(table)
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0ef03c8030281335fd1d06d5cc51a236e7727da8
 def creation_table(cur):
     cur.execute(open("Profil_Artiste/Profil_Artiste_TABLE.sql", "r").read())
     cur.execute(open("Profil_Utilisateurice/Profil_Utilisateurice_TABLE.sql", "r").read())
@@ -655,9 +660,8 @@ def main():
                     if choice == '2':
                         consultation(cur, table)
                     if choice == '3':
-                        suppression(cur,table)
+                        suppression(cur, table)
                     table = 'z'
-
 
             if choice == '*':
                 suppression_bdd(cur)
