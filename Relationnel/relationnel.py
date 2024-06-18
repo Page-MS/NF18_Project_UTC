@@ -1383,7 +1383,7 @@ def requete(cur, req) :
         genre_prefere(cur)
 
 def chansons_longues(cur):
-    cur.execute(open("Relationnel/Interrogation/Artistes_chansons_longues.sql", "r").read())
+    cur.execute(open("Interrogation/Artistes_chansons_longues.sql", "r").read())
     # Fetch data line by line
     print("Artiste")
     print('_______')
