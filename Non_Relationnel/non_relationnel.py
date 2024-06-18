@@ -478,7 +478,12 @@ class Chanson():
             self.cur.execute(update_query, (Json(chansons_list), album))
             print("Donnée modifiée avec succès.")
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7ad1afa040dd19f4997650909d9ddb52ddb4e01a
     def suppression(self):
+        print("executer suppresion")
         titre = input("Titre de l'album de la chanson à supprimer : ")
         artiste = input("Artiste principal de l'album : ")
         self.cur.execute("SELECT art.id from NR_Profil_Artiste art where nom = %s", (artiste,))
@@ -529,6 +534,12 @@ class Chanson():
         table.add_rows(data)
         print(table)
 
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> 7ad1afa040dd19f4997650909d9ddb52ddb4e01a
 def creation_table(cur):
     cur.execute(open("Profil_Artiste/Profil_Artiste_TABLE.sql", "r").read())
     cur.execute(open("Profil_Utilisateurice/Profil_Utilisateurice_TABLE.sql", "r").read())
@@ -606,7 +617,7 @@ def main():
             print("__________________________________________________")
 
             choice = input("Votre choix : ")
-            if '1' <= choice <= '3':
+            if '1' <= choice <= '2':
                 table = 'z'
                 print("\nChoisissez la table concernée : Playlist(a), Chanson(b), Album(c), Profil_Artiste(d), Profil_Utilisateurice(e)")
                 table = input("Table : ")
@@ -620,6 +631,11 @@ def main():
                     if choice == '3':
                         suppression(cur, table)
                     table = 'z'
+            if choice == '3':
+                table = 'b'
+                print("-----\n")
+                suppression(cur, table)
+                table = 'z'
 
             if choice == '*':
                 suppression_bdd(cur)
