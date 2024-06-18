@@ -447,7 +447,7 @@ class Chanson():
 
                         nouveaux_auteurices = input("Nouvelles•aux auteur•ice•s de la chanson : ") or chanson['droit_auteurice']['auteurs']
                         nouveaux_compositeurices = input("Nouvelles•aux compositeur•ice•s de la chanson : ") or chanson['droit_auteurice']['compositeurs']
-                        nouveaux_editeurices = input("Nouvelles•aux editeur•ice•s de la chanson : ") or chanson['droit_auteurice']['éditeurs']
+                        nouveaux_editeurices = input("Nouvelles•aux editeur•ice•s de la chanson : ") or chanson['droit_auteurice']['editeurs']
 
                         # Modification de la chanson dans la liste
                         chansons_list[i] = {
@@ -459,7 +459,7 @@ class Chanson():
                             'droit_auteurice': {
                             'auteurs': nouveaux_auteurices,
                             'compositeurs': nouveaux_compositeurices,
-                            'éditeurs': nouveaux_editeurices
+                            'editeurs': nouveaux_editeurices
                             }
                         }
                         true_exit = True
