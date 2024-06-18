@@ -520,7 +520,6 @@ class Chanson():
                     print("La chanson spécifiée n'a pas été trouvée dans l'album.")
 
 
-
     def consultation(self):
         table = PrettyTable()
         self.cur.execute(open("Views/Chanson_view.sql", "r").read())
@@ -531,6 +530,8 @@ class Chanson():
         data = self.cur.fetchall()
         table.add_rows(data)
         print(table)
+
+
 
 
 def creation_table(cur):
@@ -622,9 +623,8 @@ def main():
                     if choice == '2':
                         consultation(cur, table)
                     if choice == '3':
-                        suppression(cur,table)
+                        suppression(cur, table)
                     table = 'z'
-
 
             if choice == '*':
                 suppression_bdd(cur)
