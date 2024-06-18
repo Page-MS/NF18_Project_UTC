@@ -1,0 +1,8 @@
+Profil_Artiste (#id : Integer, bio : varchar(500), type : {"Profil_Groupe", "Profil_ArtisteSolo"}, groupe => Profil_Artiste, pays : varchar(30)) WITH pays NOT NULL, bio, groupe.type = "Profil_Groupe" or groupe.type = NULL if type = "Profil_Artiste_Solo", groupe = NULL if type = "Profil_Groupe"
+
+Profil_Utilisateurice(#id : integer, nom : varchar(30), mail : varchar(30), mdp : varchar(30), date_inscription : date, statut : {"premium", "regulier"}, genres : JSON) WITH nom UNIQUE NOT NULL, mail UNIQUE NOT NULL, mdp NOT NULL, date_inscription NOT NULL, statut NOT NULL, genres NOT NULL
+
+Album(#id : integer, titre : varchar(30), annee_de_sortie : date, duree_totale : integer, artiste_principal=>Profil_Artiste, chansons : JSON) WITH titre NOT NULL, annee_de_sortie NOT NULL, duree_totale NOT NULL, artiste_principale NOT NULL, (titre, artiste_principal) UNIQUE
+
+
+Playlists(#id : integer, titre: varchar(30), description : varchar(50), autorisation_acces : {"privée", "publique", "partagee_aux_amies"}, createurice => Profil_Utilisateurice, chansons : JSON, albums : JSON ) WITH titre NOT NULL, createurice NOT NULL, (titre, createurice) UNIQUE
