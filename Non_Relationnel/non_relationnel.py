@@ -283,7 +283,7 @@ class Playlist():
 
     def consultation(self):
         table = PrettyTable()
-        self.cur.execute(open("Non_Relationnel/Views/Playlists_view.sql", "r").read())
+        self.cur.execute(open("Views/Playlists_view.sql", "r").read())
         self.cur.execute("SELECT * from V_Playlists")
         print("Playlist")
         print('_______')
@@ -376,7 +376,7 @@ class Album():
 
     def consultation(self):
         table = PrettyTable()
-        self.cur.execute(open("Non_Relationnel/Views/Albums_view.sql", "r").read())
+        self.cur.execute(open("Views/Albums_view.sql", "r").read())
         self.cur.execute("SELECT * from V_Albums")
         print("Albums")
         print('_______')
@@ -479,7 +479,7 @@ class Chanson():
 
     def consultation(self):
         table = PrettyTable()
-        self.cur.execute(open("Non_Relationnel/Views/Chanson_view.sql", "r").read())
+        self.cur.execute(open("Views/Chanson_view.sql", "r").read())
         self.cur.execute("SELECT * from V_Chansons")
         print("Chansons")
         print('_______')
@@ -489,25 +489,25 @@ class Chanson():
         print(table)
 
 def creation_table(cur):
-    cur.execute(open("Non_Relationnel/Profil_Artiste/Profil_Artiste_TABLE.sql", "r").read())
-    cur.execute(open("Non_Relationnel/Profil_Utilisateurice/Profil_Utilisateurice_TABLE.sql", "r").read())
-    cur.execute(open("Non_Relationnel/Album/Album_TABLE.sql", "r").read())
-    cur.execute(open("Non_Relationnel/Playlist/Playlist_TABLE.sql", "r").read())
+    cur.execute(open("Profil_Artiste/Profil_Artiste_TABLE.sql", "r").read())
+    cur.execute(open("Profil_Utilisateurice/Profil_Utilisateurice_TABLE.sql", "r").read())
+    cur.execute(open("Album/Album_TABLE.sql", "r").read())
+    cur.execute(open("Playlist/Playlist_TABLE.sql", "r").read())
 
 def insertion_donnee(cur):
-    cur.execute(open("Non_Relationnel/Profil_Artiste/Profil_Artiste_INSERTION.sql", "r").read())
-    cur.execute(open("Non_Relationnel/Profil_Utilisateurice/Profil_Utilisateurice_INSERTION.sql", "r").read())
-    cur.execute(open("Non_Relationnel/Album/Album_INSERTION.sql", "r").read())
-    cur.execute(open("Non_Relationnel/Playlist/Playlist_INSERTION.sql", "r").read())
+    cur.execute(open("Profil_Artiste/Profil_Artiste_INSERTION.sql", "r").read())
+    cur.execute(open("Profil_Utilisateurice/Profil_Utilisateurice_INSERTION.sql", "r").read())
+    cur.execute(open("Album/Album_INSERTION.sql", "r").read())
+    cur.execute(open("Playlist/Playlist_INSERTION.sql", "r").read())
 
 def suppression_bdd(cur):
     cur.execute("DROP VIEW IF EXISTS V_Chansons")
     cur.execute("DROP VIEW IF EXISTS V_Playlists")
     cur.execute("DROP VIEW IF EXISTS V_Albums")
-    cur.execute(open("Non_Relationnel/Playlist/Playlist_DELETE.sql", "r").read())
-    cur.execute(open("Non_Relationnel/Album/Album_DELETE.sql", "r").read())
-    cur.execute(open("Non_Relationnel/Profil_Utilisateurice/Profil_Utilisateurice_DELETE.sql", "r").read())
-    cur.execute(open("Non_Relationnel/Profil_Artiste/Profil_Artiste_DELETE.sql", "r").read())
+    cur.execute(open("Playlist/Playlist_DELETE.sql", "r").read())
+    cur.execute(open("Album/Album_DELETE.sql", "r").read())
+    cur.execute(open("Profil_Utilisateurice/Profil_Utilisateurice_DELETE.sql", "r").read())
+    cur.execute(open("Profil_Artiste/Profil_Artiste_DELETE.sql", "r").read())
 
 def modification(cur, table):
     if table == 'a':
