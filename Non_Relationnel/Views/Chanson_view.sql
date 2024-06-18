@@ -6,6 +6,6 @@ AS SELECT
         c->>'genre_musical' as genre,
         c->'droit_auteurice'-> 'auteurs' as auteurices,
         c->'droit_auteurice'-> 'compositeurs' as compositeurices,
-        c->'droit_auteurice'-> 'éditeurs' as éditeurices
+        c->'droit_auteurice'-> 'editeurs' as éditeurices
         FROM NR_Album a, JSON_ARRAY_ELEMENTS(a.chansons) c
         LEFT JOIN NR_Profil_Artiste p ON CAST(c->>'createurice' as INTEGER) = p.id;
