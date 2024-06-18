@@ -514,6 +514,7 @@ class Chanson():
     #             print("Donnée modifiée avec succès.")
 
     def suppression(self):
+        print("executer suppresion")
         titre = input("Titre de l'album de la chanson à supprimer : ")
         artiste = input("Artiste principal de l'album : ")
         self.cur.execute("SELECT art.id from NR_Profil_Artiste art where nom = %s", (artiste,))
