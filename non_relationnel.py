@@ -476,6 +476,81 @@ class Chanson():
             self.cur.execute(update_query, (Json(chansons_list), album))
             print("Donnée modifiée avec succès.")
 
+    # def suppresion(self):
+    #     titre = input("Titre de l'album de la chanson à modifier : ")
+    #     artiste = input("Artiste principal de l'album : ")
+    #     self.cur.execute("SELECT art.id from NR_Profil_Artiste art where nom = %s", (artiste,))
+    #     art = self.cur.fetchone()
+
+    #     while not art:
+    #         print("/!\ Le nom d'artiste renseigné n'appartient pas à la base de donnée.\n")
+    #         artiste = input("Artiste principal de l'album : ")
+    #         self.cur.execute("SELECT art.id from NR_Profil_Artiste art where nom = %s", (artiste,))
+    #         art = self.cur.fetchone()
+
+    #     self.cur.execute("SELECT a.id from NR_Album a where a.artiste_principal=%s and a.titre=%s ", (art[0], titre))
+    #     album = self.cur.fetchone()
+
+    #     if not album:
+    #         print("L'artiste n'interprète aucune album ayant ce nom pour titre.")
+
+    #     else :
+    #         true_exit = False
+    #         while not true_exit :
+    #             chanson_choisit = input("Titre de la chanson à modifier : ")
+    #             self.cur.execute("SELECT chansons FROM NR_Album WHERE id = %s", (album,))
+    #             chansons_list = self.cur.fetchone()[0]
+
+    #     for i, chanson in enumerate(chansons_list):
+    #         if chanson['titre'] == chanson_choisit:
+
+        
+    #             update_query = "UPDATE NR_Album SET chansons = %s::jsonb WHERE id = %s ;"
+
+    #             # Exécution de la requête avec les paramètres sécurisés
+    #             self.cur.execute(update_query, (Json(chansons_list), album))
+    #             print("Donnée modifiée avec succès.")
+
+    def suppression(self):
+        titre = input("Titre de l'album de la chanson à supprimer : ")
+        artiste = input("Artiste principal de l'album : ")
+        self.cur.execute("SELECT art.id from NR_Profil_Artiste art where nom = %s", (artiste,))
+        art = self.cur.fetchone()
+
+        while not art:
+            print("/!\ Le nom d'artiste renseigné n'appartient pas à la base de données.\n")
+            artiste = input("Artiste principal de l'album : ")
+            self.cur.execute("SELECT art.id from NR_Profil_Artiste art where nom = %s", (artiste,))
+            art = self.cur.fetchone()
+
+        self.cur.execute("SELECT a.id from NR_Album a where a.artiste_principal=%s and a.titre=%s", (art[0], titre))
+        album = self.cur.fetchone()
+
+        if not album:
+            print("L'artiste n'interprète aucun album ayant ce nom pour titre.")
+        else:
+            true_exit = False
+            while not true_exit:
+                chanson_choisit = input("Titre de la chanson à supprimer : ")
+                self.cur.execute("SELECT chansons FROM NR_Album WHERE id = %s", (album[0],))
+                chansons_list = self.cur.fetchone()[0]
+
+                chanson_found = False
+                for i, chanson in enumerate(chansons_list):
+                    if chanson['titre'] == chanson_choisit:
+                        chanson_found = True
+                        del chansons_list[i]
+                        break
+
+                if chanson_found:
+                    update_query = "UPDATE NR_Album SET chansons = %s::jsonb WHERE id = %s;"
+                    self.cur.execute(update_query, (Json(chansons_list), album[0]))
+                    print("Chanson supprimée avec succès.")
+                    true_exit = True
+                else:
+                    print("La chanson spécifiée n'a pas été trouvée dans l'album.")
+
+
 
     def consultation(self):
         table = PrettyTable()
