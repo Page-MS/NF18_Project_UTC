@@ -488,6 +488,9 @@ class Chanson():
         table.add_rows(data)
         print(table)
 
+    def suppression(self):
+        pass
+
 def creation_table(cur):
     cur.execute(open("Non_Relationnel/Profil_Artiste/Profil_Artiste_TABLE.sql", "r").read())
     cur.execute(open("Non_Relationnel/Profil_Utilisateurice/Profil_Utilisateurice_TABLE.sql", "r").read())
@@ -534,6 +537,10 @@ def consultation(cur, table):
     if table == 'e' :
         Profil_Utilisateurice(cur).consultation()
 
+def suppression(cur, table):
+    if table == 'b':
+        Chanson(cur).suppression()
+
 def main():
     try:
         print("\nBienvenue dans le programme d'accès à votre base de donnée de streaming musical !")
@@ -549,18 +556,19 @@ def main():
         print("Connexion réussie")
         choice = '1'
 
-        while choice in ['1', '2', '*', '#']:
+        while choice in ['1', '2','3', '*', '#']:
             cur = conn.cursor()
             print("__________________________________________________")
             print("Pour créer la base de donnée, entrez *")
             print("Pour supprimer l'entièreté de la base de donnée, entrez # ")
             print("Pour effectuer une modification dans la base de donnée, entrez 1")
             print("Pour effectuer une consultation dans la base de donnée, entrez 2")
+            print("Pour supprimer une chanson dans la base de donnée, entrez 3")
             print("Pour quitter, entrez n'importe quel autre charactère")
             print("__________________________________________________")
 
             choice = input("Votre choix : ")
-            if '1' <= choice <= '2':
+            if '1' <= choice <= '3':
                 table = 'z'
                 print("\nChoisissez la table concernée : Playlist(a), Chanson(b), Album(c), Profil_Artiste(d), Profil_Utilisateurice(e)")
                 table = input("Table : ")
@@ -571,6 +579,8 @@ def main():
                         modification(cur, table)
                     if choice == '2':
                         consultation(cur, table)
+                    if choice == '3':
+                        suppression(cur,table)
                     table = 'z'
 
 
