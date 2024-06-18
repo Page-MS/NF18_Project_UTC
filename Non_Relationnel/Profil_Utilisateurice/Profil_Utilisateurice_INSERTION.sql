@@ -1,5 +1,5 @@
 INSERT INTO NR_Profil_Utilisateurice VALUES(1, 'lau_fst', 'lau@example.com', 'mdp123456', '2020-10-27', 'premium', '[{"nom": ["Rock", "Pop"]}]');
-INSERT INTO NR_Profil_Utilisateurice VALUES(2, 'emmanuel_macron', 'emmanuel.macron@example.com','BenallaIl0v3U','2024-01-01','regulier', '[{"nom":["Rock","Métal"]}]');
+INSERT INTO NR_Profil_Utilisateurice VALUES(2, 'emmanuel_macron', 'emmanuel.macron@example.com','BenallaIl0v3U','2024-01-01','regulier', '[{"nom":["Rock","Metal"]}]');
 INSERT INTO NR_Profil_Utilisateurice VALUES(3, 'Xavier Guchet', 'xavier.guchet@example.com', 'xavier4312','2022-10-23','regulier', '[{"nom": ["Jazz","Classique"]}]');
 INSERT INTO NR_Profil_Utilisateurice VALUES(4, 'Laure Ploix', 'laure.ploix@example.com', 'bvqjkr5', '2021-05-12', 'premium', '[{"nom":["Rock","Rap"]}]');
 INSERT INTO NR_Profil_Utilisateurice VALUES(5, 'no_gru', 'no.gruget@example.com', 'skateboard', '2020-12-30', 'premium', '[{"nom": ["Indie"]}]');
